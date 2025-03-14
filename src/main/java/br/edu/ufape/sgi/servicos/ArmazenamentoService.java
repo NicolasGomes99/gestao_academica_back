@@ -1,11 +1,14 @@
 package br.edu.ufape.sgi.servicos;
 
 import br.edu.ufape.sgi.models.Documento;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -15,6 +18,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +57,22 @@ public class ArmazenamentoService implements br.edu.ufape.sgi.servicos.interface
             }
         }
         return documentosSalvos;
+    }
+
+    @Override
+    public Resource carregarArquivoZip(List<Documento> documentos) throws IOException {
+        Path zipPath = Files.createTempFile("documentos", ".zip");
+        try (ZipOutputStream zipOut = new ZipOutputStream(Files.newOutputStream(zipPath))) {
+            for (Documento documento : documentos) {
+                Path filePath = Paths.get(uploadDir).resolve(documento.getPath()).normalize();
+                if (Files.exists(filePath)) {
+                    ZipEntry zipEntry = new ZipEntry(documento.getNome());
+                    zipOut.putNextEntry(zipEntry);
+                    Files.copy(filePath, zipOut);
+                    zipOut.closeEntry();
+                }
+            }
+        }
+        return new UrlResource(zipPath.toUri());
     }
 }

@@ -1,18 +1,20 @@
 package br.edu.ufape.sgi.servicos.interfaces;
 
-import br.edu.ufape.sgi.exceptions.tipoUnidadeAdministrativa.TipoUnidadeAdministrativaNotFoundException;
-import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
-
 import java.util.List;
+
+import br.edu.ufape.sgi.exceptions.TipoUnidadeAdministrativaDuplicadoException;
+import br.edu.ufape.sgi.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
+import br.edu.ufape.sgi.models.TipoUnidadeAdministrativa;
 
 public interface TipoUnidadeAdministrativaService {
 
+    TipoUnidadeAdministrativa salvar(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaDuplicadoException;
 
-    TipoUnidadeAdministrativa salvar(TipoUnidadeAdministrativa tipoUnidadeAdministrativa);
+    TipoUnidadeAdministrativa buscar(Long id) throws TipoUnidadeAdministrativaNotFoundException;
 
-    TipoUnidadeAdministrativa buscarTipoUnidadeAdministrativa(Long id) throws TipoUnidadeAdministrativaNotFoundException;
+    List<TipoUnidadeAdministrativa> listar();
 
-    List<TipoUnidadeAdministrativa> listarTiposUnidadeAdministrativa();
+    TipoUnidadeAdministrativa editar(Long id, TipoUnidadeAdministrativa novoTipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaNotFoundException;
 
-    void deletarTipoUnidadeAdministrativa(Long id) throws TipoUnidadeAdministrativaNotFoundException;
+    void deletar(Long id) throws TipoUnidadeAdministrativaNotFoundException;
 }
