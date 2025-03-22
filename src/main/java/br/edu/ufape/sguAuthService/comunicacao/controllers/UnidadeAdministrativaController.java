@@ -1,14 +1,17 @@
 package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.*;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
+import br.edu.ufape.sguAuthService.models.Usuario;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,4 +80,44 @@ public class UnidadeAdministrativaController {
         fachada.deletarUnidadeAdministrativa(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PostMapping("/{id}/gestor/{gestorId}")
+    public ResponseEntity<Void> adicionarGestor(@PathVariable Long id, @PathVariable Long gestorId) throws UsuarioNotFoundException {
+        fachada.adicionarGestor(id, gestorId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @DeleteMapping("/{id}/gestor")
+    public ResponseEntity<Void> removerGestor(@PathVariable Long id) throws UsuarioNotFoundException {
+        fachada.removerGestor(id);
+        return ResponseEntity.noContent().build();
+    }
+
+//    @PreAuthorize("hasRole('GESTOR')")
+//    @PostMapping("/{id}/tecnico/{tecnicoId}")
+//    public ResponseEntity<Void> adicionarTecnico(@PathVariable Long id, @PathVariable Long tecnicoId) {
+//        fachada.adicionarTecnico(id, tecnicoId);
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
+//
+//    @PreAuthorize("hasRole('GESTOR')")
+//    @DeleteMapping("/{id}/tecnico/{tecnicoId}")
+//    public ResponseEntity<Void> removerTecnico(@PathVariable Long id, @PathVariable Long tecnicoId) {
+//        fachada.removerTecnico(id, tecnicoId);
+//        return ResponseEntity.noContent().build();
+//    }
+
+//    @GetMapping("/{id}/tecnicos")
+//    public ResponseEntity<List<Usuario>> getTecnicosPorUnidade(@PathVariable Long id) {
+//        List<Usuario> tecnicos = fachada.buscarTecnicosPorUnidade(id);
+//        return ResponseEntity.ok(tecnicos);
+//    }
+//
+//    @GetMapping("/{id}/gestor")
+//    public ResponseEntity<Usuario> getGestorPorUnidade(@PathVariable Long id) {
+//        Usuario gestor = fachada.buscarGestorPorUnidade(id);
+//        return ResponseEntity.ok(gestor);
+//    }
 }
