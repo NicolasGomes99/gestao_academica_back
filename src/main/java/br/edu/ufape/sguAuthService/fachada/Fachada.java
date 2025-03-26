@@ -44,6 +44,7 @@ public class Fachada {
     private final TecnicoService tecnicoService;
     private final GestorService gestorService;
     private final TipoUnidadeAdministrativaService tipoUnidadeAdministrativaService;
+    private final EstudanteService estudanteService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -297,4 +298,28 @@ public class Fachada {
     public void deletarTipo(Long id) throws TipoUnidadeAdministrativaNotFoundException {
         tipoUnidadeAdministrativaService.deletar(id);
     }
+
+
+        // ================== Estudante ================== //
+
+    public Estudante salvarEstudante(Estudante estudante) {
+        return estudanteService.salvarEstudante(estudante);
+    }
+
+    public Estudante buscarEstudante(Long id) {
+        return estudanteService.buscarEstudante(id);
+    }
+
+    public List<Estudante> listarEstudantes() {
+        return estudanteService.listarEstudantes();
+    }
+
+    public Estudante atualizarEstudante(Long id, Estudante estudante) {
+        return estudanteService.atualizarEstudante(id, estudante);
+    }
+
+    public void deletarEstudante(Long id) {
+        estudanteService.deletarEstudante(id);
+    }
+
 }
