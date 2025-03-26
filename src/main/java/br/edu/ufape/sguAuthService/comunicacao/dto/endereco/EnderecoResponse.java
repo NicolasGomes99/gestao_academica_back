@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 @AllArgsConstructor
 public class EnderecoResponse {
     private Long id;
+    private String rua;
     private String cep;
     private String cidade;
     private String estado;
