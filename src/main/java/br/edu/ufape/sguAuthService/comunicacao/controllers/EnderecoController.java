@@ -21,14 +21,11 @@ public class EnderecoController {
     private final Fachada fachada;
     private final ModelMapper modelMapper;
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<EnderecoResponse> buscarEndereco(@PathVariable Long id) {
-//        Optional<Endereco> endereco = fachada.buscarEndereco(id);
-//        if (endereco == null) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<>(new EnderecoResponse(endereco, modelMapper), HttpStatus.OK);
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<EnderecoResponse> buscarEndereco(@PathVariable Long id) {
+        Endereco response = fachada.buscarEndereco(id);
+        return new ResponseEntity<>(new EnderecoResponse(response, modelMapper), HttpStatus.OK);
+    }
 
     @GetMapping
     public List<EnderecoResponse> listarEnderecos() {

@@ -1,5 +1,6 @@
 package br.edu.ufape.sguAuthService.servicos.interfaces;
 
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.EnderecoNotFoundException;
 import br.edu.ufape.sguAuthService.models.Endereco;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface EnderecoService {
 
     List<Endereco> listarEnderecos();
 
-    Optional<Endereco> buscarEndereco(Long id);
+    Endereco buscarEndereco(Long id) throws EnderecoNotFoundException;
 
     Endereco criarEndereco(Endereco endereco);
 
