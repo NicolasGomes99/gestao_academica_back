@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,15 +33,15 @@ public class EnderecoController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping
+    @PostMapping("/registrar")
     public ResponseEntity<EnderecoResponse> criarEndereco(@RequestBody EnderecoRequest enderecoRequest) {
         Endereco endereco = enderecoRequest.convertToEntity(enderecoRequest, modelMapper);
         Endereco novoEndereco = fachada.criarEndereco(endereco);
         return new ResponseEntity<>(new EnderecoResponse(novoEndereco, modelMapper), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<EnderecoResponse> excluirEndereco(@PathVariable Long id, @RequestBody EnderecoRequest enderecoRequest) {
+    @PatchMapping("/{id}/editar")
+    public ResponseEntity<EnderecoResponse> editarEndereco(@PathVariable Long id, @RequestBody EnderecoRequest enderecoRequest) {
         Endereco endereco = enderecoRequest.convertToEntity(enderecoRequest, modelMapper);
         Endereco enderecoAtualizado = fachada.editarEndereco(id, endereco);
         if (enderecoAtualizado == null) {
@@ -51,7 +50,7 @@ public class EnderecoController {
         return new ResponseEntity<>(new EnderecoResponse(enderecoAtualizado, modelMapper), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/deletar")
     public ResponseEntity<Void> excluirEndereco(@PathVariable Long id) {
         fachada.excluirEndereco(id);
         return ResponseEntity.noContent().build();
