@@ -37,14 +37,14 @@ public class EstudanteController {
         return ResponseEntity.ok(new EstudanteResponse(estudante, modelMapper));
     }
 
-    @PostMapping
+    @PostMapping("/registrar")
     public ResponseEntity<EstudanteResponse> criarEstudante(@Valid @RequestBody EstudanteRequest estudanteRequest) {
         Estudante estudante = estudanteRequest.convertToEntity(estudanteRequest, modelMapper);
         Estudante novoEstudante = fachada.salvarEstudante(estudante);
         return ResponseEntity.status(HttpStatus.CREATED).body(new EstudanteResponse(novoEstudante, modelMapper));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/editar")
     public ResponseEntity<EstudanteResponse> atualizarEstudante(@PathVariable Long id, @Valid @RequestBody EstudanteRequest estudanteRequest) {
         Estudante estudante = estudanteRequest.convertToEntity(estudanteRequest, modelMapper);
         Estudante estudanteAtualizado = fachada.atualizarEstudante(id, estudante);
@@ -54,7 +54,7 @@ public class EstudanteController {
         return ResponseEntity.ok(new EstudanteResponse(estudanteAtualizado, modelMapper));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/deletar")
     public ResponseEntity<Void> deletarEstudante(@PathVariable Long id) {
         fachada.deletarEstudante(id);
         return ResponseEntity.noContent().build();

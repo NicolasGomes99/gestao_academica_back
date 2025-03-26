@@ -36,14 +36,14 @@ public class TipoEtniaController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping
+    @PostMapping("registrar")
     public ResponseEntity<TipoEtniaResponse> criarTipoEtnia(@RequestBody TipoEtniaRequest tipoEtniaRequest) {
         TipoEtnia tipoEtnia = tipoEtniaRequest.convertToEntity(tipoEtniaRequest, modelMapper);
         TipoEtnia novoTipoEtnia = fachada.salvarTipoEtnia(tipoEtnia);
         return new ResponseEntity<>(new TipoEtniaResponse(novoTipoEtnia, modelMapper), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/editar")
     public ResponseEntity<TipoEtniaResponse> atualizarTipoEtnia(@PathVariable Long id, @RequestBody TipoEtniaRequest tipoEtniaRequest) {
         TipoEtnia tipoEtnia = tipoEtniaRequest.convertToEntity(tipoEtniaRequest, modelMapper);
         TipoEtnia tipoEtniaAtualizado = fachada.atualizarTipoEtnia(id, tipoEtnia);
@@ -53,7 +53,7 @@ public class TipoEtniaController {
         return new ResponseEntity<>(new TipoEtniaResponse(tipoEtniaAtualizado, modelMapper), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/deletar")
     public ResponseEntity<Void> deletarTipoEtnia(@PathVariable Long id) {
         fachada.deletarTipoEtnia(id);
         return ResponseEntity.noContent().build();
