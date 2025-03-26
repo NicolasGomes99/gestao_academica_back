@@ -45,6 +45,7 @@ public class Fachada {
     private final GestorService gestorService;
     private final TipoUnidadeAdministrativaService tipoUnidadeAdministrativaService;
     private final EstudanteService estudanteService;
+    private final TipoEtniaService tipoEtniaService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -300,7 +301,7 @@ public class Fachada {
     }
 
 
-        // ================== Estudante ================== //
+    // ================== Estudante  ================== //
 
     public Estudante salvarEstudante(Estudante estudante) {
         return estudanteService.salvarEstudante(estudante);
@@ -320,6 +321,29 @@ public class Fachada {
 
     public void deletarEstudante(Long id) {
         estudanteService.deletarEstudante(id);
+    }
+
+
+        // ================== TipoEtnia  ================== //
+
+    public TipoEtnia salvarTipoEtnia(TipoEtnia tipoEtnia) {
+        return tipoEtniaService.salvarTipoEtnia(tipoEtnia);
+    }
+
+    public TipoEtnia buscarTipoEtnia(Long id) {
+        return tipoEtniaService.buscarTipoEtnia(id);
+    }
+
+    public List<TipoEtnia> listarTiposEtnia() {
+        return tipoEtniaService.listarTiposEtnia();
+    }
+
+    public TipoEtnia atualizarTipoEtnia(Long id, TipoEtnia tipoEtnia) {
+        return tipoEtniaService.atualizarTipoEtnia(id, tipoEtnia);
+    }
+
+    public void deletarTipoEtnia(Long id) {
+        tipoEtniaService.deletarTipoEtnia(id);
     }
 
 }

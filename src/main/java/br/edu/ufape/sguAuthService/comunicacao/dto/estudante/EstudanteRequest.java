@@ -10,15 +10,13 @@ import org.modelmapper.ModelMapper;
 import java.math.BigDecimal;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class EstudanteResponse {
-    private Long id;
+public class EstudanteRequest {
     private BigDecimal rendaPercapta;
     private String contatoFamilia;
     private boolean deficiente;
     private String tipoDeficiencia;
 
-    public EstudanteResponse(Estudante estudante,  ModelMapper modelMapper) {
-        if (estudante == null) throw new IllegalArgumentException("Estudante não pode ser nulo");
-        else modelMapper.map(estudante, this);
+    public Estudante convertToEntity(EstudanteRequest estudanteRequest, ModelMapper modelMapper) {
+        return modelMapper.map(estudanteRequest, Estudante.class);
     }
 }
