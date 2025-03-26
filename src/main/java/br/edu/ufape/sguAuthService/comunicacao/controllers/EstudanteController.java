@@ -1,9 +1,9 @@
 package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
+import br.edu.ufape.sguAuthService.comunicacao.dto.estudante.EstudanteRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.estudante.EstudanteResponse;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Estudante;
-import br.edu.ufape.sguAuthService.servicos.interfaces.EstudanteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,33 +18,40 @@ import java.util.stream.Collectors;
 @RequestMapping("/estudantes")
 @RequiredArgsConstructor
 public class EstudanteController {
-
     private final Fachada fachada;
     private final ModelMapper modelMapper;
 
     @GetMapping
     public List<EstudanteResponse> listarEstudantes() {
         return fachada.listarEstudantes().stream()
-                .map(EstudanteResponse::new)
+                .map(estudante -> new EstudanteResponse(estudante, modelMapper))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EstudanteResponse> buscarEstudante(@PathVariable Long id) {
         Estudante estudante = fachada.buscarEstudante(id);
-        return ResponseEntity.ok(new EstudanteResponse(estudante));
+        if (estudante == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(new EstudanteResponse(estudante, modelMapper));
     }
 
-    @PostMapping()
-    public ResponseEntity<EstudanteResponse> criarEstudante(@RequestBody Estudante estudante) {
+    @PostMapping
+    public ResponseEntity<EstudanteResponse> criarEstudante(@Valid @RequestBody EstudanteRequest estudanteRequest) {
+        Estudante estudante = estudanteRequest.convertToEntity(estudanteRequest, modelMapper);
         Estudante novoEstudante = fachada.salvarEstudante(estudante);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new EstudanteResponse(novoEstudante));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new EstudanteResponse(novoEstudante, modelMapper));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<EstudanteResponse> atualizarEstudante(@PathVariable Long id, @Valid @RequestBody Estudante estudante) {
+    public ResponseEntity<EstudanteResponse> atualizarEstudante(@PathVariable Long id, @Valid @RequestBody EstudanteRequest estudanteRequest) {
+        Estudante estudante = estudanteRequest.convertToEntity(estudanteRequest, modelMapper);
         Estudante estudanteAtualizado = fachada.atualizarEstudante(id, estudante);
-        return ResponseEntity.ok(new EstudanteResponse(estudanteAtualizado));
+        if (estudanteAtualizado == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(new EstudanteResponse(estudanteAtualizado, modelMapper));
     }
 
     @DeleteMapping("/{id}")
