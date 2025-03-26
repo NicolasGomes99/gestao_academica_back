@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.fachada;
 
 
+import br.edu.ufape.sguAuthService.dados.EnderecoRepository;
 import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
@@ -15,6 +16,7 @@ import br.edu.ufape.sguAuthService.models.*;
 import br.edu.ufape.sguAuthService.servicos.interfaces.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,7 @@ public class Fachada {
     private final TipoUnidadeAdministrativaService tipoUnidadeAdministrativaService;
     private final EstudanteService estudanteService;
     private final TipoEtniaService tipoEtniaService;
+    private final EnderecoService enderecoService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -346,4 +349,26 @@ public class Fachada {
         tipoEtniaService.deletarTipoEtnia(id);
     }
 
+
+    // ================== Endereco  ================== //
+
+    public List<Endereco> listarEnderecos() {
+        return enderecoService.listarEnderecos();
+    }
+
+    public Optional<Endereco> buscarEndereco(Long id) {
+        return enderecoService.buscarEndereco(id);
+    }
+
+    public Endereco criarEndereco(Endereco endereco) {
+        return enderecoService.criarEndereco(endereco);
+    }
+
+    public void excluirEndereco(Long id) {
+        enderecoService.excluirEndereco(id);
+    }
+
+    public Endereco editarEndereco(Long id, Endereco enderecoAtualizado) {
+        return enderecoService.editarEndereco(id, enderecoAtualizado);
+    }
 }
