@@ -47,6 +47,7 @@ public class Fachada {
     private final EstudanteService estudanteService;
     private final TipoEtniaService tipoEtniaService;
     private final EnderecoService enderecoService;
+    private final DadosBancariosService dadosBancariosService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -372,5 +373,27 @@ public class Fachada {
 
     public Endereco editarEndereco(Long id, Endereco enderecoAtualizado) {
         return enderecoService.editarEndereco(id, enderecoAtualizado);
+    }
+
+    // ================== Dados Bancarios  ================== //
+
+    public DadosBancarios salvarDadosBancarios(DadosBancarios dadosBancarios) {
+        return dadosBancariosService.salvarDadosBancarios(dadosBancarios);
+    }
+
+    public List<DadosBancarios> listarDadosBancarios() {
+        return dadosBancariosService.listarDadosBancarios();
+    }
+
+    public DadosBancarios buscarDadosBancarios(Long id) {
+        return dadosBancariosService.buscarDadosBancarios(id);
+    }
+
+    public void deletarDadosBancarios(Long id) {
+        dadosBancariosService.deletarDadosBancarios(id);
+    }
+
+    public DadosBancarios atualizarDadosBancarios(Long id, DadosBancarios novosDadosBancarios) {
+        return dadosBancariosService.atualizarDadosBancarios(id, novosDadosBancarios);
     }
 }
