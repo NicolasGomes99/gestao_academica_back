@@ -15,6 +15,9 @@ public class EstudanteService implements br.edu.ufape.sguAuthService.servicos.in
     private final ModelMapper modelMapper;
 
     public Estudante salvarEstudante(Estudante estudante) {
+        if (!estudante.isDeficiente()) {
+            estudante.setTipoDeficiencia(null);
+        }
         return estudanteRepository.save(estudante);
     }
 
@@ -30,6 +33,9 @@ public class EstudanteService implements br.edu.ufape.sguAuthService.servicos.in
         Estudante estudanteExistente = estudanteRepository.findById(id).orElse(null);
         if (estudanteExistente != null) {
             modelMapper.map(estudante, estudanteExistente);
+            if (!estudanteExistente.isDeficiente()) {
+                estudanteExistente.setTipoDeficiencia(null);
+            }
             return estudanteRepository.save(estudanteExistente);
         }
         return null;
