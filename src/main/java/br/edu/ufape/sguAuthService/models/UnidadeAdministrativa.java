@@ -37,7 +37,7 @@ public class UnidadeAdministrativa {
     private String codigo;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "tipo_unidade_administrativa_id", nullable = false)
+    @JoinColumn(name = "tipo_unidade_administrativa_id",referencedColumnName = "id", nullable = false)
     @JsonManagedReference
     private TipoUnidadeAdministrativa tipoUnidadeAdministrativa;
 
