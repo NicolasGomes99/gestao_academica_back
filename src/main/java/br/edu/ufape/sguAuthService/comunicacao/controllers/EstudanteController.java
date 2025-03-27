@@ -2,6 +2,7 @@ package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.estudante.EstudanteRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.estudante.EstudanteResponse;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.AlunoNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Estudante;
 import jakarta.validation.Valid;
@@ -29,7 +30,7 @@ public class EstudanteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EstudanteResponse> buscarEstudante(@PathVariable Long id) {
+    public ResponseEntity<EstudanteResponse> buscarEstudante(@PathVariable Long id) throws AlunoNotFoundException {
         Estudante estudante = fachada.buscarEstudante(id);
         if (estudante == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -45,7 +46,7 @@ public class EstudanteController {
     }
 
     @PatchMapping("/{id}/editar")
-    public ResponseEntity<EstudanteResponse> atualizarEstudante(@PathVariable Long id, @Valid @RequestBody EstudanteRequest estudanteRequest) {
+    public ResponseEntity<EstudanteResponse> atualizarEstudante(@PathVariable Long id, @Valid @RequestBody EstudanteRequest estudanteRequest) throws AlunoNotFoundException{
         Estudante estudante = estudanteRequest.convertToEntity(estudanteRequest, modelMapper);
         Estudante estudanteAtualizado = fachada.atualizarEstudante(id, estudante);
         if (estudanteAtualizado == null) {

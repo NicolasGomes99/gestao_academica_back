@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.servicos;
 
 import br.edu.ufape.sguAuthService.dados.EstudanteRepository;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.AlunoNotFoundException;
 import br.edu.ufape.sguAuthService.models.Estudante;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,16 +22,16 @@ public class EstudanteService implements br.edu.ufape.sguAuthService.servicos.in
         return estudanteRepository.save(estudante);
     }
 
-    public Estudante buscarEstudante(Long id) {
-        return estudanteRepository.findById(id).orElse(null);
+    public Estudante buscarEstudante(Long id) throws AlunoNotFoundException{
+        return estudanteRepository.findById(id).orElseThrow(AlunoNotFoundException::new);
     }
 
     public List<Estudante> listarEstudantes() {
         return estudanteRepository.findAll();
     }
 
-    public Estudante atualizarEstudante(Long id, Estudante estudante) {
-        Estudante estudanteExistente = estudanteRepository.findById(id).orElse(null);
+    public Estudante atualizarEstudante(Long id, Estudante estudante) throws AlunoNotFoundException{
+        Estudante estudanteExistente = estudanteRepository.findById(id).orElseThrow(AlunoNotFoundException::new);
         if (estudanteExistente != null) {
             modelMapper.map(estudante, estudanteExistente);
             if (!estudanteExistente.isDeficiente()) {

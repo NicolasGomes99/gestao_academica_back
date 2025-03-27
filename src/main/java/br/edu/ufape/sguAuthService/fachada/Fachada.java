@@ -309,7 +309,7 @@ public class Fachada {
         return estudanteService.salvarEstudante(estudante);
     }
 
-    public Estudante buscarEstudante(Long id) {
+    public Estudante buscarEstudante(Long id) throws AlunoNotFoundException{
         return estudanteService.buscarEstudante(id);
     }
 
@@ -317,7 +317,7 @@ public class Fachada {
         return estudanteService.listarEstudantes();
     }
 
-    public Estudante atualizarEstudante(Long id, Estudante estudante) {
+    public Estudante atualizarEstudante(Long id, Estudante estudante) throws AlunoNotFoundException{
         return estudanteService.atualizarEstudante(id, estudante);
     }
 
