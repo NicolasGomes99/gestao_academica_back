@@ -1,5 +1,6 @@
 package br.edu.ufape.sguAuthService.servicos.interfaces;
 
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
 
@@ -21,5 +22,11 @@ public interface UnidadeAdministrativaService {
 
     UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa unidadeAdministrativa, Long id) throws UnidadeAdministrativaNotFoundException;
 
-//    void adicionarGestor(Long unidadeId, Long usuarioId);
+    void adicionarGestor(Long unidadeId, Long usuarioId) throws UsuarioNotFoundException;
+
+    void removerGestor(Long unidadeId);
+
+    void adicionarTecnico(Long unidadeId, Long usuarioId) throws UsuarioNotFoundException;
+
+    void removerTecnico(Long unidadeId, Long tecnicoId);
 }

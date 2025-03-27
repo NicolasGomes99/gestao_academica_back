@@ -277,6 +277,22 @@ public class Fachada {
         return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
     }
 
+    public void adicionarGestor(Long unidadeId, Long usuarioId) throws UsuarioNotFoundException {
+        unidadeAdministrativaService.adicionarGestor(unidadeId, usuarioId);
+    }
+
+    public void removerGestor(Long unidadeId) {
+        unidadeAdministrativaService.removerGestor(unidadeId);
+    }
+
+    public void adicionarTecnico(Long unidadeId, Long usuarioId) throws UsuarioNotFoundException {
+        unidadeAdministrativaService.adicionarTecnico(unidadeId, usuarioId);
+    }
+
+    public void removerTecnico(Long unidadeId, Long tecnicoId) {
+        unidadeAdministrativaService.removerTecnico(unidadeId, tecnicoId);
+    }
+
 
     // ==================Tipo Unidade Administrativa ================== //
      public TipoUnidadeAdministrativa salvarTipo(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaDuplicadoException {

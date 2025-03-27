@@ -2,13 +2,14 @@ package br.edu.ufape.sguAuthService.servicos;
 
 import br.edu.ufape.sguAuthService.dados.TipoUnidadeAdministrativaRepository;
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
+import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaCircularException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaComDependenciasException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaDuplicadaException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
-import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
-import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
+import br.edu.ufape.sguAuthService.models.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService.servicos.interfaces.UnidadeAdministrativaService {
     private final UnidadeAdministrativaRepository unidadeAdministrativaRepository;
     private final TipoUnidadeAdministrativaRepository tipoUnidadeAdministrativaRepository;
+    private final UsuarioRepository usuarioRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -95,74 +97,75 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         unidadeAdministrativaRepository.deleteById(id);
     }
 
+
+    @Override
+    public void adicionarGestor(Long unidadeId, Long gestorId) throws UsuarioNotFoundException {
+        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
+                .orElseThrow(() -> new UnidadeAdministrativaNotFoundException("Unidade administrativa não encontrada"));
+
+        Gestor gestor = usuarioRepository.findById(gestorId)
+                .orElseThrow(UsuarioNotFoundException::new)
+                .getGestor();
+
+        if (unidade.getGestor() != null) {
+            throw new IllegalStateException("Esta unidade já possui um gestor.");
+        }
+
+        if (gestor.getUnidadeAdministrativa() != null) {
+            throw new IllegalStateException("Este gestor já está gerenciando outra unidade.");
+        }
+
+        unidade.setGestor(gestor);
+        gestor.setUnidadeAdministrativa(unidade);
+        unidadeAdministrativaRepository.save(unidade);
+    }
+
+    @Override
+    public void removerGestor(Long unidadeId) {
+        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
+                .orElseThrow(() -> new UnidadeAdministrativaNotFoundException("Unidade administrativa não encontrada"));
+
+        if (unidade.getGestor() == null) {
+            throw new IllegalStateException("Esta unidade não tem um gestor atribuído.");
+        }
+
+        Gestor gestor = unidade.getGestor();
+        unidade.setGestor(null);
+        gestor.setUnidadeAdministrativa(null);
+
+        unidadeAdministrativaRepository.save(unidade);
+    }
+
+    public void adicionarTecnico(Long unidadeId, Long tecnicoId) throws UsuarioNotFoundException {
+        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
+                .orElseThrow(() -> new UnidadeAdministrativaNotFoundException("Unidade administrativa não encontrada"));
+
+        Tecnico tecnico = usuarioRepository.findById(tecnicoId)
+                .orElseThrow(UsuarioNotFoundException::new)
+                .getTecnico();
+
+        if (tecnico.getUnidadeAdministrativa() != null) {
+            throw new IllegalStateException("O técnico já está alocado em outra unidade.");
+        }
+
+        tecnico.setUnidadeAdministrativa(unidade);
+        unidade.getTecnicos().add(tecnico);
+        unidadeAdministrativaRepository.save(unidade);
+    }
+
+    public void removerTecnico(Long unidadeId, Long tecnicoId) {
+        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
+                .orElseThrow(() -> new UnidadeAdministrativaNotFoundException("Unidade administrativa não encontrada"));
+
+        unidade.getTecnicos().removeIf(tecnico -> tecnico.getId().equals(tecnicoId));
+        unidadeAdministrativaRepository.save(unidade);
+    }
+
 //    public List<Usuario> buscarTecnicosPorUnidade(Long id) {
-//        return usuarioRepository.findTecnicosByUnidadeAdministrativa(id);
+//    return usuarioRepository.findTecnicosByUnidadeAdministrativa(id);
 //    }
-//
+
 //    public Usuario buscarGestorPorUnidade(Long id) {
 //        return usuarioRepository.findGestorByUnidadeAdministrativa(id).orElseThrow(UnidadeAdministrativaNotFoundException::new);
-//    }
-//
-//    @Override
-//    public void adicionarGestor(Long unidadeId, Long gestorId) throws UsuarioNotFoundException {
-//        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
-//                .orElseThrow(() -> new UnidadeAdministrativaNotFoundException("Unidade administrativa não encontrada"));
-//
-//        Gestor gestor = usuarioRepository.findById(gestorId)
-//                .orElseThrow(UsuarioNotFoundException::new)
-//                .getGestor();
-//
-//        if (unidade.getGestor() != null) {
-//            throw new IllegalStateException("Esta unidade já possui um gestor.");
-//        }
-//
-//        if (gestor.getUnidadeAdministrativa() != null) {
-//            throw new IllegalStateException("Este gestor já está gerenciando outra unidade.");
-//        }
-//
-//        unidade.setGestor(gestor);
-//        gestor.setUnidadeAdministrativa(unidade);
-//        unidadeAdministrativaRepository.save(unidade);
-//    }
-//
-//    @Override
-//    public void removerGestor(Long unidadeId) {
-//        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
-//                .orElseThrow(() -> new UnidadeAdministrativaNotFoundException("Unidade administrativa não encontrada"));
-//
-//        if (unidade.getGestor() == null) {
-//            throw new IllegalStateException("Esta unidade não tem um gestor atribuído.");
-//        }
-//
-//        Gestor gestor = unidade.getGestor();
-//        unidade.setGestor(null);
-//        gestor.setUnidadeAdministrativa(null);
-//
-//        unidadeAdministrativaRepository.save(unidade);
-//    }
-//
-//    public void adicionarTecnico(Long unidadeId, Long tecnicoId) throws UsuarioNotFoundException {
-//        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
-//                .orElseThrow(() -> new UnidadeAdministrativaNotFoundException("Unidade administrativa não encontrada"));
-//
-//        Tecnico tecnico = usuarioRepository.findById(tecnicoId)
-//                .orElseThrow(UsuarioNotFoundException::new)
-//                .getTecnico();
-//
-//        if (tecnico.getUnidadeAdministrativa() != null) {
-//            throw new IllegalStateException("O técnico já está alocado em outra unidade.");
-//        }
-//
-//        tecnico.setUnidadeAdministrativa(unidade);
-//        unidade.getTecnicos().add(tecnico);
-//        unidadeAdministrativaRepository.save(unidade);
-//    }
-//
-//    public void removerTecnico(Long unidadeId, Long tecnicoId) {
-//        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
-//                .orElseThrow(() -> new UnidadeAdministrativaNotFoundException("Unidade administrativa não encontrada"));
-//
-//        unidade.getTecnicos().removeIf(tecnico -> tecnico.getId().equals(tecnicoId));
-//        unidadeAdministrativaRepository.save(unidade);
 //    }
 }

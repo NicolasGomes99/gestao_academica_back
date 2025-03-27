@@ -1,12 +1,16 @@
 package br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.tipoUnidadeAdministrativa.TipoUnidadeAdministrativaResponse;
+import br.edu.ufape.sguAuthService.models.Gestor;
+import br.edu.ufape.sguAuthService.models.Tecnico;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
 import org.modelmapper.ModelMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class UnidadeAdministrativaGetResponse {
