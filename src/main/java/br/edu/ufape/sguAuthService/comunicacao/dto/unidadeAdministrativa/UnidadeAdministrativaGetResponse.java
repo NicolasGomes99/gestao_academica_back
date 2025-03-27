@@ -14,12 +14,16 @@ public class UnidadeAdministrativaGetResponse {
     private String nome;
     private String codigo;
     private TipoUnidadeAdministrativaResponse tipoUnidadeAdministrativa;
+//    private Gestor gestor;
+//    private List<Tecnico> tecnicos;
 
     public UnidadeAdministrativaGetResponse(UnidadeAdministrativa unidadeAdministrativa, ModelMapper modelMapper) {
         this.id = unidadeAdministrativa.getId();
         this.nome = unidadeAdministrativa.getNome();
         this.codigo = unidadeAdministrativa.getCodigo();
         this.tipoUnidadeAdministrativa = new TipoUnidadeAdministrativaResponse(unidadeAdministrativa.getTipoUnidadeAdministrativa(), modelMapper);
+//        this.gestor = modelMapper.map(unidadeAdministrativa.getGestor(), Gestor.class);
+//        this.tecnicos = unidadeAdministrativa.getTecnicos();
     }
 }
 

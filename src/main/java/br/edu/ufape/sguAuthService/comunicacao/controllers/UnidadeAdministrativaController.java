@@ -77,4 +77,42 @@ public class UnidadeAdministrativaController {
         fachada.deletarUnidadeAdministrativa(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+//
+//    //    @PreAuthorize("hasRole('ADMINISTRADOR')")
+//    @PostMapping("/{id}/cadastrar-gestor/{gestorId}")
+//    public ResponseEntity<Void> adicionarGestor(@PathVariable Long id, @PathVariable Long gestorId) throws UsuarioNotFoundException {
+//        fachada.adicionarGestor(id, gestorId);
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
+//
+//    //    @PreAuthorize("hasRole('ADMINISTRADOR')")
+//    @DeleteMapping("/{id}/deletar-gestor")
+//    public ResponseEntity<Void> removerGestor(@PathVariable Long id) throws UsuarioNotFoundException {
+//        fachada.removerGestor(id);
+//        return ResponseEntity.noContent().build();
+//    }
+//
+//    @PostMapping("/{id}/alocar-tecnico/{tecnicoId}")
+//    public ResponseEntity<Void> adicionarTecnico(@PathVariable Long id, @PathVariable Long tecnicoId) throws UsuarioNotFoundException {
+//        fachada.adicionarTecnico(id, tecnicoId);
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
+//
+//    @DeleteMapping("/{id}/deletar-tecnico/{tecnicoId}")
+//    public ResponseEntity<Void> removerTecnico(@PathVariable Long id, @PathVariable Long tecnicoId) {
+//        fachada.removerTecnico(id, tecnicoId);
+//        return ResponseEntity.noContent().build();
+//    }
+//
+//    @GetMapping("/{id}/tecnicos")
+//    public ResponseEntity<List<Usuario>> getTecnicosPorUnidade(@PathVariable Long id) {
+//        List<Usuario> tecnicos = fachada.buscarTecnicosPorUnidade(id);
+//        return ResponseEntity.ok(tecnicos);
+//    }
+//
+//    @GetMapping("/{id}/gestor")
+//    public ResponseEntity<Usuario> getGestorPorUnidade(@PathVariable Long id) {
+//        Usuario gestor = fachada.buscarGestorPorUnidade(id);
+//        return ResponseEntity.ok(gestor);
+//    }
 }

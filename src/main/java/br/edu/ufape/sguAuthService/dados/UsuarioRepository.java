@@ -20,4 +20,13 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Gestor AND u.ativo = true")
     List<Usuario> findUsuariosGestores();
 
+//    @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Tecnico AND u.ativo = true AND u.ativo = true")
+//    List<Usuario> findTecnicosByUnidadeAdministrativa(Long unidadeId);
+//
+//    @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Tecnico AND u.id = :id AND u.ativo = true")
+//    Optional<Usuario> findTecnicoById(Long id);
+//
+//    @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Gestor AND u.ativo = true")
+//    Optional<Usuario> findGestorByUnidadeAdministrativa(Long unidadeId);
+
 }

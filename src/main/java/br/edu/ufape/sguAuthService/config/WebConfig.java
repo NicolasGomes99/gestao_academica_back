@@ -26,7 +26,7 @@ public class WebConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Stateless session management
@@ -41,8 +41,8 @@ public class WebConfig {
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/reset-password").permitAll()
                         .anyRequest().authenticated()
-                ).oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new KeycloakJwtAuthenticationConverter())))
-                .cors(Customizer.withDefaults());
+                ).oauth2ResourceServer(auth -> auth.jwt(token -> token.jwtAuthenticationConverter(new KeycloakJwtAuthenticationConverter())));
+//                .cors(Customizer.withDefaults());
         return http.build();
     }
 
