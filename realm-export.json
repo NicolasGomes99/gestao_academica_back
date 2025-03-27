@@ -86,6 +86,15 @@
         "attributes": {}
       },
       {
+        "id": "bcef4578-5aed-4bf1-9c9f-24a0391ccd61",
+        "name": "gestor",
+        "description": "",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "ed8eab05-acf0-4eb4-8a6f-36bc50edd49c",
+        "attributes": {}
+      },
+      {
         "id": "f581a145-9c75-4da8-8825-31ab6a94c58b",
         "name": "tecnico",
         "description": "",
@@ -1636,18 +1645,18 @@
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
   "smtpServer": {
-    "password": "**********",
+    "password": "d546225af0d474",
     "replyToDisplayName": "",
     "starttls": "true",
     "auth": "true",
-    "port": "587",
-    "host": "smtp.gmail.com",
+    "port": "2525",
+    "host": "sandbox.smtp.mailtrap.io",
     "replyTo": "",
     "from": "naoresponder@ufape.edu.br",
     "fromDisplayName": "Sistema de Gestão UFAPE",
     "envelopeFrom": "",
     "ssl": "false",
-    "user": "naoresponder@ufape.edu.br"
+    "user": "9469f671a3d492"
   },
   "loginTheme": "",
   "accountTheme": "",
@@ -1719,14 +1728,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-user-attribute-mapper",
-            "oidc-address-mapper",
             "oidc-full-name-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "saml-user-property-mapper",
             "oidc-usermodel-property-mapper",
-            "saml-role-list-mapper"
+            "saml-role-list-mapper",
+            "saml-user-attribute-mapper",
+            "saml-user-property-mapper",
+            "oidc-address-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-sha256-pairwise-sub-mapper"
           ]
         }
       },
@@ -1746,14 +1755,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-attribute-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
             "saml-user-attribute-mapper",
-            "oidc-usermodel-property-mapper",
+            "saml-role-list-mapper",
+            "oidc-full-name-mapper",
             "oidc-address-mapper",
             "saml-user-property-mapper",
-            "saml-role-list-mapper",
-            "oidc-full-name-mapper"
+            "oidc-usermodel-property-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-sha256-pairwise-sub-mapper"
           ]
         }
       },
