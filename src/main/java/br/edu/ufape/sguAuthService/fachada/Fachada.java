@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.fachada;
 
 
+import br.edu.ufape.sguAuthService.comunicacao.dto.documento.DocumentoResponse;
 import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
@@ -21,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -219,13 +219,15 @@ public class Fachada {
         return solicitacaoPerfilService.listarSolicitacoesPendentes();
     }
 
-    public Resource baixarDocumentosSolicitacao(Long id, String sessionId) throws SolicitacaoNotFoundException, IOException {
+    public List<DocumentoResponse> listarDocumentosBase64(Long id, String sessionId) throws SolicitacaoNotFoundException, IOException {
         SolicitacaoPerfil solicitacao = solicitacaoPerfilService.buscarSolicitacao(id);
         if(!solicitacao.getSolicitante().getKcId().equals(sessionId) && !keycloakService.hasRoleAdmin(sessionId)){
             throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
         }
-        return armazenamentoService.carregarArquivoZip(solicitacao.getDocumentos());
+        return armazenamentoService.converterDocumentosParaBase64(solicitacao.getDocumentos());
     }
+
+
 
     @Transactional
     public SolicitacaoPerfil aceitarSolicitacao(Long id, SolicitacaoPerfil parecer, String sessionId) throws SolicitacaoNotFoundException, UsuarioNotFoundException {
