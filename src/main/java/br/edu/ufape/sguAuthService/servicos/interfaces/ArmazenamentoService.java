@@ -1,7 +1,7 @@
 package br.edu.ufape.sguAuthService.servicos.interfaces;
 
+import br.edu.ufape.sguAuthService.comunicacao.dto.documento.DocumentoResponse;
 import br.edu.ufape.sguAuthService.models.Documento;
-import org.springframework.core.io.Resource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,5 +12,5 @@ public interface ArmazenamentoService {
     @Transactional
     List<Documento> salvarArquivo(MultipartFile[] arquivos);
 
-    Resource carregarArquivoZip(List<Documento> documentos) throws IOException;
+    List<DocumentoResponse> converterDocumentosParaBase64(List<Documento> documentos) throws IOException;
 }

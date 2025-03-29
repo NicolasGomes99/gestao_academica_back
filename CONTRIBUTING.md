@@ -40,12 +40,21 @@ Acesse a página do seu repositório no GitHub e clique no botão "Compare & pul
 
 ## Convenção de Commits
 
-| Tipo de Commit | Descrição                                                          | Exemplo                               |
-|----------------|--------------------------------------------------------------------|---------------------------------------|
-| `feat`         | Adiciona uma nova funcionalidade ao projeto.                       | `feat: add USENAME.md profile`        |
-| `fix`          | Corrige um bug ou problema no projeto.                             | `fix: fixed issue fix#IssueNumber`    |
-| `docs`         | Altera a documentação do projeto.                                  | `docs: update README.md`              |
-| `style`        | Realiza mudanças na aparência, sem alterar a funcionalidade.       | `style: add EFFECTNAME to COMPONENT`  |
-| `refactor`     | Realiza mudanças no código que não alteram a funcionalidade.       | `refactor: refactor at CLASSNAME`     |
-| `test`         | Adiciona ou modifica testes no projeto.                            | `test: add unit test for UserService` |
-| `chore`        | Realiza alterações no processo de build ou ferramentas auxiliares. | `chore: add .gitignore file`          |
+| Tipo de Commit | Descrição                                                             | Exemplo                                    |
+|---------------|---------------------------------------------------------------------|--------------------------------------------|
+| `feat`        | Adiciona uma nova funcionalidade ao projeto.                        | `feat: add USENAME.md profile`            |
+| `fix`         | Corrige um bug ou problema no projeto.                              | `fix: fixed issue fix#IssueNumber`        |
+| `docs`        | Altera a documentação do projeto.                                   | `docs: update README.md`                  |
+| `style`       | Realiza mudanças na aparência, sem alterar a funcionalidade.        | `style: add EFFECTNAME to COMPONENT`      |
+| `refactor`    | Realiza mudanças no código que não alteram a funcionalidade.        | `refactor: refactor at CLASSNAME`         |
+| `test`        | Adiciona ou modifica testes no projeto.                             | `test: add unit test for UserService`     |
+| `chore`       | Realiza alterações no processo de build ou ferramentas auxiliares.  | `chore: add .gitignore file`              |
+| `perf`        | Melhora o desempenho do código sem alterar a funcionalidade.        | `perf: optimize database query execution` |
+| `build`       | Altera arquivos relacionados ao sistema de build.                   | `build: update Maven dependencies`        |
+| `ci`          | Modifica configurações de integração contínua (CI/CD).              | `ci: add GitHub Actions workflow`         |
+| `revert`      | Reverte um commit anterior.                                         | `revert: revert commit abc123`            |
+| `security`    | Corrige vulnerabilidades de segurança.                              | `security: fix JWT token exposure issue`  |
+| `infra`       | Faz alterações na infraestrutura do projeto.                        | `infra: update Dockerfile for production` |
+| `deps`        | Atualiza, adiciona ou remove dependências do projeto.               | `deps: upgrade Spring Boot to 3.2.1`      |
+| `merge`       | Realiza a fusão de branches.                                        | `merge: merge feature/login into main`    |
+| `wip`         | Indica trabalho em andamento (não deve ser usado em commits finais).| `wip: initial setup for new module`       |

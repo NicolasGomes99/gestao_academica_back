@@ -2,6 +2,7 @@ package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.aluno.AlunoRequest;
+import br.edu.ufape.sguAuthService.comunicacao.dto.documento.DocumentoResponse;
 import br.edu.ufape.sguAuthService.comunicacao.dto.gestor.GestorRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.professor.ProfessorRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.solicitacaoPerfil.SolicitacaoPerfilResponse;
@@ -14,8 +15,6 @@ import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Aluno;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -83,12 +82,10 @@ public class SolicitacaoPerfilController {
     }
 
     @GetMapping("/{id}/documentos")
-    public ResponseEntity<Resource> baixarTodosDocumentos(@PathVariable Long id) throws IOException, SolicitacaoNotFoundException {
+    public ResponseEntity<List<DocumentoResponse>> baixarTodosDocumentos(@PathVariable Long id) throws IOException, SolicitacaoNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt principal = (Jwt) authentication.getPrincipal();
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"documentos.zip\"")
-                .body(fachada.baixarDocumentosSolicitacao(id, principal.getSubject()));
+        return ResponseEntity.ok(fachada.listarDocumentosBase64(id, principal.getSubject()));
     }
 
 
