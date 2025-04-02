@@ -44,10 +44,10 @@ public class Fachada {
     private final TecnicoService tecnicoService;
     private final GestorService gestorService;
     private final TipoUnidadeAdministrativaService tipoUnidadeAdministrativaService;
-    private final EstudanteService estudanteService;
-    private final TipoEtniaService tipoEtniaService;
-    private final EnderecoService enderecoService;
-    private final DadosBancariosService dadosBancariosService;
+//    private final EstudanteService estudanteService;
+//    private final TipoEtniaService tipoEtniaService;
+//    private final EnderecoService enderecoService;
+//    private final DadosBancariosService dadosBancariosService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -303,97 +303,97 @@ public class Fachada {
     }
 
 
-    // ================== Estudante  ================== //
-
-    public Estudante salvarEstudante(Estudante estudante) {
-        return estudanteService.salvarEstudante(estudante);
-    }
-
-    public Estudante buscarEstudante(Long id) throws AlunoNotFoundException{
-        return estudanteService.buscarEstudante(id);
-    }
-
-    public List<Estudante> listarEstudantes() {
-        return estudanteService.listarEstudantes();
-    }
-
-    public Estudante atualizarEstudante(Long id, Estudante estudante) throws AlunoNotFoundException{
-        return estudanteService.atualizarEstudante(id, estudante);
-    }
-
-    public void deletarEstudante(Long id) {
-        estudanteService.deletarEstudante(id);
-    }
-
-
-        // ================== TipoEtnia  ================== //
-
-    public TipoEtnia salvarTipoEtnia(TipoEtnia tipoEtnia) {
-        return tipoEtniaService.salvarTipoEtnia(tipoEtnia);
-    }
-
-    public TipoEtnia buscarTipoEtnia(Long id) {
-        return tipoEtniaService.buscarTipoEtnia(id);
-    }
-
-    public List<TipoEtnia> listarTiposEtnia() {
-        return tipoEtniaService.listarTiposEtnia();
-    }
-
-    public TipoEtnia atualizarTipoEtnia(Long id, TipoEtnia tipoEtnia) {
-        return tipoEtniaService.atualizarTipoEtnia(id, tipoEtnia);
-    }
-
-    public void deletarTipoEtnia(Long id) {
-        tipoEtniaService.deletarTipoEtnia(id);
-    }
-
-
-    // ================== Endereco  ================== //
-
-    public List<Endereco> listarEnderecos() {
-        return enderecoService.listarEnderecos();
-    }
-
-    public Endereco buscarEndereco(Long id) {
-        try {
-            return enderecoService.buscarEndereco(id);
-        } catch (EnderecoNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Endereco criarEndereco(Endereco endereco) {
-        return enderecoService.criarEndereco(endereco);
-    }
-
-    public void excluirEndereco(Long id) {
-        enderecoService.excluirEndereco(id);
-    }
-
-    public Endereco editarEndereco(Long id, Endereco enderecoAtualizado) {
-        return enderecoService.editarEndereco(id, enderecoAtualizado);
-    }
-
-    // ================== Dados Bancarios  ================== //
-
-    public DadosBancarios salvarDadosBancarios(DadosBancarios dadosBancarios) {
-        return dadosBancariosService.salvarDadosBancarios(dadosBancarios);
-    }
-
-    public List<DadosBancarios> listarDadosBancarios() {
-        return dadosBancariosService.listarDadosBancarios();
-    }
-
-    public DadosBancarios buscarDadosBancarios(Long id) {
-        return dadosBancariosService.buscarDadosBancarios(id);
-    }
-
-    public void deletarDadosBancarios(Long id) {
-        dadosBancariosService.deletarDadosBancarios(id);
-    }
-
-    public DadosBancarios atualizarDadosBancarios(Long id, DadosBancarios novosDadosBancarios) {
-        return dadosBancariosService.atualizarDadosBancarios(id, novosDadosBancarios);
-    }
+//    // ================== Estudante  ================== //
+//
+//    public Estudante salvarEstudante(Estudante estudante) {
+//        return estudanteService.salvarEstudante(estudante);
+//    }
+//
+//    public Estudante buscarEstudante(Long id) throws AlunoNotFoundException{
+//        return estudanteService.buscarEstudante(id);
+//    }
+//
+//    public List<Estudante> listarEstudantes() {
+//        return estudanteService.listarEstudantes();
+//    }
+//
+//    public Estudante atualizarEstudante(Long id, Estudante estudante) throws AlunoNotFoundException{
+//        return estudanteService.atualizarEstudante(id, estudante);
+//    }
+//
+//    public void deletarEstudante(Long id) {
+//        estudanteService.deletarEstudante(id);
+//    }
+//
+//
+//        // ================== TipoEtnia  ================== //
+//
+//    public TipoEtnia salvarTipoEtnia(TipoEtnia tipoEtnia) {
+//        return tipoEtniaService.salvarTipoEtnia(tipoEtnia);
+//    }
+//
+//    public TipoEtnia buscarTipoEtnia(Long id) {
+//        return tipoEtniaService.buscarTipoEtnia(id);
+//    }
+//
+//    public List<TipoEtnia> listarTiposEtnia() {
+//        return tipoEtniaService.listarTiposEtnia();
+//    }
+//
+//    public TipoEtnia atualizarTipoEtnia(Long id, TipoEtnia tipoEtnia) {
+//        return tipoEtniaService.atualizarTipoEtnia(id, tipoEtnia);
+//    }
+//
+//    public void deletarTipoEtnia(Long id) {
+//        tipoEtniaService.deletarTipoEtnia(id);
+//    }
+//
+//
+//    // ================== Endereco  ================== //
+//
+//    public List<Endereco> listarEnderecos() {
+//        return enderecoService.listarEnderecos();
+//    }
+//
+//    public Endereco buscarEndereco(Long id) {
+//        try {
+//            return enderecoService.buscarEndereco(id);
+//        } catch (EnderecoNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    public Endereco criarEndereco(Endereco endereco) {
+//        return enderecoService.criarEndereco(endereco);
+//    }
+//
+//    public void excluirEndereco(Long id) {
+//        enderecoService.excluirEndereco(id);
+//    }
+//
+//    public Endereco editarEndereco(Long id, Endereco enderecoAtualizado) {
+//        return enderecoService.editarEndereco(id, enderecoAtualizado);
+//    }
+//
+//    // ================== Dados Bancarios  ================== //
+//
+//    public DadosBancarios salvarDadosBancarios(DadosBancarios dadosBancarios) {
+//        return dadosBancariosService.salvarDadosBancarios(dadosBancarios);
+//    }
+//
+//    public List<DadosBancarios> listarDadosBancarios() {
+//        return dadosBancariosService.listarDadosBancarios();
+//    }
+//
+//    public DadosBancarios buscarDadosBancarios(Long id) {
+//        return dadosBancariosService.buscarDadosBancarios(id);
+//    }
+//
+//    public void deletarDadosBancarios(Long id) {
+//        dadosBancariosService.deletarDadosBancarios(id);
+//    }
+//
+//    public DadosBancarios atualizarDadosBancarios(Long id, DadosBancarios novosDadosBancarios) {
+//        return dadosBancariosService.atualizarDadosBancarios(id, novosDadosBancarios);
+//    }
 }
