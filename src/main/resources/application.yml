@@ -61,6 +61,11 @@ spring:
   config:
     activate:
       on-profile: docker
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   datasource:
     url: jdbc:postgresql://backend-db:5432/sgu
     username: postgres
