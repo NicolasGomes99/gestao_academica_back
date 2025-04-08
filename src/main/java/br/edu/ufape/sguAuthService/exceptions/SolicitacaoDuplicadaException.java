@@ -1,8 +1,9 @@
 package br.edu.ufape.sguAuthService.exceptions;
 
-import org.springframework.web.bind.annotation.ResponseStatus;
+import com.sun.jdi.request.DuplicateRequestException;
 
-@ResponseStatus(value = org.springframework.http.HttpStatus.CONFLICT, reason = "Perfil já solicitado!")
-public class SolicitacaoDuplicadaException extends RuntimeException {
+public class SolicitacaoDuplicadaException extends DuplicateRequestException {
+    public SolicitacaoDuplicadaException() {
+        super("Perfil já solicitado!");
+    }
 }
-

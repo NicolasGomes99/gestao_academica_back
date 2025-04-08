@@ -137,8 +137,7 @@ public class Fachada {
                 return usuarioService.salvar(usuario);
             }catch (DataIntegrityViolationException e){
                 keycloakService.deleteUser(userKcId);
-                ExceptionUtil.handleDataIntegrityViolationException(e);
-                throw e;
+                throw ExceptionUtil.handleDataIntegrityViolationException(e);
             }catch (Exception e){
                 keycloakService.deleteUser(userKcId);
                 throw new RuntimeException("Ocorreu um erro inesperado ao salvar o usuário: "+ e.getMessage(), e);
@@ -166,7 +165,7 @@ public class Fachada {
         usuarioService.deletarUsuario(idSessao);}
 
     // ================== Curso ================== //
-    public Curso salvarCurso(Curso curso) throws CursoDuplicadoException {
+    public Curso salvarCurso(Curso curso){
         return cursoService.salvar(curso);
     }
 
@@ -178,7 +177,7 @@ public class Fachada {
         return cursoService.listar();
     }
 
-    public Curso editarCurso(Long id, Curso novoCurso) throws CursoNotFoundException, CursoDuplicadoException {
+    public Curso editarCurso(Long id, Curso novoCurso) throws CursoNotFoundException{
         return cursoService.editar(id, novoCurso);
     }
 
@@ -254,7 +253,9 @@ public class Fachada {
 
     // ================== Unidade Administrativa ================== //
     public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, Long paiId) throws UnidadeAdministrativaNotFoundException {
-        return unidadeAdministrativaService.salvar(unidadeAdministrativa, paiId);
+        TipoUnidadeAdministrativa tipoUnidadeAdministrativa = tipoUnidadeAdministrativaService.
+                buscar(unidadeAdministrativa.getTipoUnidadeAdministrativa().getId());
+        return unidadeAdministrativaService.salvar(unidadeAdministrativa, tipoUnidadeAdministrativa, paiId);
     }
     public UnidadeAdministrativa buscarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         return unidadeAdministrativaService.buscarUnidadeAdministrativa(id);
@@ -281,7 +282,7 @@ public class Fachada {
 
 
     // ==================Tipo Unidade Administrativa ================== //
-     public TipoUnidadeAdministrativa salvarTipo(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaDuplicadoException {
+     public TipoUnidadeAdministrativa salvarTipo(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) {
         return tipoUnidadeAdministrativaService.salvar(tipoUnidadeAdministrativa);
     }
 
@@ -292,7 +293,7 @@ public class Fachada {
        return tipoUnidadeAdministrativaService.listar();
 
     }
-    public TipoUnidadeAdministrativa editarTipo(Long id, TipoUnidadeAdministrativa novoTipo) throws TipoUnidadeAdministrativaNotFoundException, TipoUnidadeAdministrativaDuplicadoException {
+    public TipoUnidadeAdministrativa editarTipo(Long id, TipoUnidadeAdministrativa novoTipo) throws TipoUnidadeAdministrativaNotFoundException {
         return tipoUnidadeAdministrativaService.editar(id, novoTipo);
     }
 

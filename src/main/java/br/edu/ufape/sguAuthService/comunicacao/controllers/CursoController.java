@@ -3,7 +3,6 @@ package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoResponse;
-import br.edu.ufape.sguAuthService.exceptions.CursoDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.CursoNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Curso;
@@ -26,14 +25,14 @@ public class CursoController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping
-    public ResponseEntity<CursoResponse> salvar(@Valid @RequestBody CursoRequest curso) throws CursoDuplicadoException {
+    public ResponseEntity<CursoResponse> salvar(@Valid @RequestBody CursoRequest curso) {
         Curso response = fachada.salvarCurso(curso.convertToEntity(curso, modelMapper));
         return new ResponseEntity<>(new CursoResponse(response, modelMapper), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PatchMapping("/{id}")
-    public ResponseEntity<CursoResponse> editar(@PathVariable Long id, @Valid @RequestBody CursoRequest curso) throws CursoNotFoundException, CursoDuplicadoException {
+    public ResponseEntity<CursoResponse> editar(@PathVariable Long id, @Valid @RequestBody CursoRequest curso) throws CursoNotFoundException{
         Curso response = fachada.editarCurso(id, curso.convertToEntity(curso, modelMapper));
         return new ResponseEntity<>(new CursoResponse(response, modelMapper), HttpStatus.OK);
     }

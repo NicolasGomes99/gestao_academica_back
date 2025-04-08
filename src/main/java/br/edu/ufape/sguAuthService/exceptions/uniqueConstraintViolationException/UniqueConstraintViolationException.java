@@ -1,4 +1,4 @@
-package br.edu.ufape.sguAuthService.exceptions;
+package br.edu.ufape.sguAuthService.exceptions.uniqueConstraintViolationException;
 
 import lombok.Getter;
 
