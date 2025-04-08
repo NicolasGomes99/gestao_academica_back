@@ -2,11 +2,12 @@ package br.edu.ufape.sguAuthService.servicos;
 
 import java.util.List;
 
+import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufape.sguAuthService.dados.TipoUnidadeAdministrativaRepository;
-import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,13 @@ public class TipoUnidadeAdministrativaservice implements br.edu.ufape.sguAuthSer
     private final ModelMapper modelMapper;
 
     @Override
-    public TipoUnidadeAdministrativa salvar(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaDuplicadoException {
-        tipoUnidadeAdministrativaRepository.findByNomeEqualsIgnoreCase(tipoUnidadeAdministrativa.getNome())
-                .ifPresent(_ -> { throw new TipoUnidadeAdministrativaDuplicadoException("Tipo de unidade administrativa com o nome '" + tipoUnidadeAdministrativa.getNome() + "' já existe."); });
-        return tipoUnidadeAdministrativaRepository.save(tipoUnidadeAdministrativa);
+    public TipoUnidadeAdministrativa salvar(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) {
+        try {
+            return tipoUnidadeAdministrativaRepository.save(tipoUnidadeAdministrativa);
+        }catch (DataIntegrityViolationException e) {
+            throw ExceptionUtil.handleDataIntegrityViolationException(e);
+        }
+
     }
 
     @Override
@@ -35,12 +39,15 @@ public class TipoUnidadeAdministrativaservice implements br.edu.ufape.sguAuthSer
     }
 
     @Override
-    public TipoUnidadeAdministrativa editar(Long id, TipoUnidadeAdministrativa novoTipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaNotFoundException, TipoUnidadeAdministrativaDuplicadoException {
-        tipoUnidadeAdministrativaRepository.findByNomeEqualsIgnoreCase(novoTipoUnidadeAdministrativa.getNome())
-                .ifPresent(existing -> { throw new TipoUnidadeAdministrativaDuplicadoException("Tipo de unidade administrativa com o nome '" + existing.getNome() + "' já existe."); });
-        TipoUnidadeAdministrativa antigoTipoUnidadeAdministrativa = tipoUnidadeAdministrativaRepository.findById(id).orElseThrow(TipoUnidadeAdministrativaNotFoundException::new);
-        modelMapper.map(novoTipoUnidadeAdministrativa, antigoTipoUnidadeAdministrativa);
-        return tipoUnidadeAdministrativaRepository.save(antigoTipoUnidadeAdministrativa);
+    public TipoUnidadeAdministrativa editar(Long id, TipoUnidadeAdministrativa novoTipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaNotFoundException {
+        try {
+            TipoUnidadeAdministrativa antigoTipoUnidadeAdministrativa = tipoUnidadeAdministrativaRepository.findById(id).orElseThrow(TipoUnidadeAdministrativaNotFoundException::new);
+            modelMapper.map(novoTipoUnidadeAdministrativa, antigoTipoUnidadeAdministrativa);
+            return tipoUnidadeAdministrativaRepository.save(antigoTipoUnidadeAdministrativa);
+        }catch (DataIntegrityViolationException e) {
+            throw ExceptionUtil.handleDataIntegrityViolationException(e);
+        }
+
     }
 
     @Override

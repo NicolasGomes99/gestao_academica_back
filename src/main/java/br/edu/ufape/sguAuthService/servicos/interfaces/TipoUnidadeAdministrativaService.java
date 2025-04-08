@@ -2,13 +2,12 @@ package br.edu.ufape.sguAuthService.servicos.interfaces;
 
 import java.util.List;
 
-import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
 
 public interface TipoUnidadeAdministrativaService {
 
-    TipoUnidadeAdministrativa salvar(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaDuplicadoException;
+    TipoUnidadeAdministrativa salvar(TipoUnidadeAdministrativa tipoUnidadeAdministrativa);
 
     TipoUnidadeAdministrativa buscar(Long id) throws TipoUnidadeAdministrativaNotFoundException;
     

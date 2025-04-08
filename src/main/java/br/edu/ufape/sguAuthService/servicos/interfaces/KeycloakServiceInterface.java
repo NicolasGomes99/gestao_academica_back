@@ -33,4 +33,6 @@ public interface KeycloakServiceInterface {
     void resetPassword(String email);
 
     List<UserRepresentation> listUnverifiedUsers();
+
+    void addClientRoleToUser(String userId, String clientId, String roleName);
 }

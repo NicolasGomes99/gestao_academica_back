@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.tipoUnidadeAdministrativa.TipoUnidadeAdministrativaRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.tipoUnidadeAdministrativa.TipoUnidadeAdministrativaResponse;
-import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
 
 import jakarta.validation.Valid;
@@ -35,14 +34,14 @@ public class TipoUnidadeAdministrativaController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("/registrar")
-    public ResponseEntity<TipoUnidadeAdministrativaResponse> salvar(@Valid @RequestBody TipoUnidadeAdministrativaRequest tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaDuplicadoException {
+    public ResponseEntity<TipoUnidadeAdministrativaResponse> salvar(@Valid @RequestBody TipoUnidadeAdministrativaRequest tipoUnidadeAdministrativa){
         TipoUnidadeAdministrativa response = fachada.salvarTipo(tipoUnidadeAdministrativa.convertToEntity(tipoUnidadeAdministrativa, modelMapper));
         return new ResponseEntity<>(new TipoUnidadeAdministrativaResponse(response, modelMapper), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PatchMapping("/{id}/editar")
-    public ResponseEntity<TipoUnidadeAdministrativaResponse> editar(@PathVariable Long id, @Valid @RequestBody TipoUnidadeAdministrativaRequest tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaNotFoundException, TipoUnidadeAdministrativaDuplicadoException {
+    public ResponseEntity<TipoUnidadeAdministrativaResponse> editar(@PathVariable Long id, @Valid @RequestBody TipoUnidadeAdministrativaRequest tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaNotFoundException {
         TipoUnidadeAdministrativa response = fachada.editarTipo(id, tipoUnidadeAdministrativa.convertToEntity(tipoUnidadeAdministrativa, modelMapper));
         return new ResponseEntity<>(new TipoUnidadeAdministrativaResponse(response, modelMapper), HttpStatus.OK);
     }
