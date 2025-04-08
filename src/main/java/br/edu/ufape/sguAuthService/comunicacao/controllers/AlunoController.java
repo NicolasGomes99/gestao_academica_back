@@ -36,6 +36,26 @@ public class AlunoController {
     }
 
 
+    @PostMapping("/batch")
+    List<AlunoResponse> listarAlunosEmBatch(@RequestBody List<String> kcIds) {
+        return fachada.listarAlunosEmBatch(kcIds).stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
+    }
+
+    @GetMapping("/current")
+    ResponseEntity<AlunoResponse> buscarAlunoAtual() throws AlunoNotFoundException, UsuarioNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt principal = (Jwt) authentication.getPrincipal();
+        Usuario response = fachada.buscarAlunoPorKcId(principal.getSubject());
+        return new ResponseEntity<>(new AlunoResponse(response, modelMapper), HttpStatus.OK);
+    }
+
+    @GetMapping("/buscar/{kcId}")
+    ResponseEntity<AlunoResponse> buscarAlunoPorKcId(@PathVariable String kcId) throws AlunoNotFoundException, UsuarioNotFoundException {
+        Usuario response = fachada.buscarAlunoPorKcId(kcId);
+        return new ResponseEntity<>(new AlunoResponse(response, modelMapper), HttpStatus.OK);
+    }
+
+
 
 
 }

@@ -2,11 +2,9 @@ package br.edu.ufape.sguAuthService.fachada;
 
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.documento.DocumentoResponse;
-import br.edu.ufape.sguAuthService.exceptions.TipoUnidadeAdministrativaDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
 import br.edu.ufape.sguAuthService.comunicacao.dto.auth.TokenResponse;
-import br.edu.ufape.sguAuthService.exceptions.CursoDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
 import br.edu.ufape.sguAuthService.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sguAuthService.exceptions.SolicitacaoDuplicadaException;
@@ -72,6 +70,14 @@ public class Fachada {
     public Usuario buscarAluno(Long id, String sessionId) throws AlunoNotFoundException, UsuarioNotFoundException {
         boolean isAdmin = keycloakService.hasRoleAdmin(sessionId);
         return alunoService.buscarAluno(id, isAdmin, sessionId);
+    }
+
+    public List<Usuario> listarAlunosEmBatch(List<String> kcIds) {
+        return alunoService.buscarAlunosPorKcId(kcIds);
+    }
+
+    public Usuario buscarAlunoPorKcId(String kcId) throws AlunoNotFoundException, UsuarioNotFoundException {
+        return alunoService.buscarAlunoPorKcId(kcId);
     }
 
 

@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByKcId(String kcId);
     List<Usuario> findByAtivoTrue();
+    List<Usuario> findByKcIdIn(List<String> kcIds);
 
     @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Aluno AND u.ativo = true")
     List<Usuario> findUsuariosAlunos();
@@ -19,5 +20,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     List<Usuario> findUsuariosTecnicos();
     @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Gestor AND u.ativo = true")
     List<Usuario> findUsuariosGestores();
-
 }

@@ -11,4 +11,8 @@ public interface AlunoService {
     List<Usuario> listarAlunos();
 
     Usuario buscarAluno(Long id, boolean isAdm, String sessionId) throws AlunoNotFoundException, UsuarioNotFoundException;
+
+    Usuario buscarAlunoPorKcId(String kcId) throws UsuarioNotFoundException, AlunoNotFoundException;
+
+    List<Usuario> buscarAlunosPorKcId(List<String> kcIds);
 }
