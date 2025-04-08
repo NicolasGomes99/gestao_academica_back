@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -330,6 +331,36 @@ public class KeycloakService implements KeycloakServiceInterface {
         return keycloak.realm(realm).users().list().stream()
                 .filter(user -> !user.isEmailVerified())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addClientRoleToUser(String userId, String clientId, String roleName) {
+        try {
+            ClientRepresentation client = keycloak.realm(realm)
+                    .clients()
+                    .findByClientId(clientId)
+                    .getFirst();
+
+            RoleRepresentation role = keycloak.realm(realm)
+                    .clients()
+                    .get(client.getId())
+                    .roles()
+                    .get(roleName)
+                    .toRepresentation();
+
+            keycloak.realm(realm)
+                    .users()
+                    .get(userId)
+                    .roles()
+                    .clientLevel(client.getId())
+                    .add(Collections.singletonList(role));
+
+            log.info("Adicionada role '{}' do client '{}' ao usuário '{}'", roleName, clientId, userId);
+
+        } catch (Exception e) {
+            log.error("Erro ao adicionar role de client ao usuário", e);
+            throw new KeycloakAuthenticationException("Erro ao adicionar role de client ao usuário", e);
+        }
     }
 
 }
