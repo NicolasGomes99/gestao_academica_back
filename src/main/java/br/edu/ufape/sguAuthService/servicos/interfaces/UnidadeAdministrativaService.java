@@ -22,5 +22,12 @@ public interface UnidadeAdministrativaService {
 
     UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa unidadeAdministrativa, Long id) throws UnidadeAdministrativaNotFoundException;
 
-//    void adicionarGestor(Long unidadeId, Long usuarioId);
+    void adicionarGestor(Long unidadeId, Long usuarioId);
+
+    void removerGestor(Long unidadeId);
+
+    void adicionarTecnico(Long unidadeId, Long usuarioId);
+
+    void removerTecnico(Long unidadeId, Long usuarioId);
+
 }

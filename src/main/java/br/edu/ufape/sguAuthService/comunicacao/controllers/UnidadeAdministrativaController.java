@@ -77,4 +77,29 @@ public class UnidadeAdministrativaController {
         fachada.deletarUnidadeAdministrativa(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PatchMapping("/{id}/adicionarGestor/{usuarioId}")
+    public ResponseEntity<Void> adicionarGestor(@PathVariable Long id, @PathVariable Long usuarioId) {
+        fachada.adicionarGestor(id, usuarioId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/removerGestor")
+    public ResponseEntity<Void> removerGestor(@PathVariable Long id) {
+        fachada.removerGestor(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{unidadeId}/adicionarTecnico/{usuarioId}")
+    public ResponseEntity<Void> adicionarTecnico(@PathVariable Long unidadeId, @PathVariable Long usuarioId) {
+        fachada.adicionarTecnico(unidadeId, usuarioId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{unidadeId}/removerTecnico/{usuarioId}")
+    public ResponseEntity<Void> removerTecnico(@PathVariable Long unidadeId, @PathVariable Long usuarioId) {
+        fachada.removerTecnico(unidadeId, usuarioId);
+        return ResponseEntity.ok().build();
+    }
+
 }

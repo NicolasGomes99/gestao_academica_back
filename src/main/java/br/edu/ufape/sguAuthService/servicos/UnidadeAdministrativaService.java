@@ -2,12 +2,13 @@ package br.edu.ufape.sguAuthService.servicos;
 
 
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
+import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaCircularException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaComDependenciasException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
-import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
-import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
+import br.edu.ufape.sguAuthService.models.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService.servicos.interfaces.UnidadeAdministrativaService {
     private final UnidadeAdministrativaRepository unidadeAdministrativaRepository;
+    private final UsuarioRepository usuarioRepository;
 
     private final ModelMapper modelMapper;
 
@@ -93,4 +95,58 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
 
         unidadeAdministrativaRepository.deleteById(id);
     }
+
+    @Override
+    public void adicionarGestor(Long unidadeId, Long usuarioId) {
+        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
+                .orElseThrow(UnidadeAdministrativaNotFoundException::new);
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(GestorNotFoundException::new);
+
+        Gestor gestor = usuario.getGestor();
+        unidade.setGestor(gestor);
+
+        unidadeAdministrativaRepository.save(unidade);
+    }
+
+    @Override
+    public void removerGestor(Long unidadeId) {
+        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
+                .orElseThrow(UnidadeAdministrativaNotFoundException::new);
+
+        unidade.setGestor(null);
+        unidadeAdministrativaRepository.save(unidade);
+    }
+
+    @Override
+    public void adicionarTecnico(Long unidadeId, Long usuarioId) {
+        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
+                .orElseThrow(UnidadeAdministrativaNotFoundException::new);
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+
+        Tecnico tecnico = usuario.getTecnico();
+
+        tecnico.setUnidadeAdministrativa(unidade);
+        usuarioRepository.save(usuario); // salva o técnico atualizado dentro do usuário
+    }
+
+    @Override
+    public void removerTecnico(Long unidadeId, Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+
+        Tecnico tecnico = usuario.getTecnico();
+
+        if (tecnico.getUnidadeAdministrativa() != null &&
+                tecnico.getUnidadeAdministrativa().getId().equals(unidadeId)) {
+
+            tecnico.setUnidadeAdministrativa(null);
+            usuarioRepository.save(usuario);
+        }
+    }
+
+
 }
