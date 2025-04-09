@@ -19,4 +19,6 @@ public interface UsuarioService {
     void deletarUsuario(String sessionId) throws UsuarioNotFoundException;
 
     void deletarUsuarioKcId(String kcId) throws UsuarioNotFoundException;
+
+    List<Usuario> buscarUsuariosPorKcId(List<String> kcIds);
 }

@@ -72,10 +72,6 @@ public class Fachada {
         return alunoService.buscarAluno(id, isAdmin, sessionId);
     }
 
-    public List<Usuario> listarAlunosEmBatch(List<String> kcIds) {
-        return alunoService.buscarAlunosPorKcId(kcIds);
-    }
-
     public Usuario buscarAlunoPorKcId(String kcId) throws AlunoNotFoundException, UsuarioNotFoundException {
         return alunoService.buscarAlunoPorKcId(kcId);
     }
@@ -161,6 +157,10 @@ public class Fachada {
         return usuarioService.buscarUsuario(id, isAdmin, sessionId);}
 
     public List<Usuario> listarUsuarios() {return usuarioService.listarUsuarios();}
+
+    public List<Usuario> listarUsuariosEmBatch(List<String> kcIds) {
+        return usuarioService.buscarUsuariosPorKcId(kcIds);
+    }
 
     public void deletarUsuario(String idSessao) throws UsuarioNotFoundException {
         try {

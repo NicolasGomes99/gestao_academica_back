@@ -38,7 +38,7 @@ public class AlunoController {
 
     @PostMapping("/batch")
     List<AlunoResponse> listarAlunosEmBatch(@RequestBody List<String> kcIds) {
-        return fachada.listarAlunosEmBatch(kcIds).stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
+        return fachada.listarUsuariosEmBatch(kcIds).stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
     }
 
     @GetMapping("/current")
