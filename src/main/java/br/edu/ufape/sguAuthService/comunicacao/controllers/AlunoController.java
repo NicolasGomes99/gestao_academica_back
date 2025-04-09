@@ -51,8 +51,7 @@ public class AlunoController {
 
     @GetMapping("/buscar/{kcId}")
     ResponseEntity<AlunoResponse> buscarAlunoPorKcId(@PathVariable String kcId) throws AlunoNotFoundException, UsuarioNotFoundException {
-        Usuario response = fachada.buscarAlunoPorKcId(kcId);
-        return new ResponseEntity<>(new AlunoResponse(response, modelMapper), HttpStatus.OK);
+        return new ResponseEntity<>(new AlunoResponse(fachada.buscarAlunoPorKcId(kcId), modelMapper), HttpStatus.OK);
     }
 
 
