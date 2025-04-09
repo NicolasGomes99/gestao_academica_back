@@ -99,6 +99,10 @@ public class Fachada {
         return tecnicoService.buscarTecnico(id, isAdmin, sessionId);
     }
 
+    public Usuario buscarTecnicoPorKcId(String kcId) throws TecnicoNotFoundException, UsuarioNotFoundException {
+        return tecnicoService.buscarTecnicoPorKcId(kcId);
+    }
+
     // ================== Gestor ================== //
     public List<Usuario> listarGestores() {
         return gestorService.listarGestores();
