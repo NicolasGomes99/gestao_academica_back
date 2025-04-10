@@ -9,6 +9,7 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -61,19 +62,19 @@ public class Usuario {
                 : getClass().hashCode();
     }
 
-    public Aluno getAluno() {
-        return perfis.stream().filter(perfil -> perfil instanceof Aluno).map(perfil -> (Aluno) perfil).findFirst().orElseThrow();
+    public Optional<Aluno> getAluno() {
+        return perfis.stream().filter(perfil -> perfil instanceof Aluno).map(perfil -> (Aluno) perfil).findFirst();
     }
 
-    public Professor getProfessor() {
-        return perfis.stream().filter(perfil -> perfil instanceof Professor).map(perfil -> (Professor) perfil).findFirst().orElseThrow();
+    public Optional<Professor> getProfessor() {
+        return perfis.stream().filter(perfil -> perfil instanceof Professor).map(perfil -> (Professor) perfil).findFirst();
     }
 
-    public Tecnico getTecnico() {
-        return perfis.stream().filter(perfil -> perfil instanceof Tecnico).map(perfil -> (Tecnico) perfil).findFirst().orElseThrow();
+    public Optional<Tecnico> getTecnico() {
+        return perfis.stream().filter(perfil -> perfil instanceof Tecnico).map(perfil -> (Tecnico) perfil).findFirst();
     }
 
-    public Gestor getGestor() {
-        return perfis.stream().filter(perfil -> perfil instanceof Gestor).map(perfil -> (Gestor) perfil).findFirst().orElseThrow();
+    public Optional<Gestor> getGestor() {
+        return perfis.stream().filter(perfil -> perfil instanceof Gestor).map(perfil -> (Gestor) perfil).findFirst();
     }
 }

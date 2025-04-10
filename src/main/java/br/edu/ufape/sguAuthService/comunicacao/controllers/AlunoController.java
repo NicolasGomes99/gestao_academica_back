@@ -38,7 +38,7 @@ public class AlunoController {
 
     @PostMapping("/batch")
     List<AlunoResponse> listarAlunosEmBatch(@RequestBody List<String> kcIds) {
-        return fachada.listarAlunosEmBatch(kcIds).stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
+        return fachada.listarUsuariosEmBatch(kcIds).stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
     }
 
     @GetMapping("/current")
@@ -51,8 +51,7 @@ public class AlunoController {
 
     @GetMapping("/buscar/{kcId}")
     ResponseEntity<AlunoResponse> buscarAlunoPorKcId(@PathVariable String kcId) throws AlunoNotFoundException, UsuarioNotFoundException {
-        Usuario response = fachada.buscarAlunoPorKcId(kcId);
-        return new ResponseEntity<>(new AlunoResponse(response, modelMapper), HttpStatus.OK);
+        return new ResponseEntity<>(new AlunoResponse(fachada.buscarAlunoPorKcId(kcId), modelMapper), HttpStatus.OK);
     }
 
 
