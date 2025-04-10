@@ -51,8 +51,4 @@ public class TecnicoController {
         return new ResponseEntity<>(new TecnicoResponse(response, modelMapper), HttpStatus.OK);
     }
 
-    @PostMapping("/batch")
-    List<TecnicoResponse> listarTecnicosEmBatch(@RequestBody List<String> kcIds) {
-        return fachada.listarUsuariosEmBatch(kcIds).stream().map(usuario -> new TecnicoResponse(usuario, modelMapper)).toList();
-    }
 }
