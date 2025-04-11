@@ -287,22 +287,24 @@ public class Fachada {
         return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
     }
 
-    public void adicionarGestor(Long unidadeId, Long usuarioId) {
-        unidadeAdministrativaService.adicionarGestor(unidadeId, usuarioId);
-    }
+   public void adicionarGestor(Long unidadeId, Long usuarioId) throws UsuarioNotFoundException, UnidadeAdministrativaNotFoundException {
+    Usuario gestor = usuarioService.buscarUsuario(usuarioId, true, null);
+    unidadeAdministrativaService.adicionarGestor(unidadeId, gestor);
+}
 
-    public void removerGestor(Long unidadeId) {
-        unidadeAdministrativaService.removerGestor(unidadeId);
+public void removerGestor(Long unidadeId) throws UnidadeAdministrativaNotFoundException {
+    unidadeAdministrativaService.removerGestor(unidadeId);
+}
 
-    }
+public void adicionarTecnico(Long unidadeId, Long usuarioId) throws UsuarioNotFoundException, UnidadeAdministrativaNotFoundException {
+    Usuario tecnico = usuarioService.buscarUsuario(usuarioId, true, null);
+    unidadeAdministrativaService.adicionarTecnico(unidadeId, tecnico);
+}
 
-    public void adicionarTecnico(Long unidadeId, Long usuarioId) {
-        unidadeAdministrativaService.adicionarTecnico(unidadeId, usuarioId);
-    }
-
-    public void removerTecnico(Long unidadeId, Long usuarioId) {
-        unidadeAdministrativaService.removerTecnico(unidadeId, usuarioId);
-    }
+public void removerTecnico(Long unidadeId, Long usuarioId) throws UsuarioNotFoundException, UnidadeAdministrativaNotFoundException {
+    Usuario tecnico = usuarioService.buscarUsuario(usuarioId, true, null);
+    unidadeAdministrativaService.removerTecnico(unidadeId, tecnico);
+}
 
 //    public void alocarGestor(Long unidadeId, Long usuarioId) {
 //        UnidadeAdministrativa unidade = unidadeAdministrativaService.buscarUnidadeAdministrativa(unidadeId);

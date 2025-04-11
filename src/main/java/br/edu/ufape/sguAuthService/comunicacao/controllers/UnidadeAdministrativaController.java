@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.*;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
@@ -78,26 +79,26 @@ public class UnidadeAdministrativaController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping("/{id}/adicionarGestor/{usuarioId}")
-    public ResponseEntity<Void> adicionarGestor(@PathVariable Long id, @PathVariable Long usuarioId) {
-        fachada.adicionarGestor(id, usuarioId);
+@PostMapping("/{unidadeId}/gestores/{usuarioId}")
+    public ResponseEntity<Void> adicionarGestor(@PathVariable Long unidadeId, @PathVariable Long usuarioId) throws UsuarioNotFoundException, UnidadeAdministrativaNotFoundException {
+        fachada.adicionarGestor(unidadeId, usuarioId);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{id}/removerGestor")
-    public ResponseEntity<Void> removerGestor(@PathVariable Long id) {
-        fachada.removerGestor(id);
+    @DeleteMapping("/{unidadeId}/gestores")
+    public ResponseEntity<Void> removerGestor(@PathVariable Long unidadeId) throws UnidadeAdministrativaNotFoundException {
+        fachada.removerGestor(unidadeId);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{unidadeId}/adicionarTecnico/{usuarioId}")
-    public ResponseEntity<Void> adicionarTecnico(@PathVariable Long unidadeId, @PathVariable Long usuarioId) {
+    @PostMapping("/{unidadeId}/tecnicos/{usuarioId}")
+    public ResponseEntity<Void> adicionarTecnico(@PathVariable Long unidadeId, @PathVariable Long usuarioId) throws UsuarioNotFoundException, UnidadeAdministrativaNotFoundException {
         fachada.adicionarTecnico(unidadeId, usuarioId);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{unidadeId}/removerTecnico/{usuarioId}")
-    public ResponseEntity<Void> removerTecnico(@PathVariable Long unidadeId, @PathVariable Long usuarioId) {
+    @DeleteMapping("/{unidadeId}/tecnicos/{usuarioId}")
+    public ResponseEntity<Void> removerTecnico(@PathVariable Long unidadeId, @PathVariable Long usuarioId) throws UsuarioNotFoundException, UnidadeAdministrativaNotFoundException {
         fachada.removerTecnico(unidadeId, usuarioId);
         return ResponseEntity.ok().build();
     }

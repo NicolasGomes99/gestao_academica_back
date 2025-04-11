@@ -97,55 +97,31 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public void adicionarGestor(Long unidadeId, Long usuarioId) {
-        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
-                .orElseThrow(UnidadeAdministrativaNotFoundException::new);
-
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(GestorNotFoundException::new);
-
-        Gestor gestor = usuario.getGestor();
-        unidade.setGestor(gestor);
-
-        unidadeAdministrativaRepository.save(unidade);
+    public void adicionarGestor(Long unidadeId, Usuario gestor) throws UnidadeAdministrativaNotFoundException {
+    UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+    unidade.setGestor(gestor.getGestor());
+    unidadeAdministrativaRepository.save(unidade);
     }
 
     @Override
-    public void removerGestor(Long unidadeId) {
-        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
-                .orElseThrow(UnidadeAdministrativaNotFoundException::new);
-
-        unidade.setGestor(null);
-        unidadeAdministrativaRepository.save(unidade);
+    public void removerGestor(Long unidadeId) throws UnidadeAdministrativaNotFoundException {
+    UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+    unidade.setGestor(null);
+    unidadeAdministrativaRepository.save(unidade);
     }
 
     @Override
-    public void adicionarTecnico(Long unidadeId, Long usuarioId) {
-        UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(unidadeId)
-                .orElseThrow(UnidadeAdministrativaNotFoundException::new);
-
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-
-        Tecnico tecnico = usuario.getTecnico();
-
-        tecnico.setUnidadeAdministrativa(unidade);
-        usuarioRepository.save(usuario);
+   public void adicionarTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException {
+    UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+    unidade.getTecnicos().add(tecnico.getTecnico());
+    unidadeAdministrativaRepository.save(unidade);
     }
 
     @Override
-    public void removerTecnico(Long unidadeId, Long usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-
-        Tecnico tecnico = usuario.getTecnico();
-
-        if (tecnico.getUnidadeAdministrativa() != null &&
-                tecnico.getUnidadeAdministrativa().getId().equals(unidadeId)) {
-
-            tecnico.setUnidadeAdministrativa(null);
-            usuarioRepository.save(usuario);
-        }
+    public void removerTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException {
+    UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+    unidade.getTecnicos().remove(tecnico.getTecnico());
+    unidadeAdministrativaRepository.save(unidade);
     }
 
 //    @Override

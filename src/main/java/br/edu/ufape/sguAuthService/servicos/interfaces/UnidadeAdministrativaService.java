@@ -1,10 +1,7 @@
 package br.edu.ufape.sguAuthService.servicos.interfaces;
 
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
-import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
-import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
-import br.edu.ufape.sguAuthService.models.Gestor;
-import br.edu.ufape.sguAuthService.models.Tecnico;
+import br.edu.ufape.sguAuthService.models.*;
 
 import java.util.List;
 
@@ -24,13 +21,13 @@ public interface UnidadeAdministrativaService {
 
     UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa unidadeAdministrativa, Long id) throws UnidadeAdministrativaNotFoundException;
 
-    void adicionarGestor(Long unidadeId, Long usuarioId);
+    void adicionarGestor(Long unidadeId, Usuario gestor) throws UnidadeAdministrativaNotFoundException;
 
-    void removerGestor(Long unidadeId);
+    void adicionarTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException;
 
-    void adicionarTecnico(Long unidadeId, Long usuarioId);
+    void removerGestor(Long unidadeId) throws UnidadeAdministrativaNotFoundException;
 
-    void removerTecnico(Long unidadeId, Long usuarioId);
+    void removerTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException;
 
 //    void vincularGestor(UnidadeAdministrativa unidade, Gestor gestor);
 //
