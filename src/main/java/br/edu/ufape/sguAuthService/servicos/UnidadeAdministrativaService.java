@@ -130,7 +130,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         Tecnico tecnico = usuario.getTecnico();
 
         tecnico.setUnidadeAdministrativa(unidade);
-        usuarioRepository.save(usuario); // salva o técnico atualizado dentro do usuário
+        usuarioRepository.save(usuario);
     }
 
     @Override
@@ -147,6 +147,28 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
             usuarioRepository.save(usuario);
         }
     }
+
+//    @Override
+//    public void vincularGestor(UnidadeAdministrativa unidade, Gestor gestor) {
+//        unidade.setGestor(gestor);
+//        unidadeAdministrativaRepository.save(unidade);
+//    }
+//
+//    @Override
+//    public void desvincularGestor(UnidadeAdministrativa unidade) {
+//        unidade.setGestor(null);
+//        unidadeAdministrativaRepository.save(unidade);
+//    }
+//
+//    @Override
+//    public void vincularTecnico(Tecnico tecnico, UnidadeAdministrativa unidade) {
+//        tecnico.setUnidadeAdministrativa(unidade);
+//    }
+//
+//    @Override
+//    public void desvincularTecnico(Tecnico tecnico) {
+//        tecnico.setUnidadeAdministrativa(null);
+//    }
 
 
 }

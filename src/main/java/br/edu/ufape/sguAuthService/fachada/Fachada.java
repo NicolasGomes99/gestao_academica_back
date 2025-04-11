@@ -14,6 +14,7 @@ import br.edu.ufape.sguAuthService.models.*;
 import br.edu.ufape.sguAuthService.servicos.interfaces.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import lombok.RequiredArgsConstructor;
@@ -302,6 +303,38 @@ public class Fachada {
     public void removerTecnico(Long unidadeId, Long usuarioId) {
         unidadeAdministrativaService.removerTecnico(unidadeId, usuarioId);
     }
+
+//    public void alocarGestor(Long unidadeId, Long usuarioId) {
+//        UnidadeAdministrativa unidade = unidadeAdministrativaService.buscarUnidadeAdministrativa(unidadeId);
+//        Usuario usuario = usuarioService.buscarUsuario(usuarioId, true, null);
+//        Gestor gestor = usuario.getGestor();
+//
+//        unidadeAdministrativaService.vincularGestor(unidade, gestor);
+//        usuarioService.atualizar(usuario);
+//    }
+//
+//    public void removerGestor(Long unidadeId) {
+//        UnidadeAdministrativa unidade = unidadeAdministrativaService.buscarUnidadeAdministrativa(unidadeId);
+//        unidadeAdministrativaService.desvincularGestor(unidade);
+//    }
+//
+//    public void alocarTecnico(Long unidadeId, Long usuarioId) {
+//        UnidadeAdministrativa unidade = unidadeAdministrativaService.buscarUnidadeAdministrativa(unidadeId);
+//        Usuario usuario = usuarioService.buscarUsuario(usuarioId, true, null);
+//        Tecnico tecnico = usuario.getTecnico();
+//
+//        unidadeAdministrativaService.vincularTecnico(tecnico, unidade);
+//        usuarioService.atualizar(usuario);
+//    }
+//
+//    public void removerTecnico(Long unidadeId, Long usuarioId) {
+//        Usuario usuario = usuarioService.buscarUsuario(usuarioId, true, null);
+//        Tecnico tecnico = usuario.getTecnico();
+//
+//        unidadeAdministrativaService.desvincularTecnico(tecnico);
+//        usuarioService.atualizar(usuario);
+//    }
+
 
     // ==================Tipo Unidade Administrativa ================== //
      public TipoUnidadeAdministrativa salvarTipo(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) {

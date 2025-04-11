@@ -65,6 +65,10 @@ public class UsuarioService implements br.edu.ufape.sguAuthService.servicos.inte
         usuarioRepository.save(usuario);
     }
 
+//    @Override
+//    public Usuario atualizar(Usuario usuario) {
+//        return usuarioRepository.save(usuario);
+//    }
 
 
 }
