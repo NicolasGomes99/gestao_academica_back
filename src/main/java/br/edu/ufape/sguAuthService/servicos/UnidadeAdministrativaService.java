@@ -2,9 +2,7 @@ package br.edu.ufape.sguAuthService.servicos;
 
 
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
-import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
-import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaCircularException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaComDependenciasException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
@@ -21,7 +19,6 @@ import java.util.List;
 
 public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService.servicos.interfaces.UnidadeAdministrativaService {
     private final UnidadeAdministrativaRepository unidadeAdministrativaRepository;
-    private final UsuarioRepository usuarioRepository;
 
     private final ModelMapper modelMapper;
 
@@ -123,28 +120,5 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     unidade.getTecnicos().remove(tecnico.getTecnico());
     unidadeAdministrativaRepository.save(unidade);
     }
-
-//    @Override
-//    public void vincularGestor(UnidadeAdministrativa unidade, Gestor gestor) {
-//        unidade.setGestor(gestor);
-//        unidadeAdministrativaRepository.save(unidade);
-//    }
-//
-//    @Override
-//    public void desvincularGestor(UnidadeAdministrativa unidade) {
-//        unidade.setGestor(null);
-//        unidadeAdministrativaRepository.save(unidade);
-//    }
-//
-//    @Override
-//    public void vincularTecnico(Tecnico tecnico, UnidadeAdministrativa unidade) {
-//        tecnico.setUnidadeAdministrativa(unidade);
-//    }
-//
-//    @Override
-//    public void desvincularTecnico(Tecnico tecnico) {
-//        tecnico.setUnidadeAdministrativa(null);
-//    }
-
 
 }

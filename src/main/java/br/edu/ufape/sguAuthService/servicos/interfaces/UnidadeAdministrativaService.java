@@ -29,11 +29,4 @@ public interface UnidadeAdministrativaService {
 
     void removerTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException;
 
-//    void vincularGestor(UnidadeAdministrativa unidade, Gestor gestor);
-//
-//    void vincularTecnico(Tecnico tecnico, UnidadeAdministrativa unidade);
-//
-//    void desvincularGestor(UnidadeAdministrativa unidade);
-//
-//    void desvincularTecnico(Tecnico tecnico);
 }
