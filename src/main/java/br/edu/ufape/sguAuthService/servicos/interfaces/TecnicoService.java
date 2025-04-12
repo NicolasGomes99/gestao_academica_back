@@ -10,4 +10,7 @@ public interface TecnicoService {
     List<Usuario> getTecnicos();
 
     Usuario buscarTecnico(Long id, boolean isAdm, String sessionId) throws TecnicoNotFoundException, UsuarioNotFoundException;
+
+    Usuario buscarTecnicoPorKcId(String kcId) throws UsuarioNotFoundException, TecnicoNotFoundException;
+
 }

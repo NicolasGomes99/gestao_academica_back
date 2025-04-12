@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class TecnicoService implements br.edu.ufape.sguAuthService.servicos.interfaces.TecnicoService {
     private final UsuarioRepository usuarioRepository;
+
 
     @Override
     public List<Usuario> getTecnicos(){
@@ -34,6 +36,13 @@ public class TecnicoService implements br.edu.ufape.sguAuthService.servicos.inte
         return usuario;
     }
 
-
+    @Override
+    public Usuario buscarTecnicoPorKcId(String kcId) throws UsuarioNotFoundException, TecnicoNotFoundException {
+        Usuario usuario = usuarioRepository.findByKcId(kcId).orElseThrow(UsuarioNotFoundException::new);
+        if (usuario.getPerfis().stream().noneMatch(perfil -> perfil instanceof Tecnico)) {
+            throw new TecnicoNotFoundException();
+        }
+        return usuario;
+    }
 
 }

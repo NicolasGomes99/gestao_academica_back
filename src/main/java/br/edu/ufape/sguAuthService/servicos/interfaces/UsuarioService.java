@@ -20,5 +20,5 @@ public interface UsuarioService {
 
     void deletarUsuarioKcId(String kcId) throws UsuarioNotFoundException;
 
-//    Usuario atualizar(Usuario usuario);
+    List<Usuario> buscarUsuariosPorKcId(List<String> kcIds);
 }

@@ -2,6 +2,7 @@ package br.edu.ufape.sguAuthService.comunicacao.dto.tecnico;
 
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.usuario.UsuarioResponse;
+import br.edu.ufape.sguAuthService.models.Tecnico;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class TecnicoResponse extends UsuarioResponse {
     public TecnicoResponse(Usuario usuario, ModelMapper modelMapper){
         if (usuario == null) throw new IllegalArgumentException("Tecnico não pode ser nulo");
         else modelMapper.map(usuario, this);
-        this.siape = usuario.getTecnico().getSiape();
+        Tecnico tecnico = usuario.getTecnico().orElseThrow();
+        this.siape = tecnico.getSiape();
     }
 }

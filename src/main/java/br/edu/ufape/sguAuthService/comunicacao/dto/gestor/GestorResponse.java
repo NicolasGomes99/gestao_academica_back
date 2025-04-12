@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.comunicacao.dto.gestor;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.usuario.UsuarioResponse;
+import br.edu.ufape.sguAuthService.models.Gestor;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class GestorResponse extends UsuarioResponse {
     public GestorResponse(Usuario usuario, ModelMapper modelMapper){
         if (usuario == null) throw new IllegalArgumentException("Gestor não pode ser nulo");
         else modelMapper.map(usuario, this);
-        this.siape = usuario.getGestor().getSiape();
+        Gestor gestor = usuario.getGestor().orElseThrow();
+        this.siape = gestor.getSiape();
     }
 }

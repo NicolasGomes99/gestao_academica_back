@@ -2,6 +2,7 @@ package br.edu.ufape.sguAuthService.comunicacao.dto.professor;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoResponse;
 import br.edu.ufape.sguAuthService.comunicacao.dto.usuario.UsuarioResponse;
+import br.edu.ufape.sguAuthService.models.Professor;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,9 @@ public class ProfessorResponse extends UsuarioResponse {
     public ProfessorResponse(Usuario usuario, ModelMapper modelMapper){
         if (usuario == null) throw new IllegalArgumentException("Professor não pode ser nulo");
         else modelMapper.map(usuario, this);
-        this.siape = usuario.getProfessor().getSiape();
-        this.cursos = usuario.getProfessor().getCursos().stream().map(curso -> new CursoResponse(curso, modelMapper)).collect(Collectors.toSet());
+        Professor professor = usuario.getProfessor().orElseThrow();
+        this.siape = professor.getSiape();
+        this.cursos = professor.getCursos().stream().map(curso -> new CursoResponse(curso, modelMapper)).collect(Collectors.toSet());
     }
 
 }
