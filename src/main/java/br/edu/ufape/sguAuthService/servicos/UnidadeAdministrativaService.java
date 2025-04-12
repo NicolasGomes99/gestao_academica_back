@@ -12,7 +12,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -96,7 +98,10 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     @Override
     public void adicionarGestor(Long unidadeId, Usuario gestor) throws UnidadeAdministrativaNotFoundException {
     UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-    unidade.setGestor(gestor.getGestor());
+    Optional<Gestor> gestorUnidade = gestor.getGestor();
+    if (gestorUnidade.isPresent()) {
+        unidade.setGestor(gestorUnidade.get());
+    }
     unidadeAdministrativaRepository.save(unidade);
     }
 
@@ -110,14 +115,22 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     @Override
    public void adicionarTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException {
     UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-    unidade.getTecnicos().add(tecnico.getTecnico());
+        Optional<Tecnico> tecnicoUnidade = tecnico.getTecnico();
+        if (tecnicoUnidade.isPresent()) {
+            List<Tecnico> tecnicos = new ArrayList<>();
+            tecnicos.add(tecnicoUnidade.get());
+            unidade.setTecnicos(tecnicos);
+        }
     unidadeAdministrativaRepository.save(unidade);
     }
+
 
     @Override
     public void removerTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException {
     UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-    unidade.getTecnicos().remove(tecnico.getTecnico());
+        if (tecnico.getTecnico().isPresent()) {
+            unidade.getTecnicos().remove(tecnico.getTecnico().get());
+        }
     unidadeAdministrativaRepository.save(unidade);
     }
 
