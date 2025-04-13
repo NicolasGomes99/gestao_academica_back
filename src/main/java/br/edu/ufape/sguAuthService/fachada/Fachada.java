@@ -290,24 +290,25 @@ public class Fachada {
         return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
     }
 
-   public void adicionarGestor(Long unidadeId, Long usuarioId) throws UsuarioNotFoundException, UnidadeAdministrativaNotFoundException {
-    Usuario gestor = usuarioService.buscarUsuario(usuarioId, true, null);
-    unidadeAdministrativaService.adicionarGestor(unidadeId, gestor);
-}
+    public UnidadeAdministrativa adicionarGestor(Long unidadeId, Long usuarioId) {
+        Usuario gestor = usuarioService.buscarUsuario(usuarioId, true, null);
+        return unidadeAdministrativaService.adicionarGestor(unidadeId, gestor);
+    }
 
-public void removerGestor(Long unidadeId) throws UnidadeAdministrativaNotFoundException {
-    unidadeAdministrativaService.removerGestor(unidadeId);
-}
+    public UnidadeAdministrativa removerGestor(Long unidadeId) {
+        return unidadeAdministrativaService.removerGestor(unidadeId);
+    }
 
-public void adicionarTecnico(Long unidadeId, Long usuarioId) throws UsuarioNotFoundException, UnidadeAdministrativaNotFoundException {
-    Usuario tecnico = usuarioService.buscarUsuario(usuarioId, true, null);
-    unidadeAdministrativaService.adicionarTecnico(unidadeId, tecnico);
-}
+    public UnidadeAdministrativa adicionarTecnico(Long unidadeId, Long usuarioId) {
+        Usuario tecnico = usuarioService.buscarUsuario(usuarioId, true, null);
+        return unidadeAdministrativaService.adicionarTecnico(unidadeId, tecnico);
+    }
 
-public void removerTecnico(Long unidadeId, Long usuarioId) throws UsuarioNotFoundException, UnidadeAdministrativaNotFoundException {
-    Usuario tecnico = usuarioService.buscarUsuario(usuarioId, true, null);
-    unidadeAdministrativaService.removerTecnico(unidadeId, tecnico);
-}
+    public UnidadeAdministrativa removerTecnico(Long unidadeId, Long usuarioId) {
+        Usuario tecnico = usuarioService.buscarUsuario(usuarioId, true, null);
+        return unidadeAdministrativaService.removerTecnico(unidadeId, tecnico);
+    }
+
 
 
     // ==================Tipo Unidade Administrativa ================== //

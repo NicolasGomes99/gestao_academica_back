@@ -3,6 +3,8 @@ package br.edu.ufape.sguAuthService.servicos;
 
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundException;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TecnicoNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaCircularException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaComDependenciasException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
@@ -12,9 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     private final ModelMapper modelMapper;
 
     @Override
-    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa,TipoUnidadeAdministrativa tipoUnidadeAdministrativa, Long paiId) {
+    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, TipoUnidadeAdministrativa tipoUnidadeAdministrativa, Long paiId) {
         try {
             if (unidadeAdministrativa.getId() != null && unidadeAdministrativa.getId().equals(paiId)) {
                 throw new UnidadeAdministrativaCircularException();
@@ -38,7 +38,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
             }
 
             return unidadeAdministrativaRepository.save(unidadeAdministrativa);
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw ExceptionUtil.handleDataIntegrityViolationException(e);
         }
 
@@ -96,42 +96,51 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public void adicionarGestor(Long unidadeId, Usuario gestor) throws UnidadeAdministrativaNotFoundException {
-    UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-    Optional<Gestor> gestorUnidade = gestor.getGestor();
-    if (gestorUnidade.isPresent()) {
-        unidade.setGestor(gestorUnidade.get());
-    }
-    unidadeAdministrativaRepository.save(unidade);
+    public UnidadeAdministrativa adicionarGestor(Long unidadeId, Usuario usuario) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+        Gestor gestor = usuario.getGestor()
+                .orElseThrow(GestorNotFoundException::new);
+
+        unidade.setGestor(gestor);
+        return unidadeAdministrativaRepository.save(unidade);
     }
 
     @Override
-    public void removerGestor(Long unidadeId) throws UnidadeAdministrativaNotFoundException {
-    UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-    unidade.setGestor(null);
-    unidadeAdministrativaRepository.save(unidade);
-    }
-
-    @Override
-   public void adicionarTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException {
-    UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-        Optional<Tecnico> tecnicoUnidade = tecnico.getTecnico();
-        if (tecnicoUnidade.isPresent()) {
-            List<Tecnico> tecnicos = new ArrayList<>();
-            tecnicos.add(tecnicoUnidade.get());
-            unidade.setTecnicos(tecnicos);
+    public UnidadeAdministrativa removerGestor(Long unidadeId) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+        if (unidade.getGestor() == null) {
+            throw new GestorNotFoundException();
         }
-    unidadeAdministrativaRepository.save(unidade);
+        unidade.setGestor(null);
+        return unidadeAdministrativaRepository.save(unidade);
     }
 
+    @Override
+    public UnidadeAdministrativa adicionarTecnico(Long unidadeId, Usuario usuario) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+        Tecnico tecnico = usuario.getTecnico()
+                .orElseThrow(TecnicoNotFoundException::new);
+
+        if (unidade.getTecnicos().contains(tecnico)) {
+            throw new DataIntegrityViolationException("O técnico já está vinculado a esta unidade.");
+        }
+
+        unidade.getTecnicos().add(tecnico);
+        return unidadeAdministrativaRepository.save(unidade);
+    }
 
     @Override
-    public void removerTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException {
-    UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-        if (tecnico.getTecnico().isPresent()) {
-            unidade.getTecnicos().remove(tecnico.getTecnico().get());
+    public UnidadeAdministrativa removerTecnico(Long unidadeId, Usuario usuario) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+        Tecnico tecnico = usuario.getTecnico()
+                .orElseThrow(TecnicoNotFoundException::new);
+
+        if (!unidade.getTecnicos().contains(tecnico)) {
+            throw new TecnicoNotFoundException();
         }
-    unidadeAdministrativaRepository.save(unidade);
+
+        unidade.getTecnicos().remove(tecnico);
+        return unidadeAdministrativaRepository.save(unidade);
     }
 
 }

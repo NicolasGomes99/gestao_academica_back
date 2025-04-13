@@ -21,12 +21,12 @@ public interface UnidadeAdministrativaService {
 
     UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa unidadeAdministrativa, Long id) throws UnidadeAdministrativaNotFoundException;
 
-    void adicionarGestor(Long unidadeId, Usuario gestor) throws UnidadeAdministrativaNotFoundException;
+    UnidadeAdministrativa adicionarGestor(Long unidadeId, Usuario gestor) throws UnidadeAdministrativaNotFoundException;
 
-    void adicionarTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException;
+    UnidadeAdministrativa adicionarTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException;
 
-    void removerGestor(Long unidadeId) throws UnidadeAdministrativaNotFoundException;
+    UnidadeAdministrativa removerGestor(Long unidadeId) throws UnidadeAdministrativaNotFoundException;
 
-    void removerTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException;
+    UnidadeAdministrativa removerTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException;
 
 }

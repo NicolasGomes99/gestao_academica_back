@@ -46,7 +46,7 @@ public class UnidadeAdministrativa {
     @JoinColumn(name = "gestor_id", referencedColumnName = "id")
     private Gestor gestor;
 
-    @OneToMany(mappedBy = "unidadeAdministrativa")
+    @OneToMany
     private List<Tecnico> tecnicos = new ArrayList<>();
 
 }
