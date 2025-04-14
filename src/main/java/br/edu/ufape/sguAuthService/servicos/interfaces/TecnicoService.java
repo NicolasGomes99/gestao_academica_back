@@ -5,12 +5,12 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFound
 import br.edu.ufape.sguAuthService.models.Usuario;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface TecnicoService {
     List<Usuario> getTecnicos();
 
-    Usuario buscarTecnico(Long id, boolean isAdm, String sessionId) throws TecnicoNotFoundException, UsuarioNotFoundException;
+    Usuario buscarTecnico(UUID id, boolean isAdm, UUID sessionId) throws TecnicoNotFoundException, UsuarioNotFoundException;
 
-    Usuario buscarTecnicoPorKcId(String kcId) throws UsuarioNotFoundException, TecnicoNotFoundException;
-
+    Usuario buscarTecnicoAtual() throws TecnicoNotFoundException, UsuarioNotFoundException;
 }

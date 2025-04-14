@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Service @RequiredArgsConstructor
@@ -20,9 +21,9 @@ public class GestorService implements br.edu.ufape.sguAuthService.servicos.inter
     public List<Usuario> listarGestores() {return usuarioRepository.findUsuariosGestores();}
 
     @Override
-    public Usuario buscarGestor(Long id, boolean isAdm, String sessionId) throws GestorNotFoundException, UsuarioNotFoundException {
+    public Usuario buscarGestor(UUID id, boolean isAdm, UUID sessionId) throws GestorNotFoundException, UsuarioNotFoundException {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(UsuarioNotFoundException::new);
-        if(!isAdm && !usuario.getKcId().equals(sessionId)) {
+        if(!isAdm && !usuario.getId().equals(sessionId)) {
             throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
         }
         if (usuario.getPerfis().stream().noneMatch(perfil -> perfil instanceof Gestor)) {

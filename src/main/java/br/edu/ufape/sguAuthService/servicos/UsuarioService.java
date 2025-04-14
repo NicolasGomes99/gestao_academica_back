@@ -1,5 +1,6 @@
 package br.edu.ufape.sguAuthService.servicos;
 
+import br.edu.ufape.sguAuthService.config.AuthenticatedUserProvider;
 import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 
 
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class UsuarioService implements br.edu.ufape.sguAuthService.servicos.interfaces.UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ModelMapper modelMapper;
+    private final AuthenticatedUserProvider authenticatedUserProvider;
 
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
@@ -33,24 +36,26 @@ public class UsuarioService implements br.edu.ufape.sguAuthService.servicos.inte
         return usuarioRepository.save(usuario);
     }
     @Override
-    public Usuario editarUsuario(String idSessao, Usuario novoUsuario) throws UsuarioNotFoundException {
-        Usuario antigoUsuario =  usuarioRepository.findByKcId(idSessao).orElseThrow(UsuarioNotFoundException::new);
+    public Usuario editarUsuario(Usuario novoUsuario) throws UsuarioNotFoundException {
+        UUID idSessao = authenticatedUserProvider.getUserId();
+        Usuario antigoUsuario =  usuarioRepository.findById(idSessao).orElseThrow(UsuarioNotFoundException::new);
         modelMapper.map(novoUsuario, antigoUsuario);
         return usuarioRepository.save(antigoUsuario);
     }
 
     @Override
-    public Usuario buscarUsuario(Long id, boolean isAdm, String sessionId) throws UsuarioNotFoundException {
+    public Usuario buscarUsuario(UUID id, boolean isAdm, UUID sessionId) throws UsuarioNotFoundException {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(UsuarioNotFoundException::new);
-        if(!isAdm && !usuario.getKcId().equals(sessionId)) {
+        if(!isAdm && !usuario.getId().equals(sessionId)) {
             throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
         }
         return usuario;
     }
 
     @Override
-    public Usuario buscarUsuarioPorKcId(String kcId) throws UsuarioNotFoundException {
-        return usuarioRepository.findByKcId(kcId).orElseThrow(UsuarioNotFoundException::new);
+    public Usuario buscarUsuarioAtual() throws UsuarioNotFoundException{
+        UUID idSessao = authenticatedUserProvider.getUserId();
+        return usuarioRepository.findById(idSessao).orElseThrow(UsuarioNotFoundException::new);
     }
 
     @Override
@@ -59,25 +64,18 @@ public class UsuarioService implements br.edu.ufape.sguAuthService.servicos.inte
     }
 
     @Override
-    public void deletarUsuario(String sessionId) throws UsuarioNotFoundException {
-        Usuario usuario = usuarioRepository.findByKcId(sessionId).orElseThrow(UsuarioNotFoundException::new);
+    public void deletarUsuario(UUID sessionId) throws UsuarioNotFoundException {
+        Usuario usuario = usuarioRepository.findById(sessionId).orElseThrow(UsuarioNotFoundException::new);
         usuario.setAtivo(false);
         usuarioRepository.save(usuario);
     }
 
     @Override
-    public void deletarUsuarioKcId(String kcId) throws UsuarioNotFoundException {
-        Usuario usuario = usuarioRepository.findByKcId(kcId).orElseThrow(UsuarioNotFoundException::new);
-        usuario.setAtivo(false);
-        usuarioRepository.save(usuario);
-    }
+    public List<Usuario> buscarUsuariosPorIds(List<UUID> kcIds) {
+        List<Usuario> usuarios = usuarioRepository.findByIdIn(kcIds);
 
-    @Override
-    public List<Usuario> buscarUsuariosPorKcId(List<String> kcIds) {
-        List<Usuario> usuarios = usuarioRepository.findByKcIdIn(kcIds);
-
-        Map<String, Usuario> usuarioMap = usuarios.stream()
-                .collect(Collectors.toMap(Usuario::getKcId, Function.identity()));
+        Map<UUID, Usuario> usuarioMap = usuarios.stream()
+                .collect(Collectors.toMap(Usuario::getId, Function.identity()));
 
         List<Usuario> users =  kcIds.stream()
                 .map(usuarioMap::get)

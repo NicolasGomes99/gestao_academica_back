@@ -11,11 +11,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 @RestController @RequestMapping("/aluno")  @RequiredArgsConstructor
 
@@ -23,10 +21,8 @@ public class AlunoController {
     private final Fachada fachada;
     private final ModelMapper modelMapper;
 
-    @GetMapping("/{id}") ResponseEntity<AlunoResponse> buscarAluno(@PathVariable Long id) throws AlunoNotFoundException, UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        Usuario response = fachada.buscarAluno(id, principal.getSubject());
+    @GetMapping("/{id}") ResponseEntity<AlunoResponse> buscarAluno(@PathVariable UUID id) throws AlunoNotFoundException, UsuarioNotFoundException {
+        Usuario response = fachada.buscarAluno(id);
         return new ResponseEntity<>(new AlunoResponse(response, modelMapper), HttpStatus.OK);
     }
 
@@ -37,24 +33,15 @@ public class AlunoController {
 
 
     @PostMapping("/batch")
-    List<AlunoResponse> listarAlunosEmBatch(@RequestBody List<String> kcIds) {
-        return fachada.listarUsuariosEmBatch(kcIds).stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
+    List<AlunoResponse> listarAlunosEmBatch(@RequestBody List<UUID> ids) {
+        return fachada.listarUsuariosEmBatch(ids).stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
     }
 
     @GetMapping("/current")
     ResponseEntity<AlunoResponse> buscarAlunoAtual() throws AlunoNotFoundException, UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        Usuario response = fachada.buscarAlunoPorKcId(principal.getSubject());
+        Usuario response = fachada.buscarAlunoAtual();
         return new ResponseEntity<>(new AlunoResponse(response, modelMapper), HttpStatus.OK);
     }
-
-    @GetMapping("/buscar/{kcId}")
-    ResponseEntity<AlunoResponse> buscarAlunoPorKcId(@PathVariable String kcId) throws AlunoNotFoundException, UsuarioNotFoundException {
-        return new ResponseEntity<>(new AlunoResponse(fachada.buscarAlunoPorKcId(kcId), modelMapper), HttpStatus.OK);
-    }
-
-
 
 
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +24,9 @@ public class ProfessorService implements br.edu.ufape.sguAuthService.servicos.in
 
 
     @Override
-    public Usuario buscarProfessor(Long id, boolean isAdm, String sessionId) throws ProfessorNotFoundException, UsuarioNotFoundException {
+    public Usuario buscarProfessor(UUID id, boolean isAdm, UUID sessionId) throws ProfessorNotFoundException, UsuarioNotFoundException {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(UsuarioNotFoundException::new);
-        if(!isAdm && !usuario.getKcId().equals(sessionId)) {
+        if(!isAdm && !usuario.getId().equals(sessionId)) {
             throw new GlobalAccessDeniedException("Você não tem permissão para acessar este recurso");
         }
         if (usuario.getPerfis().stream().noneMatch(perfil -> perfil instanceof Professor)) {

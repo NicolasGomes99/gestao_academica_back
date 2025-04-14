@@ -5,12 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findByKcId(String kcId);
+public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     List<Usuario> findByAtivoTrue();
-    List<Usuario> findByKcIdIn(List<String> kcIds);
+    List<Usuario> findByIdIn(List<UUID> kcIds);
 
     @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Aluno AND u.ativo = true")
     List<Usuario> findUsuariosAlunos();

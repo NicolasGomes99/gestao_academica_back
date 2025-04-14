@@ -18,13 +18,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -36,64 +34,48 @@ public class SolicitacaoPerfilController {
 
     @PostMapping(value = "/aluno", consumes = "multipart/form-data")
     public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilAluno(@ModelAttribute AlunoRequest alunoRequest) throws CursoNotFoundException, UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
         Aluno aluno = alunoRequest.convertToEntity(modelMapper, fachada);
-        return new ResponseEntity<>( new SolicitacaoPerfilResponse(fachada.solicitarPerfil(aluno,principal.getSubject(), alunoRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
+        return new ResponseEntity<>( new SolicitacaoPerfilResponse(fachada.solicitarPerfil(aluno,alunoRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
     }
 
 
     @PostMapping(value = "/professor", consumes = "multipart/form-data")
     public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilProfessor(@ModelAttribute ProfessorRequest professorRequest) throws  UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(professorRequest.convertToEntity(modelMapper, fachada), principal.getSubject(), professorRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(professorRequest.convertToEntity(modelMapper, fachada), professorRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
     }
 
 
     @PostMapping(value = "/tecnico", consumes = "multipart/form-data")
     public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilTecnico(@ModelAttribute TecnicoRequest tecnicoRequest) throws  UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(tecnicoRequest.convertToEntity(modelMapper), principal.getSubject(), tecnicoRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(tecnicoRequest.convertToEntity(modelMapper),tecnicoRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/gestor", consumes = "multipart/form-data")
     public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilGestor(@ModelAttribute GestorRequest gestorRequest) throws  UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(gestorRequest.convertToEntity(modelMapper), principal.getSubject(), gestorRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(gestorRequest.convertToEntity(modelMapper),gestorRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("/{id}/aprovar")
     public ResponseEntity<SolicitacaoPerfilResponse> aprovarSolicitacao(@PathVariable Long id, @RequestBody SolicitacaoPerfilRequest parecer) throws SolicitacaoNotFoundException, UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.aceitarSolicitacao(id, parecer.convertToEntity(modelMapper), principal.getSubject()), modelMapper), HttpStatus.OK);
+        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.aceitarSolicitacao(id, parecer.convertToEntity(modelMapper)), modelMapper), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PostMapping("/{id}/rejeitar")
     public ResponseEntity<SolicitacaoPerfilResponse> rejeitarSolicitacao(@PathVariable Long id, @RequestBody SolicitacaoPerfilRequest parecer) throws SolicitacaoNotFoundException, UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.rejeitarSolicitacao(id, parecer.convertToEntity(modelMapper), principal.getSubject()), modelMapper), HttpStatus.OK);
+        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.rejeitarSolicitacao(id, parecer.convertToEntity(modelMapper)), modelMapper), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/documentos")
     public ResponseEntity<List<DocumentoResponse>> baixarTodosDocumentos(@PathVariable Long id) throws IOException, SolicitacaoNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        return ResponseEntity.ok(fachada.listarDocumentosBase64(id, principal.getSubject()));
+        return ResponseEntity.ok(fachada.listarDocumentosBase64(id));
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<SolicitacaoPerfilResponse> buscarSolicitacao(@PathVariable Long id) throws SolicitacaoNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.buscarSolicitacao(id, principal.getSubject()), modelMapper), HttpStatus.OK);
+        return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.buscarSolicitacao(id), modelMapper), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
@@ -110,14 +92,12 @@ public class SolicitacaoPerfilController {
 
     @GetMapping("/usuario")
     public List<SolicitacaoPerfilResponse> buscarSolicitacoesUsuario() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        return fachada.buscarSolicitacoesUsuario(principal.getSubject()).stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
+        return fachada.buscarSolicitacoesUsuarioAtual().stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping("/{id}/usuario")
-    public List<SolicitacaoPerfilResponse> buscarSolicitacoesPorId(@PathVariable Long id) {
+    public List<SolicitacaoPerfilResponse> buscarSolicitacoesPorId(@PathVariable UUID id) {
         return fachada.buscarSolicitacoesPorId(id).stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
     }
 }

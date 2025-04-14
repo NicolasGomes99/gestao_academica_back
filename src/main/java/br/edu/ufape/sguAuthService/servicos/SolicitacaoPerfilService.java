@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.servicos;
 
 
+import br.edu.ufape.sguAuthService.config.AuthenticatedUserProvider;
 import br.edu.ufape.sguAuthService.dados.SolicitacaoPerfilRepository;
 import br.edu.ufape.sguAuthService.exceptions.SolicitacaoDuplicadaException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.SolicitacaoNotFoundException;
@@ -16,10 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service @RequiredArgsConstructor
 public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.servicos.interfaces.SolicitacaoPerfilService {
     private final SolicitacaoPerfilRepository solicitacaoPerfilRepository;
+    private final AuthenticatedUserProvider authenticatedUserProvider;
 
 
 
@@ -52,12 +55,13 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
     }
 
     @Override
-    public List<SolicitacaoPerfil> buscarSolicitacoesUsuario(String sessionId) {
-        return solicitacaoPerfilRepository.findAllBySolicitante_KcId(sessionId);
+    public List<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual() {
+        UUID sessionId = authenticatedUserProvider.getUserId();
+        return solicitacaoPerfilRepository.findAllBySolicitante_Id(sessionId);
     }
 
     @Override
-    public List<SolicitacaoPerfil> buscarSolicitacoesPorId(Long id) {
+    public List<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id) {
         return solicitacaoPerfilRepository.findAllBySolicitante_Id(id);
     }
 

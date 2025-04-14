@@ -8,12 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,21 +22,19 @@ public class FuncionarioController {
 
     @GetMapping("/current")
     public ResponseEntity<FuncionarioResponse> getCurrentFuncionario() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        Usuario response = fachada.buscarUsuarioPorKcId(principal.getSubject());
+        Usuario response = fachada.buscarUsuarioAtual();
         return new ResponseEntity<>(new FuncionarioResponse(response, modelMapper), HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<FuncionarioResponse> buscarFuncionarioPorId(@PathVariable String userId) {
-        Usuario response = fachada.buscarUsuarioPorKcId(userId);
+    @GetMapping("/{id}")
+    public ResponseEntity<FuncionarioResponse> buscarFuncionarioPorId(@PathVariable UUID id) {
+        Usuario response = fachada.buscarUsuario(id);
         return new ResponseEntity<>(new FuncionarioResponse(response, modelMapper), HttpStatus.OK);
     }
 
     @PostMapping("/batch")
-    List<FuncionarioResponse> listarFuncionariosEmBatch(@RequestBody List<String> kcIds) {
-        return fachada.listarUsuariosEmBatch(kcIds).stream().map(usuario -> new FuncionarioResponse(usuario, modelMapper)).toList();
+    List<FuncionarioResponse> listarFuncionariosEmBatch(@RequestBody List<UUID> ids) {
+        return fachada.listarUsuariosEmBatch(ids).stream().map(usuario -> new FuncionarioResponse(usuario, modelMapper)).toList();
     }
 
 }

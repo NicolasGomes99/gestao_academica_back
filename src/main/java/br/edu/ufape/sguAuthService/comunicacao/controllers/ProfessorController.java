@@ -11,15 +11,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,10 +27,8 @@ public class ProfessorController {
     private final ModelMapper modelMapper;
 
     @GetMapping("/{id}")
-    ResponseEntity<ProfessorResponse> buscarProfessor(@PathVariable Long id) throws ProfessorNotFoundException, UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        Usuario response = fachada.buscarProfessor(id, principal.getSubject());
+    ResponseEntity<ProfessorResponse> buscarProfessor(@PathVariable UUID id) throws ProfessorNotFoundException, UsuarioNotFoundException {
+        Usuario response = fachada.buscarProfessor(id);
         return new ResponseEntity<>(new ProfessorResponse(response, modelMapper), HttpStatus.OK);
     }
 

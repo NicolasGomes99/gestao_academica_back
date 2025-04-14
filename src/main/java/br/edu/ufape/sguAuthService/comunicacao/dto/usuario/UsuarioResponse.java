@@ -6,9 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
+import java.util.UUID;
+
 @Getter @Setter
 public class UsuarioResponse {
-    Long id;
+    UUID id;
     String nome;
     String nomeSocial;
     String cpf;
