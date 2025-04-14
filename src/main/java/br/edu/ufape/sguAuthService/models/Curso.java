@@ -20,5 +20,7 @@ public class Curso {
     @Column(unique = true)
     private String nome;
 
+    private int numeroPeriodos;
+
     private boolean ativo = true;
 }
