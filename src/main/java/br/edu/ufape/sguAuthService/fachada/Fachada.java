@@ -44,6 +44,7 @@ public class Fachada {
     private final TecnicoService tecnicoService;
     private final GestorService gestorService;
     private final TipoUnidadeAdministrativaService tipoUnidadeAdministrativaService;
+    private final AuthenticatedUserProvider authenticatedUserProvider;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -107,6 +108,8 @@ public class Fachada {
     public Usuario buscarTecnicoAtual() throws UsuarioNotFoundException, TecnicoNotFoundException {
         return tecnicoService.buscarTecnicoAtual();
     }
+
+
 
     // ================== Gestor ================== //
     public List<Usuario> listarGestores() {
@@ -307,26 +310,26 @@ public class Fachada {
         return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
     }
 
-    public Usuario adicionarGestor(Long unidadeId, Long usuarioId) {
-        Usuario gestor = usuarioService.buscarUsuario(usuarioId, true, null);
+    public Usuario adicionarGestor(Long unidadeId, UUID usuarioId) {
+        Usuario gestor = gestorService.buscarGestor(usuarioId, true, null);
         unidadeAdministrativaService.adicionarGestor(unidadeId, gestor);
         return gestor;
     }
 
-    public Usuario removerGestor(Long unidadeId, Long usuarioId) {
-        Usuario gestor = usuarioService.buscarUsuario(usuarioId, true, null);
+    public Usuario removerGestor(Long unidadeId, UUID usuarioId) {
+        Usuario gestor = gestorService.buscarGestor(usuarioId, true, null);
         unidadeAdministrativaService.removerGestor(unidadeId, gestor);
         return gestor;
     }
 
-    public Usuario adicionarTecnico(Long unidadeId, Long usuarioId) {
-        Usuario tecnico = usuarioService.buscarUsuario(usuarioId, true, null);
+    public Usuario adicionarTecnico(Long unidadeId, UUID usuarioId) {
+        Usuario tecnico = tecnicoService.buscarTecnico(usuarioId, true, null);
         unidadeAdministrativaService.adicionarTecnico(unidadeId, tecnico);
         return tecnico;
     }
 
-    public Usuario removerTecnico(Long unidadeId, Long usuarioId) {
-        Usuario tecnico = usuarioService.buscarUsuario(usuarioId, true, null);
+    public Usuario removerTecnico(Long unidadeId, UUID usuarioId) {
+        Usuario tecnico = tecnicoService.buscarTecnico(usuarioId, true, null);
         unidadeAdministrativaService.removerTecnico(unidadeId, tecnico);
         return tecnico;
     }

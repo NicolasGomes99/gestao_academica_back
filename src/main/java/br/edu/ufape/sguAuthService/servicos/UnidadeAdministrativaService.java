@@ -96,17 +96,17 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public UnidadeAdministrativa adicionarGestor(Long unidadeId, Usuario usuario) {
+    public void adicionarGestor(Long unidadeId, Usuario usuario) {
         UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
         Gestor gestor = usuario.getGestor()
                 .orElseThrow(GestorNotFoundException::new);
 
         unidade.setGestor(gestor);
-        return unidadeAdministrativaRepository.save(unidade);
+        unidadeAdministrativaRepository.save(unidade);
     }
 
     @Override
-    public UnidadeAdministrativa removerGestor(Long unidadeId, Usuario usuario) {
+    public void removerGestor(Long unidadeId, Usuario usuario) {
         UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
 
         Gestor gestorAtual = unidade.getGestor();
@@ -118,11 +118,11 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         }
 
         unidade.setGestor(null);
-        return unidadeAdministrativaRepository.save(unidade);
+        unidadeAdministrativaRepository.save(unidade);
     }
 
     @Override
-    public UnidadeAdministrativa adicionarTecnico(Long unidadeId, Usuario usuario) {
+    public void adicionarTecnico(Long unidadeId, Usuario usuario) {
         UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
         Tecnico tecnico = usuario.getTecnico()
                 .orElseThrow(TecnicoNotFoundException::new);
@@ -132,11 +132,11 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         }
 
         unidade.getTecnicos().add(tecnico);
-        return unidadeAdministrativaRepository.save(unidade);
+        unidadeAdministrativaRepository.save(unidade);
     }
 
     @Override
-    public UnidadeAdministrativa removerTecnico(Long unidadeId, Usuario usuario) {
+    public void removerTecnico(Long unidadeId, Usuario usuario) {
         UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
         Tecnico tecnico = usuario.getTecnico()
                 .orElseThrow(TecnicoNotFoundException::new);
@@ -146,7 +146,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         }
 
         unidade.getTecnicos().remove(tecnico);
-        return unidadeAdministrativaRepository.save(unidade);
+        unidadeAdministrativaRepository.save(unidade);
     }
 
 }

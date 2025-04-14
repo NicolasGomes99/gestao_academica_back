@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,5 +17,5 @@ public class UnidadeAdministrativaAlocarUsuarioRequest {
     private Long unidadeAdministrativaId;
 
     @NotNull(message = "O id do usuário é obrigatório")
-    private Long usuarioId;
+    private UUID usuarioId;
 }
