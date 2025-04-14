@@ -3,11 +3,12 @@ package br.edu.ufape.sguAuthService.servicos;
 
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundException;
+import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TecnicoNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaCircularException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaComDependenciasException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
-import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
-import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
+import br.edu.ufape.sguAuthService.models.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,7 +25,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     private final ModelMapper modelMapper;
 
     @Override
-    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa,TipoUnidadeAdministrativa tipoUnidadeAdministrativa, Long paiId) {
+    public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, TipoUnidadeAdministrativa tipoUnidadeAdministrativa, Long paiId) {
         try {
             if (unidadeAdministrativa.getId() != null && unidadeAdministrativa.getId().equals(paiId)) {
                 throw new UnidadeAdministrativaCircularException();
@@ -37,7 +38,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
             }
 
             return unidadeAdministrativaRepository.save(unidadeAdministrativa);
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw ExceptionUtil.handleDataIntegrityViolationException(e);
         }
 
@@ -93,4 +94,59 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
 
         unidadeAdministrativaRepository.deleteById(id);
     }
+
+    @Override
+    public UnidadeAdministrativa adicionarGestor(Long unidadeId, Usuario usuario) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+        Gestor gestor = usuario.getGestor()
+                .orElseThrow(GestorNotFoundException::new);
+
+        unidade.setGestor(gestor);
+        return unidadeAdministrativaRepository.save(unidade);
+    }
+
+    @Override
+    public UnidadeAdministrativa removerGestor(Long unidadeId, Usuario usuario) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+
+        Gestor gestorAtual = unidade.getGestor();
+        Gestor usuarioGestor = usuario.getGestor()
+                .orElseThrow(GestorNotFoundException::new);
+
+        if (gestorAtual == null || !gestorAtual.equals(usuarioGestor)) {
+            throw new GestorNotFoundException();
+        }
+
+        unidade.setGestor(null);
+        return unidadeAdministrativaRepository.save(unidade);
+    }
+
+    @Override
+    public UnidadeAdministrativa adicionarTecnico(Long unidadeId, Usuario usuario) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+        Tecnico tecnico = usuario.getTecnico()
+                .orElseThrow(TecnicoNotFoundException::new);
+
+        if (unidade.getTecnicos().contains(tecnico)) {
+            throw new DataIntegrityViolationException("O técnico já está vinculado a esta unidade.");
+        }
+
+        unidade.getTecnicos().add(tecnico);
+        return unidadeAdministrativaRepository.save(unidade);
+    }
+
+    @Override
+    public UnidadeAdministrativa removerTecnico(Long unidadeId, Usuario usuario) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+        Tecnico tecnico = usuario.getTecnico()
+                .orElseThrow(TecnicoNotFoundException::new);
+
+        if (!unidade.getTecnicos().contains(tecnico)) {
+            throw new TecnicoNotFoundException();
+        }
+
+        unidade.getTecnicos().remove(tecnico);
+        return unidadeAdministrativaRepository.save(unidade);
+    }
+
 }

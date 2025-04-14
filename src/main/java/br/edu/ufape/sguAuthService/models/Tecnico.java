@@ -8,5 +8,4 @@ import lombok.Setter;
 @Entity
 public class Tecnico extends Funcionario {
 
-
 }

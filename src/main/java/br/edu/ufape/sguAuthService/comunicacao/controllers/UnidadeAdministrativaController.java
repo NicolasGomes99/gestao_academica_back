@@ -1,14 +1,17 @@
 package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.*;
+import br.edu.ufape.sguAuthService.comunicacao.dto.usuario.UsuarioResponse;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
+import br.edu.ufape.sguAuthService.models.Usuario;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -77,4 +80,53 @@ public class UnidadeAdministrativaController {
         fachada.deletarUnidadeAdministrativa(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PostMapping("/gestores")
+    public ResponseEntity<UsuarioResponse> alocarGestor(
+            @RequestBody @Valid UnidadeAdministrativaAlocarUsuarioRequest request) {
+
+        Usuario gestor = fachada.adicionarGestor(
+                request.getUnidadeAdministrativaId(),
+                request.getUsuarioId()
+        );
+        return ResponseEntity.ok(new UsuarioResponse(gestor, modelMapper));
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @DeleteMapping("/gestores")
+    public ResponseEntity<UsuarioResponse> removerGestor(
+            @RequestBody @Valid UnidadeAdministrativaAlocarUsuarioRequest request) {
+
+        Usuario gestor = fachada.removerGestor(
+                request.getUnidadeAdministrativaId(),
+                request.getUsuarioId()
+        );
+        return ResponseEntity.ok(new UsuarioResponse(gestor, modelMapper));
+    }
+
+    @PreAuthorize("hasRole('GESTOR')")
+    @PostMapping("/tecnicos")
+    public ResponseEntity<UsuarioResponse> alocarTecnico(
+            @RequestBody @Valid UnidadeAdministrativaAlocarUsuarioRequest request) {
+
+        Usuario tecnico = fachada.adicionarTecnico(
+                request.getUnidadeAdministrativaId(),
+                request.getUsuarioId()
+        );
+        return ResponseEntity.ok(new UsuarioResponse(tecnico, modelMapper));
+    }
+
+    @PreAuthorize("hasRole('GESTOR')")
+    @DeleteMapping("/tecnicos")
+    public ResponseEntity<UsuarioResponse> removerTecnico(
+            @RequestBody @Valid UnidadeAdministrativaAlocarUsuarioRequest request) {
+
+        Usuario tecnico = fachada.removerTecnico(
+                request.getUnidadeAdministrativaId(),
+                request.getUsuarioId()
+        );
+        return ResponseEntity.ok(new UsuarioResponse(tecnico, modelMapper));
+    }
+
 }

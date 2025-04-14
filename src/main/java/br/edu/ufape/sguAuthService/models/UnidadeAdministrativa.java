@@ -6,15 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,4 +41,12 @@ public class UnidadeAdministrativa {
     @OneToMany(mappedBy = "unidadePai", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JsonManagedReference
     private List<UnidadeAdministrativa> unidadesFilhas = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "gestor_id", referencedColumnName = "id")
+    private Gestor gestor;
+
+    @OneToMany
+    private List<Tecnico> tecnicos = new ArrayList<>();
+
 }
