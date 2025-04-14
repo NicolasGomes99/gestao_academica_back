@@ -33,14 +33,14 @@ public class TipoUnidadeAdministrativaController {
     private final ModelMapper modelMapper;
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    @PostMapping("/registrar")
+    @PostMapping
     public ResponseEntity<TipoUnidadeAdministrativaResponse> salvar(@Valid @RequestBody TipoUnidadeAdministrativaRequest tipoUnidadeAdministrativa){
         TipoUnidadeAdministrativa response = fachada.salvarTipo(tipoUnidadeAdministrativa.convertToEntity(tipoUnidadeAdministrativa, modelMapper));
         return new ResponseEntity<>(new TipoUnidadeAdministrativaResponse(response, modelMapper), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    @PatchMapping("/{id}/editar")
+    @PatchMapping("/{id}")
     public ResponseEntity<TipoUnidadeAdministrativaResponse> editar(@PathVariable Long id, @Valid @RequestBody TipoUnidadeAdministrativaRequest tipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaNotFoundException {
         TipoUnidadeAdministrativa response = fachada.editarTipo(id, tipoUnidadeAdministrativa.convertToEntity(tipoUnidadeAdministrativa, modelMapper));
         return new ResponseEntity<>(new TipoUnidadeAdministrativaResponse(response, modelMapper), HttpStatus.OK);
@@ -62,7 +62,7 @@ public class TipoUnidadeAdministrativaController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    @DeleteMapping("/{id}/deletar")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) throws TipoUnidadeAdministrativaNotFoundException {
         fachada.deletarTipo(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
