@@ -16,12 +16,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController@RequiredArgsConstructor
 @RequestMapping("/usuario")
@@ -36,10 +34,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResponse> buscar(@PathVariable Long id) throws UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        Usuario response = fachada.buscarUsuario(id, principal.getSubject());
+    public ResponseEntity<UsuarioResponse> buscar(@PathVariable UUID id) throws UsuarioNotFoundException {
+        Usuario response = fachada.buscarUsuario(id);
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.OK);
     }
 
@@ -51,25 +47,19 @@ public class UsuarioController {
 
     @GetMapping("/current")
     public ResponseEntity<UsuarioResponse> buscarUsuarioAtual() throws UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        Usuario response = fachada.buscarUsuarioPorKcId(principal.getSubject());
+        Usuario response = fachada.buscarUsuarioAtual();
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.OK);
     }
 
     @PatchMapping
     public ResponseEntity<UsuarioResponse> atualizar(@Valid @RequestBody UsuarioPatchRequest usuario) throws UsuarioNotFoundException{
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
         Usuario novoUsuario = usuario.convertToEntity(usuario, modelMapper);
-        return new ResponseEntity<>(new UsuarioResponse(fachada.editarUsuario(principal.getSubject(), novoUsuario), modelMapper), HttpStatus.OK);
+        return new ResponseEntity<>(new UsuarioResponse(fachada.editarUsuario(novoUsuario), modelMapper), HttpStatus.OK);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deletar() throws UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        fachada.deletarUsuario(principal.getSubject());
+        fachada.deletarUsuario();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

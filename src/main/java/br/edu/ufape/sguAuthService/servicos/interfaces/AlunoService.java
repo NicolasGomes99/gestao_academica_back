@@ -5,13 +5,14 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFound
 import br.edu.ufape.sguAuthService.models.Usuario;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface AlunoService {
 
     List<Usuario> listarAlunos();
 
-    Usuario buscarAluno(Long id, boolean isAdm, String sessionId) throws AlunoNotFoundException, UsuarioNotFoundException;
+    Usuario buscarAluno(UUID id, boolean isAdm, UUID sessionId) throws AlunoNotFoundException, UsuarioNotFoundException;
 
-    Usuario buscarAlunoPorKcId(String kcId) throws UsuarioNotFoundException, AlunoNotFoundException;
+    Usuario buscarAlunoAtual();
 
 }

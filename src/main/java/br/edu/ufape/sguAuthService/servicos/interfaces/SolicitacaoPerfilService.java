@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.UUID;
 
 public interface SolicitacaoPerfilService {
     @Transactional
@@ -17,9 +18,9 @@ public interface SolicitacaoPerfilService {
 
     SolicitacaoPerfil buscarSolicitacao(Long id) throws SolicitacaoNotFoundException;
 
-    List<SolicitacaoPerfil> buscarSolicitacoesUsuario(String sessionId);
+    List<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual();
 
-    List<SolicitacaoPerfil> buscarSolicitacoesPorId(Long id);
+    List<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id);
 
     List<SolicitacaoPerfil> listarSolicitacoes();
 

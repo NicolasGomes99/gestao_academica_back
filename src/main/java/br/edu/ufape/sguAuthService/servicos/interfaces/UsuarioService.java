@@ -4,21 +4,21 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFound
 import br.edu.ufape.sguAuthService.models.Usuario;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UsuarioService {
     Usuario salvar(Usuario usuario);
 
-    Usuario editarUsuario(String idSessao, Usuario novoUsuario) throws UsuarioNotFoundException;
 
-    Usuario buscarUsuario(Long id, boolean isAdmin, String sessionId) throws UsuarioNotFoundException;
+    Usuario editarUsuario(Usuario novoUsuario) throws UsuarioNotFoundException;
 
-    Usuario buscarUsuarioPorKcId(String kcId) throws UsuarioNotFoundException;
+    Usuario buscarUsuario(UUID id, boolean isAdm, UUID sessionId) throws UsuarioNotFoundException;
+
+    Usuario buscarUsuarioAtual() throws UsuarioNotFoundException;
 
     List<Usuario> listarUsuarios();
 
-    void deletarUsuario(String sessionId) throws UsuarioNotFoundException;
+    void deletarUsuario(UUID sessionId) throws UsuarioNotFoundException;
 
-    void deletarUsuarioKcId(String kcId) throws UsuarioNotFoundException;
-
-    List<Usuario> buscarUsuariosPorKcId(List<String> kcIds);
+    List<Usuario> buscarUsuariosPorIds(List<UUID> ids);
 }

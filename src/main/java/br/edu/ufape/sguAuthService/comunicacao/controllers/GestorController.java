@@ -12,15 +12,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping("/gestor")
@@ -29,10 +27,8 @@ public class GestorController {
     private final ModelMapper modelMapper;
 
     @GetMapping("/{id}")
-    ResponseEntity<GestorResponse> buscarGestor(@PathVariable Long id) throws GestorNotFoundException, UsuarioNotFoundException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt principal = (Jwt) authentication.getPrincipal();
-        Usuario response = fachada.buscarGestor(id, principal.getSubject());
+    ResponseEntity<GestorResponse> buscarGestor(@PathVariable UUID id) throws GestorNotFoundException, UsuarioNotFoundException {
+        Usuario response = fachada.buscarGestor(id);
         return new ResponseEntity<>(new GestorResponse(response, modelMapper), HttpStatus.OK);
     }
 

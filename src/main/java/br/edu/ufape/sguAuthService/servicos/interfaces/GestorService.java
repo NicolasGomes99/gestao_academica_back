@@ -5,9 +5,10 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFound
 import br.edu.ufape.sguAuthService.models.Usuario;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface GestorService {
     List<Usuario> listarGestores();
 
-    Usuario buscarGestor(Long id, boolean isAdm, String sessionId) throws GestorNotFoundException, UsuarioNotFoundException;
+    Usuario buscarGestor(UUID id, boolean isAdm, UUID sessionId) throws GestorNotFoundException, UsuarioNotFoundException;
 }

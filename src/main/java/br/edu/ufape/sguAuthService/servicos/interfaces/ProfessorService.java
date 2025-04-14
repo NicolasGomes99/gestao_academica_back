@@ -5,9 +5,10 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFound
 import br.edu.ufape.sguAuthService.models.Usuario;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ProfessorService {
     List<Usuario> listarProfessores();
 
-    Usuario buscarProfessor(Long id, boolean isAdm, String sessionId) throws ProfessorNotFoundException, UsuarioNotFoundException;
+    Usuario buscarProfessor(UUID id, boolean isAdm, UUID sessionId) throws ProfessorNotFoundException, UsuarioNotFoundException;
 }
