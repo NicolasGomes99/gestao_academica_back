@@ -25,7 +25,7 @@ public class UnidadeAdministrativaController {
     private final ModelMapper modelMapper;
 
 
-    @PostMapping(value = "/registrar", consumes = "application/json", produces = "application/json")
+    @PostMapping
     public ResponseEntity<UnidadeAdministrativaResponse> salvar(@Valid @RequestBody UnidadeAdministrativaRequest unidadeAdministrativaRequest) throws UnidadeAdministrativaNotFoundException {
         UnidadeAdministrativa unidade = unidadeAdministrativaRequest.convertToEntity(unidadeAdministrativaRequest, modelMapper);
         Long unidadePai = unidadeAdministrativaRequest.getUnidadePaiId();
@@ -49,7 +49,7 @@ public class UnidadeAdministrativaController {
         return new ResponseEntity<>(new UnidadeAdministrativaGetResponse(response, modelMapper), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/listar", produces = "application/json")
+    @GetMapping
     public List<UnidadeAdministrativaGetAllResponse> listarUnidadesAdministrativas() {
         return fachada.listarUnidadesAdministrativas().stream()
                 .map(unidadeAdministrativa -> new UnidadeAdministrativaGetAllResponse(unidadeAdministrativa, modelMapper))
