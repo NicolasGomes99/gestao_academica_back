@@ -290,25 +290,29 @@ public class Fachada {
         return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
     }
 
-    public UnidadeAdministrativa adicionarGestor(Long unidadeId, Long usuarioId) {
+    public Usuario adicionarGestor(Long unidadeId, Long usuarioId) {
         Usuario gestor = usuarioService.buscarUsuario(usuarioId, true, null);
-        return unidadeAdministrativaService.adicionarGestor(unidadeId, gestor);
+        unidadeAdministrativaService.adicionarGestor(unidadeId, gestor);
+        return gestor;
     }
 
-    public UnidadeAdministrativa removerGestor(Long unidadeId) {
-        return unidadeAdministrativaService.removerGestor(unidadeId);
+    public Usuario removerGestor(Long unidadeId, Long usuarioId) {
+        Usuario gestor = usuarioService.buscarUsuario(usuarioId, true, null);
+        unidadeAdministrativaService.removerGestor(unidadeId, gestor);
+        return gestor;
     }
 
-    public UnidadeAdministrativa adicionarTecnico(Long unidadeId, Long usuarioId) {
+    public Usuario adicionarTecnico(Long unidadeId, Long usuarioId) {
         Usuario tecnico = usuarioService.buscarUsuario(usuarioId, true, null);
-        return unidadeAdministrativaService.adicionarTecnico(unidadeId, tecnico);
+        unidadeAdministrativaService.adicionarTecnico(unidadeId, tecnico);
+        return tecnico;
     }
 
-    public UnidadeAdministrativa removerTecnico(Long unidadeId, Long usuarioId) {
+    public Usuario removerTecnico(Long unidadeId, Long usuarioId) {
         Usuario tecnico = usuarioService.buscarUsuario(usuarioId, true, null);
-        return unidadeAdministrativaService.removerTecnico(unidadeId, tecnico);
+        unidadeAdministrativaService.removerTecnico(unidadeId, tecnico);
+        return tecnico;
     }
-
 
 
     // ==================Tipo Unidade Administrativa ================== //

@@ -106,11 +106,17 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public UnidadeAdministrativa removerGestor(Long unidadeId) {
+    public UnidadeAdministrativa removerGestor(Long unidadeId, Usuario usuario) {
         UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-        if (unidade.getGestor() == null) {
+
+        Gestor gestorAtual = unidade.getGestor();
+        Gestor usuarioGestor = usuario.getGestor()
+                .orElseThrow(GestorNotFoundException::new);
+
+        if (gestorAtual == null || !gestorAtual.equals(usuarioGestor)) {
             throw new GestorNotFoundException();
         }
+
         unidade.setGestor(null);
         return unidadeAdministrativaRepository.save(unidade);
     }

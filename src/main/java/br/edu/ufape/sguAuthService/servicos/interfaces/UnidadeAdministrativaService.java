@@ -25,8 +25,8 @@ public interface UnidadeAdministrativaService {
 
     UnidadeAdministrativa adicionarTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException;
 
-    UnidadeAdministrativa removerGestor(Long unidadeId) throws UnidadeAdministrativaNotFoundException;
-
     UnidadeAdministrativa removerTecnico(Long unidadeId, Usuario tecnico) throws UnidadeAdministrativaNotFoundException;
+
+    UnidadeAdministrativa removerGestor(Long unidadeId, Usuario usuario);
 
 }
