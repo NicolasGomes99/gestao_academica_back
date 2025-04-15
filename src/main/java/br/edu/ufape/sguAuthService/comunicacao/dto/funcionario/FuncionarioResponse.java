@@ -19,11 +19,11 @@ public class FuncionarioResponse extends UsuarioResponse {
         if (usuario == null) throw new IllegalArgumentException("Tecnico não pode ser nulo");
         else modelMapper.map(usuario, this);
 
-        if (usuario.getTecnico().isEmpty()) {
-            Professor professor = usuario.getProfessor().orElseThrow();
+        if (usuario.getPerfil(Tecnico.class).isEmpty()) {
+            Professor professor = usuario.getPerfil(Professor.class).orElseThrow();
             this.siape = professor.getSiape();
         }else {
-            Tecnico tecnico = usuario.getTecnico().orElseThrow();
+            Tecnico tecnico = usuario.getPerfil(Tecnico.class).orElseThrow();
             this.siape = tecnico.getSiape();
         }
     }

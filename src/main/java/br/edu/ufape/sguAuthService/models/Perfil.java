@@ -13,9 +13,12 @@ public abstract class Perfil {
     private Long id;
 
 
-    // Foto de perfil armazenada em binário
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
     @Lob
-    private byte[] fotoPerfil;  // Usando byte[] para armazenar a imagem em formato binário
+    private byte[] fotoPerfil;
 
 
 }

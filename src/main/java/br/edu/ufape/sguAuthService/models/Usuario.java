@@ -24,11 +24,11 @@ public class Usuario {
     private String telefone;
     private Boolean ativo = true;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuario_id")
-    private Set<Perfil> perfis = new  HashSet<>();
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Perfil> perfis = new HashSet<>();
 
     public void adicionarPerfil(Perfil perfil) {
+        perfil.setUsuario(this);
         perfis.add(perfil);
     }
 
@@ -57,19 +57,10 @@ public class Usuario {
                 : getClass().hashCode();
     }
 
-    public Optional<Aluno> getAluno() {
-        return perfis.stream().filter(perfil -> perfil instanceof Aluno).map(perfil -> (Aluno) perfil).findFirst();
-    }
-
-    public Optional<Professor> getProfessor() {
-        return perfis.stream().filter(perfil -> perfil instanceof Professor).map(perfil -> (Professor) perfil).findFirst();
-    }
-
-    public Optional<Tecnico> getTecnico() {
-        return perfis.stream().filter(perfil -> perfil instanceof Tecnico).map(perfil -> (Tecnico) perfil).findFirst();
-    }
-
-    public Optional<Gestor> getGestor() {
-        return perfis.stream().filter(perfil -> perfil instanceof Gestor).map(perfil -> (Gestor) perfil).findFirst();
+    public <T extends Perfil> Optional<T> getPerfil(Class<T> clazz) {
+        return perfis.stream()
+                .filter(clazz::isInstance)
+                .map(clazz::cast)
+                .findFirst();
     }
 }

@@ -310,28 +310,26 @@ public class Fachada {
         return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
     }
 
-    public Usuario adicionarGestor(Long unidadeId, UUID usuarioId) {
-        Usuario gestor = gestorService.buscarGestor(usuarioId, true, null);
-        unidadeAdministrativaService.adicionarGestor(unidadeId, gestor);
-        return gestor;
+    public GestorUnidade adicionarGestor(Long unidadeId, GestorUnidade gestorUnidade, UUID gestorId) {
+        Usuario gestor = gestorService.buscarGestor(gestorId, true, null);
+        gestorUnidade.setGestor(gestor.getPerfil(Gestor.class).orElseThrow());
+        return unidadeAdministrativaService.adicionarGestor(unidadeId, gestorUnidade);
     }
 
-    public Usuario removerGestor(Long unidadeId, UUID usuarioId) {
-        Usuario gestor = gestorService.buscarGestor(usuarioId, true, null);
-        unidadeAdministrativaService.removerGestor(unidadeId, gestor);
-        return gestor;
+    public void removerGestor(Long unidadeId, UUID gestorId) {
+        Usuario gestor = gestorService.buscarGestor(gestorId, true, null);
+        unidadeAdministrativaService.removerGestor(unidadeId, gestor.getPerfil(Gestor.class).orElseThrow().getId());
     }
 
-    public Usuario adicionarTecnico(Long unidadeId, UUID usuarioId) {
-        Usuario tecnico = tecnicoService.buscarTecnico(usuarioId, true, null);
-        unidadeAdministrativaService.adicionarTecnico(unidadeId, tecnico);
-        return tecnico;
+    public Usuario adicionarFuncionario(Long unidadeId, UUID usuarioId) {
+        Usuario funcionario = usuarioService.buscarUsuario(usuarioId, true, null);
+        unidadeAdministrativaService.adicionarFuncionario(unidadeId, funcionario);
+        return funcionario;
     }
 
-    public Usuario removerTecnico(Long unidadeId, UUID usuarioId) {
-        Usuario tecnico = tecnicoService.buscarTecnico(usuarioId, true, null);
-        unidadeAdministrativaService.removerTecnico(unidadeId, tecnico);
-        return tecnico;
+    public void removerFuncionario(Long unidadeId, UUID usuarioId) {
+        Usuario funcionario = usuarioService.buscarUsuario(usuarioId, true, null);
+        unidadeAdministrativaService.removerFuncionario(unidadeId, funcionario);
     }
 
 

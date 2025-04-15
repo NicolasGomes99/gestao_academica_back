@@ -16,7 +16,7 @@ public class GestorResponse extends UsuarioResponse {
     public GestorResponse(Usuario usuario, ModelMapper modelMapper){
         if (usuario == null) throw new IllegalArgumentException("Gestor não pode ser nulo");
         else modelMapper.map(usuario, this);
-        Gestor gestor = usuario.getGestor().orElseThrow();
+        Gestor gestor = usuario.getPerfil(Gestor.class).orElseThrow();
         this.siape = gestor.getSiape();
     }
 }

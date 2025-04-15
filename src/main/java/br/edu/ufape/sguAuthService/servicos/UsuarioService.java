@@ -6,6 +6,7 @@ import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 
 import br.edu.ufape.sguAuthService.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
+import br.edu.ufape.sguAuthService.models.Aluno;
 import br.edu.ufape.sguAuthService.models.Usuario;
 
 import br.edu.ufape.sguAuthService.models.Visitante;
@@ -81,7 +82,7 @@ public class UsuarioService implements br.edu.ufape.sguAuthService.servicos.inte
                 .map(usuarioMap::get)
                 .collect(Collectors.toList());
 
-        logger.info("Usuarios encontrados: {}", users.getFirst().getAluno());
+        logger.info("Usuarios encontrados: {}", users.getFirst().getPerfil(Aluno.class));
         return users;
     }
 
