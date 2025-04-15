@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.servicos;
 
 
+import br.edu.ufape.sguAuthService.dados.GestorUnidadeRepository;
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundException;
@@ -23,6 +24,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     private final UnidadeAdministrativaRepository unidadeAdministrativaRepository;
 
     private final ModelMapper modelMapper;
+    private final GestorUnidadeRepository gestorUnidadeRepository;
 
     @Override
     public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, TipoUnidadeAdministrativa tipoUnidadeAdministrativa, Long paiId) {
@@ -96,56 +98,54 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public void adicionarGestor(Long unidadeId, Usuario usuario) {
+    public GestorUnidade adicionarGestor(Long unidadeId, GestorUnidade gestorUnidade) {
         UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-        Gestor gestor = usuario.getGestor()
+        gestorUnidade.setUnidadeAdministrativa(unidade);
+        unidade.getGestores().add(gestorUnidade);
+        gestorUnidadeRepository.save(gestorUnidade);
+        return gestorUnidade;
+    }
+
+    @Override
+    public void removerGestor(Long unidadeId, Long gestorUnidadeId) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+
+        GestorUnidade gestorUnidade = unidade.getGestores().stream()
+                .filter(gu -> gu.getGestor().getId().equals(gestorUnidadeId))
+                .findFirst()
                 .orElseThrow(GestorNotFoundException::new);
 
-        unidade.setGestor(gestor);
+        unidade.getGestores().remove(gestorUnidade);
+
+        gestorUnidade.setUnidadeAdministrativa(null);
+
         unidadeAdministrativaRepository.save(unidade);
     }
 
     @Override
-    public void removerGestor(Long unidadeId, Usuario usuario) {
+    public void adicionarFuncionario(Long unidadeId, Usuario usuario) {
         UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+        Funcionario funcionario = usuario.getPerfil(Funcionario.class)
+                .orElseThrow(() -> new RuntimeException("Usuário não é um funcionário."));
 
-        Gestor gestorAtual = unidade.getGestor();
-        Gestor usuarioGestor = usuario.getGestor()
-                .orElseThrow(GestorNotFoundException::new);
-
-        if (gestorAtual == null || !gestorAtual.equals(usuarioGestor)) {
-            throw new GestorNotFoundException();
+        if (unidade.getFuncionarios().contains(funcionario)) {
+            throw new DataIntegrityViolationException("O Funcionário já está vinculado a esta unidade.");
         }
 
-        unidade.setGestor(null);
+        unidade.getFuncionarios().add(funcionario);
         unidadeAdministrativaRepository.save(unidade);
     }
 
     @Override
-    public void adicionarTecnico(Long unidadeId, Usuario usuario) {
+    public void removerFuncionario(Long unidadeId, Usuario usuario) {
         UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-        Tecnico tecnico = usuario.getTecnico()
-                .orElseThrow(TecnicoNotFoundException::new);
+        Funcionario funcionario = usuario.getPerfil(Funcionario.class)
+                .orElseThrow(() -> new RuntimeException("Usuário não é um funcionário."));
 
-        if (unidade.getTecnicos().contains(tecnico)) {
-            throw new DataIntegrityViolationException("O técnico já está vinculado a esta unidade.");
-        }
-
-        unidade.getTecnicos().add(tecnico);
-        unidadeAdministrativaRepository.save(unidade);
-    }
-
-    @Override
-    public void removerTecnico(Long unidadeId, Usuario usuario) {
-        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-        Tecnico tecnico = usuario.getTecnico()
-                .orElseThrow(TecnicoNotFoundException::new);
-
-        if (!unidade.getTecnicos().contains(tecnico)) {
+        if (!unidade.getFuncionarios().contains(funcionario)) {
             throw new TecnicoNotFoundException();
         }
-
-        unidade.getTecnicos().remove(tecnico);
+        unidade.getFuncionarios().remove(funcionario);
         unidadeAdministrativaRepository.save(unidade);
     }
 
