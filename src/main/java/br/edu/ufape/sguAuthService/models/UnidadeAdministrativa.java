@@ -1,7 +1,9 @@
 package br.edu.ufape.sguAuthService.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -42,11 +44,15 @@ public class UnidadeAdministrativa {
     @JsonManagedReference
     private List<UnidadeAdministrativa> unidadesFilhas = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "gestor_id", referencedColumnName = "id")
-    private Gestor gestor;
+    @OneToMany(mappedBy = "unidadeAdministrativa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<GestorUnidade> gestores = new HashSet<>();
 
-    @OneToMany
-    private List<Tecnico> tecnicos = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(
+            name = "ua_funcionarios",
+            joinColumns = @JoinColumn(name = "ua_id"),
+            inverseJoinColumns = @JoinColumn(name = "funcionario_id")
+    )
+    private Set<Funcionario> funcionarios = new HashSet<>();
 
 }

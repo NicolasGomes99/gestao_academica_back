@@ -13,9 +13,8 @@ public abstract class Perfil {
     private Long id;
 
 
-    // Foto de perfil armazenada em binário
     @Lob
-    private byte[] fotoPerfil;  // Usando byte[] para armazenar a imagem em formato binário
+    private byte[] fotoPerfil;
 
 
 }

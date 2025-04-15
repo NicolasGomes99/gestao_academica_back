@@ -20,7 +20,7 @@ public class ProfessorResponse extends UsuarioResponse {
     public ProfessorResponse(Usuario usuario, ModelMapper modelMapper){
         if (usuario == null) throw new IllegalArgumentException("Professor não pode ser nulo");
         else modelMapper.map(usuario, this);
-        Professor professor = usuario.getProfessor().orElseThrow();
+        Professor professor = usuario.getPerfil(Professor.class).orElseThrow();
         this.siape = professor.getSiape();
         this.cursos = professor.getCursos().stream().map(curso -> new CursoResponse(curso, modelMapper)).collect(Collectors.toSet());
     }
