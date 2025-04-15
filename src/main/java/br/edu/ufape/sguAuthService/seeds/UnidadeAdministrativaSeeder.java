@@ -1,33 +1,41 @@
-/*package br.edu.ufape.sgi.seeds;
+package br.edu.ufape.sguAuthService.seeds;
 
+import br.edu.ufape.sguAuthService.dados.TipoUnidadeAdministrativaRepository;
+import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
+import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
+import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import br.edu.ufape.sgi.models.UnidadeAdministrativa;
-import br.edu.ufape.sgi.models.Enums.TipoUnidadeAdministrativa;
-import br.edu.ufape.sgi.dados.UnidadeAdministrativaRepository;
 
 @Component
+@RequiredArgsConstructor
 public class UnidadeAdministrativaSeeder implements CommandLineRunner {
-    private final UnidadeAdministrativaRepository unidadeAdministrativaRepository;
 
-    public UnidadeAdministrativaSeeder(UnidadeAdministrativaRepository unidadeAdministrativaRepository) {
-        this.unidadeAdministrativaRepository = unidadeAdministrativaRepository;
-    }
+    private final UnidadeAdministrativaRepository unidadeRepo;
+    private final TipoUnidadeAdministrativaRepository tipoRepo;
 
     @Override
     public void run(String... args) throws Exception {
-        if (unidadeAdministrativaRepository.count() == 0) {
-            unidadeAdministrativaRepository.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Administração", "PROAD", TipoUnidadeAdministrativa.PROREITORIA));
-            unidadeAdministrativaRepository.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Ensino e Graduação", "PREG", TipoUnidadeAdministrativa.PROREITORIA));
-            unidadeAdministrativaRepository.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Extensão e CUltura", "PREC", TipoUnidadeAdministrativa.PROREITORIA));
-            unidadeAdministrativaRepository.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Planejamento", "PROPLAN", TipoUnidadeAdministrativa.PROREITORIA));
-            unidadeAdministrativaRepository.save(new UnidadeAdministrativa(null, "Pro-Reitoria de Pesquisa, Pós-Graduação e Inovação", "PRPPGI", TipoUnidadeAdministrativa.PROREITORIA));
-            unidadeAdministrativaRepository.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Gestão de Pessoas", "PROGEPE", TipoUnidadeAdministrativa.PROREITORIA));
-            unidadeAdministrativaRepository.save(new UnidadeAdministrativa(null, "Reitoria", "REIT", TipoUnidadeAdministrativa.REITORIA));
-
-            System.out.println("Unidades Administrativas inseridas com sucesso.");
-        } else {
-            System.out.println("Seed já foi executado anteriormente.");
+        if (unidadeRepo.count() > 0) {
+            System.out.println("Unidades administrativas já existem. Seeder ignorado.");
+            return;
         }
+
+        TipoUnidadeAdministrativa proReitoria = tipoRepo.findByNomeEqualsIgnoreCase("PROREITORIA")
+                .orElseThrow(() -> new RuntimeException("Tipo 'PROREITORIA' não encontrado"));
+
+        TipoUnidadeAdministrativa reitoria = tipoRepo.findByNomeEqualsIgnoreCase("REITORIA")
+                .orElseThrow(() -> new RuntimeException("Tipo 'REITORIA' não encontrado"));
+
+        unidadeRepo.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Administração", "PROAD", proReitoria, null, null, null));
+        unidadeRepo.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Ensino e Graduação", "PREG", proReitoria, null, null, null));
+        unidadeRepo.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Extensão e Cultura", "PREC", proReitoria, null, null, null));
+        unidadeRepo.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Planejamento", "PROPLAN", proReitoria, null, null, null));
+        unidadeRepo.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Pesquisa, Pós-Graduação e Inovação", "PRPPGI", proReitoria, null, null, null));
+        unidadeRepo.save(new UnidadeAdministrativa(null, "Pró-Reitoria de Gestão de Pessoas", "PROGEPE", proReitoria, null, null, null));
+        unidadeRepo.save(new UnidadeAdministrativa(null, "Reitoria", "REIT", reitoria, null, null, null));
+
+        System.out.println("Unidades administrativas criadas com sucesso");
     }
-}*/
+}

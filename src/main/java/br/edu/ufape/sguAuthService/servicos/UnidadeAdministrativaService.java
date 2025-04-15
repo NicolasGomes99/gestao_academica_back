@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.servicos;
 
 
+import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.UnidadeAdnministrativaArvoreResponse;
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundException;
@@ -78,6 +79,25 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         return unidadeAdministrativaRepository.findByUnidadePaiIsNull();
     }
 
+//    @Override
+//    public List<UnidadeAdnministrativaArvoreResponse> montarArvore() {
+//        List<UnidadeAdministrativa> roots = unidadeAdministrativaRepository.findByUnidadePaiIsNull();
+//        return roots.stream().map(this::mapearArvore).toList();
+//    }
+//
+//    private UnidadeAdnministrativaArvoreResponse mapearArvore(UnidadeAdministrativa unidade) {
+//        List<UnidadeAdministrativa> filhos = unidadeAdministrativaRepository.findByUnidadePaiId(unidade.getId());
+//
+//        return new UnidadeAdnministrativaArvoreResponse(
+//                unidade.getId(),
+//                unidade.getNome(),
+//                unidade.getCodigo(),
+//                new TipoUnidadeAdministrativaResponse(unidade.getTipoUnidadeAdministrativa(), new ModelMapper()),
+//                filhos.stream().map(this::mapearArvore).toList()
+//        );
+//    } VERIFICAR
+
+
     @Override
     public List<UnidadeAdministrativa> listarUnidadesFilhas(Long id) {
         return unidadeAdministrativaRepository.findByUnidadePaiId(id);
@@ -88,9 +108,9 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(id)
                 .orElseThrow(UnidadeAdministrativaNotFoundException::new);
 
-        if (!unidade.getUnidadesFilhas().isEmpty()) {
-            throw new UnidadeAdministrativaComDependenciasException("Não é possível excluir a unidade, pois ela possui unidades filhas.");
-        }
+//        if (!unidade.getUnidadesFilhas().isEmpty()) {
+//            throw new UnidadeAdministrativaComDependenciasException("Não é possível excluir a unidade, pois ela possui unidades filhas.");
+//        }
 
         unidadeAdministrativaRepository.deleteById(id);
     }

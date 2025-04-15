@@ -38,9 +38,9 @@ public class UnidadeAdministrativa {
     @JsonBackReference
     private UnidadeAdministrativa unidadePai;
 
-    @OneToMany(mappedBy = "unidadePai", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonManagedReference
-    private List<UnidadeAdministrativa> unidadesFilhas = new ArrayList<>();
+//    @OneToMany(mappedBy = "unidadePai", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JsonManagedReference
+//    private List<UnidadeAdministrativa> unidadesFilhas = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "gestor_id", referencedColumnName = "id")
