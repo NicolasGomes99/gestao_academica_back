@@ -334,6 +334,10 @@ public class Fachada {
         return tecnico;
     }
 
+    public UnidadeAdministrativa listarTecnicosUnidade(Long id) throws UnidadeAdministrativaNotFoundException{
+        return unidadeAdministrativaService.buscarUnidadeAdministrativa(id);
+    }
+
 
     // ==================Tipo Unidade Administrativa ================== //
      public TipoUnidadeAdministrativa salvarTipo(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) {

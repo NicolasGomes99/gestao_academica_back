@@ -129,4 +129,10 @@ public class UnidadeAdministrativaController {
         return ResponseEntity.ok(new UsuarioResponse(tecnico, modelMapper));
     }
 
+    @PreAuthorize("hasRole('GESTOR')")
+    @GetMapping(value = "/{id}/tecnicos")
+    public ResponseEntity<GetTecnicosUnidadeResponse> listarTecnicosUnidade(@PathVariable Long id) throws UnidadeAdministrativaNotFoundException {
+        UnidadeAdministrativa response = fachada.listarTecnicosUnidade(id);
+        return new ResponseEntity<>(new GetTecnicosUnidadeResponse(response, modelMapper), HttpStatus.OK);
+    }
 }
