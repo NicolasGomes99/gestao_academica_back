@@ -24,11 +24,11 @@ public class Usuario {
     private String telefone;
     private Boolean ativo = true;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuario_id")
-    private Set<Perfil> perfis = new  HashSet<>();
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Perfil> perfis = new HashSet<>();
 
     public void adicionarPerfil(Perfil perfil) {
+        perfil.setUsuario(this);
         perfis.add(perfil);
     }
 
