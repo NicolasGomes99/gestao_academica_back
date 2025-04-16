@@ -5,6 +5,7 @@ import br.edu.ufape.sguAuthService.dados.CursoRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.CursoNotFoundException;
 import br.edu.ufape.sguAuthService.models.Curso;
+import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,6 +36,11 @@ public class CursoService implements br.edu.ufape.sguAuthService.servicos.interf
     @Override
     public List<Curso> listar() {
         return cursoRepository.findByAtivoTrue();
+    }
+
+    @Override
+    public List<Usuario> listarAlunosPorCurso(Long id){
+        return cursoRepository.findAllAlunosByCursoId(id);
     }
 
     @Override

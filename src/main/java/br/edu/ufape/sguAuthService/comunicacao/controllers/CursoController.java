@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 
+import br.edu.ufape.sguAuthService.comunicacao.dto.aluno.AlunoResponse;
 import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoResponse;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.CursoNotFoundException;
@@ -53,5 +54,11 @@ public class CursoController {
     public ResponseEntity<Void> deletar(@PathVariable Long id) throws CursoNotFoundException {
         fachada.deletarCurso(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("{id}/alunos")
+    public ResponseEntity<List<AlunoResponse>> listarAlunosPorCurso(@PathVariable Long id) throws CursoNotFoundException {
+        List<AlunoResponse> response = fachada.listarAlunosPorCurso(id).stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
