@@ -204,6 +204,10 @@ public class Fachada {
         return cursoService.listar();
     }
 
+    public List<Usuario> listarAlunosPorCurso(Long id){
+        return cursoService.listarAlunosPorCurso(id);
+    }
+
     public Curso editarCurso(Long id, Curso novoCurso) throws CursoNotFoundException{
         return cursoService.editar(id, novoCurso);
     }
