@@ -1,93 +1,13 @@
-# src/main/resources/application.yml
-
-arquivo:
-  diretorio-upload: /app/storage
-server:
-  port: 8081
-  error:
-    include-stacktrace: never
-
 spring:
   application:
     name: sgu-auth-service
-  web:
-    locale-resolver: fixed
-    locale: pt_BR
-  devtools:
-    livereload:
-      enabled: true
-  servlet:
-    multipart:
-      max-file-size: 2MB
-      max-request-size: 20MB
-  datasource:
-    url: jdbc:postgresql://localhost:5432/sgu
-    username: postgres
-    password: password
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-  security:
-    oauth2:
-      client:
-        provider:
-          keycloak:
-            issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
-            user-name-attribute: preferred_username
-      resourceserver:
-        jwt:
-          jwk-set-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
-springdoc:
-  api-docs:
-    path: /api-doc/docs
-  swagger-ui:
-    path: /api-doc/swagger.html
+  profiles:
+    active: docker
 
-keycloak:
-    auth-server-url: http://localhost:9090/
-    realm: sgu-ufape
-    client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
-    client-id: sgu-application
-
-logging:
-  level:
-    org:
-      springframework: DEBUG
----
-spring:
   config:
-    activate:
-      on-profile: docker
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-  datasource:
-    url: jdbc:postgresql://backend-db:5432/sgu
-    username: postgres
-    password: password
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: ${keycloak.auth-server-url}realms/${keycloak.realm}/protocol/openid-connect/certs
-keycloak:
-  auth-server-url: http://keycloak:8080/
-  realm: sgu-ufape
-  client-secret: iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5
-  client-id: sgu-application
+    import: "configserver:"
 
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://discovery:8761/eureka/
-    registerWithEureka: true
-    fetchRegistry: true
-  instance:
-    hostname: sgu-auth-service
-    prefer-ip-address: false
+  cloud:
+    config:
+      uri: http://config-service:8888
+      fail-fast: true
