@@ -21,6 +21,13 @@ public class CursoService implements br.edu.ufape.sguAuthService.servicos.interf
     @Override
     public Curso salvar(Curso curso) {
         try {
+            if(cursoRepository.existsByNome(curso.getNome())) {
+                Curso cursoDesativado = cursoRepository.findByNomeAndAtivoFalse(curso.getNome());
+                if (cursoDesativado != null) {
+                    cursoDesativado.setAtivo(true);
+                    return cursoRepository.save(cursoDesativado);
+                }
+            }
             return cursoRepository.save(curso);
         }catch (DataIntegrityViolationException e){
           throw  ExceptionUtil.handleDataIntegrityViolationException(e);
