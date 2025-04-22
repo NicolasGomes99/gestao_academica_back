@@ -12,4 +12,7 @@ public interface CursoRepository extends JpaRepository<Curso, Long> {
     @Query("SELECT a.usuario FROM Aluno a WHERE a.curso.id = :id")
     List<Usuario> findAllAlunosByCursoId(Long id);
     List<Curso> findByAtivoTrue();
+
+    boolean existsByNome(String nome);
+    Curso findByNomeAndAtivoFalse(String nome);
 }
