@@ -16,7 +16,7 @@ public class TecnicoResponse extends UsuarioResponse {
     public TecnicoResponse(Usuario usuario, ModelMapper modelMapper){
         if (usuario == null) throw new IllegalArgumentException("Tecnico não pode ser nulo");
         else modelMapper.map(usuario, this);
-        Tecnico tecnico = usuario.getTecnico().orElseThrow();
+        Tecnico tecnico = usuario.getPerfil(Tecnico.class).orElseThrow();
         this.siape = tecnico.getSiape();
     }
 }

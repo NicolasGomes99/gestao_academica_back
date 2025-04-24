@@ -17,7 +17,7 @@ public class AlunoResponse extends UsuarioResponse {
     public AlunoResponse(Usuario usuario, ModelMapper modelMapper){
         if (usuario == null) throw new IllegalArgumentException("Aluno não pode ser nulo");
         else modelMapper.map(usuario, this);
-        Aluno aluno = usuario.getAluno().orElseThrow();
+        Aluno aluno = usuario.getPerfil(Aluno.class).orElseThrow();
         this.matricula = aluno.getMatricula();
         this.curso = new CursoResponse(aluno.getCurso(), modelMapper);
     }

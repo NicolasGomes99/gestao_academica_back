@@ -18,9 +18,8 @@ public class PerfilService implements br.edu.ufape.sguAuthService.servicos.inter
         try {
             return perfilRepository.save(perfil);
         } catch (DataIntegrityViolationException e) {
-            ExceptionUtil.handleDataIntegrityViolationException(e);
+            throw ExceptionUtil.handleDataIntegrityViolationException(e);
         }
-        return null;
     }
 
     @Override
