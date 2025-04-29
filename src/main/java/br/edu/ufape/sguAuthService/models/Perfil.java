@@ -1,5 +1,6 @@
 package br.edu.ufape.sguAuthService.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ public abstract class Perfil {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
+    @JsonBackReference
     private Usuario usuario;
 
     @Lob

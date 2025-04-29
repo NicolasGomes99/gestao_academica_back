@@ -1,5 +1,6 @@
 package br.edu.ufape.sguAuthService.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Usuario {
     private Boolean ativo = true;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Perfil> perfis = new HashSet<>();
 
     public void adicionarPerfil(Perfil perfil) {
