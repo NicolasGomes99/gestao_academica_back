@@ -16,6 +16,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -147,6 +148,18 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         }
         unidade.getFuncionarios().remove(funcionario);
         unidadeAdministrativaRepository.save(unidade);
+    }
+
+    @Override
+    public Set<GestorUnidade> listarGestores(Long unidadeId) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+        return unidade.getGestores();
+    }
+
+    @Override
+    public Set<Funcionario> listarFuncionarios(Long unidadeId) {
+        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+        return unidade.getFuncionarios();
     }
 
 }

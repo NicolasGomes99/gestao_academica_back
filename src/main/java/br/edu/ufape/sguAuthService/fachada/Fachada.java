@@ -15,6 +15,7 @@ import br.edu.ufape.sguAuthService.models.*;
 import br.edu.ufape.sguAuthService.servicos.interfaces.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -334,6 +335,14 @@ public class Fachada {
     public void removerFuncionario(Long unidadeId, UUID usuarioId) {
         Usuario funcionario = usuarioService.buscarUsuario(usuarioId, true, null);
         unidadeAdministrativaService.removerFuncionario(unidadeId, funcionario);
+    }
+
+    public Set<GestorUnidade> listarGestoresPorUnidade(Long id) {
+        return unidadeAdministrativaService.listarGestores(id);
+    }
+
+    public Set<Funcionario> listarFuncionariosPorUnidade(Long id) {
+        return unidadeAdministrativaService.listarFuncionarios(id);
     }
 
 

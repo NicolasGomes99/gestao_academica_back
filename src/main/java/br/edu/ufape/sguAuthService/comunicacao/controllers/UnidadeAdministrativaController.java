@@ -1,5 +1,6 @@
 package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
+import br.edu.ufape.sguAuthService.comunicacao.dto.funcionario.FuncionarioResponse;
 import br.edu.ufape.sguAuthService.comunicacao.dto.gestorUnidade.GestorUnidadeRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.gestorUnidade.GestorUnidadeResponse;
 import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.*;
@@ -102,6 +103,12 @@ public class UnidadeAdministrativaController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @GetMapping("/{id}/gestores")
+    public List<GestorUnidadeResponse> listarGestores(@PathVariable Long id) {
+        return fachada.listarGestoresPorUnidade(id).stream().map(gestorUnidade -> new GestorUnidadeResponse(gestorUnidade, modelMapper)).collect(Collectors.toList());
+    }
+
     @PreAuthorize("hasRole('GESTOR')")
     @PostMapping("{id}/funcionarios")
     public ResponseEntity<UsuarioResponse> alocarFuncionarios( @PathVariable Long id, @RequestBody Map<String, String> body) {
@@ -116,6 +123,12 @@ public class UnidadeAdministrativaController {
         UUID usuarioId = UUID.fromString(body.get("usuarioId"));
         fachada.removerFuncionario(id, usuarioId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('GESTOR')")
+    @GetMapping("/{id}/funcionarios")
+    public List<FuncionarioResponse> listarFuncionarios(@PathVariable Long id) {
+        return fachada.listarFuncionariosPorUnidade(id).stream().map(funcionario -> new FuncionarioResponse(funcionario.getUsuario(), modelMapper)).collect(Collectors.toList());
     }
 
 }
