@@ -46,19 +46,49 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
 
     }
 
+//    @Override
+//    public UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa novaUnidadeAdministrativa, Long id) {
+//        try {
+//            UnidadeAdministrativa unidadeAdministrativaAtual = unidadeAdministrativaRepository.findById(id)
+//                    .orElseThrow(UnidadeAdministrativaNotFoundException::new);
+//
+//            if (novaUnidadeAdministrativa.getUnidadePai() != null
+//                    && novaUnidadeAdministrativa.getUnidadePai().getId().equals(id)) {
+//                throw new UnidadeAdministrativaCircularException();
+//            }
+//
+//            modelMapper.map(novaUnidadeAdministrativa, unidadeAdministrativaAtual);
+//            return unidadeAdministrativaRepository.save(unidadeAdministrativaAtual);
+//        } catch (DataIntegrityViolationException e) {
+//            throw ExceptionUtil.handleDataIntegrityViolationException(e);
+//        }
+//    }
+
     @Override
     public UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa novaUnidadeAdministrativa, Long id) {
         try {
-            UnidadeAdministrativa unidadeAdministrativaAtual = unidadeAdministrativaRepository.findById(id)
+            UnidadeAdministrativa unidadeAtual = unidadeAdministrativaRepository.findById(id)
                     .orElseThrow(UnidadeAdministrativaNotFoundException::new);
 
-            if (novaUnidadeAdministrativa.getUnidadePai() != null
-                    && novaUnidadeAdministrativa.getUnidadePai().getId().equals(id)) {
+            if (novaUnidadeAdministrativa.getUnidadePai() != null &&
+                    novaUnidadeAdministrativa.getUnidadePai().getId().equals(id)) {
                 throw new UnidadeAdministrativaCircularException();
             }
 
-            modelMapper.map(novaUnidadeAdministrativa, unidadeAdministrativaAtual);
-            return unidadeAdministrativaRepository.save(unidadeAdministrativaAtual);
+            // ModelMapper tem que ignorar campos nulos
+            modelMapper.getConfiguration().setPropertyCondition(ctx -> ctx.getSource() != null);
+
+            modelMapper.typeMap(UnidadeAdministrativa.class, UnidadeAdministrativa.class)
+                    .addMappings(mapper -> {
+                        mapper.skip(UnidadeAdministrativa::setGestores);
+                        mapper.skip(UnidadeAdministrativa::setFuncionarios);
+                        mapper.skip(UnidadeAdministrativa::setUnidadesFilhas);
+                        mapper.skip(UnidadeAdministrativa::setUnidadePai);
+                    });
+
+            modelMapper.map(novaUnidadeAdministrativa, unidadeAtual);
+
+            return unidadeAdministrativaRepository.save(unidadeAtual);
         } catch (DataIntegrityViolationException e) {
             throw ExceptionUtil.handleDataIntegrityViolationException(e);
         }
