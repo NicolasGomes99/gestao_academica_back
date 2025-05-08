@@ -398,7 +398,7 @@ public class UnidadeAdministrativaSeeder {
             unidade.setNome(nome);
             unidade.setCodigo(codigo);
 
-            // Buscar tipo
+
             TipoUnidadeAdministrativa tipoUnidade = tipoUnidadeAdministrativaRepository.findByNome(tipo);
             if (tipoUnidade == null) {
                 System.err.println("Tipo não encontrado: " + tipo);
@@ -406,7 +406,7 @@ public class UnidadeAdministrativaSeeder {
             }
             unidade.setTipoUnidadeAdministrativa(tipoUnidade);
 
-            // Buscar unidade pai
+
             String codigoPai = extrairCodigoPai(codigo, unidadesSalvas);
             if (codigoPai != null && unidadesSalvas.containsKey(codigoPai)) {
                 unidade.setUnidadePai(unidadesSalvas.get(codigoPai));
@@ -416,30 +416,30 @@ public class UnidadeAdministrativaSeeder {
             unidadesSalvas.put(codigo, unidade);
         }
 
-        // Salvar todas as unidades
+
         unidadeAdministrativaRepository.saveAll(unidades);
     }
 
     private String extrairCodigoPai(String codigo, Map<String, UnidadeAdministrativa> unidadesSalvas) {
         if (!codigo.contains(".")) {
-            return null; // Sem pai
+            return null;
         }
 
-        // Encontrar o código pai removendo o prefixo até o primeiro ponto
+
         String[] partes = codigo.split("\\.", 2);
         if (partes.length < 2) {
             return null;
         }
-
-        // Procurar o código pai completo no mapa
         String sufixo = partes[1];
+
+
         for (String codigoSalvo : unidadesSalvas.keySet()) {
-            if (codigoSalvo.equals(sufixo) || codigoSalvo.endsWith("." + sufixo)) {
+            if (codigoSalvo.startsWith(sufixo)) {
                 return codigoSalvo;
             }
         }
 
-        // Retornar o sufixo como fallback (pode precisar de ajuste para casos complexos)
-        return sufixo;
+
+        return null;
     }
 }
