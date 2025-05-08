@@ -24,7 +24,7 @@ public class UnidadeAdministrativa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String nome;
 
     @Column(unique = true, nullable = false)
