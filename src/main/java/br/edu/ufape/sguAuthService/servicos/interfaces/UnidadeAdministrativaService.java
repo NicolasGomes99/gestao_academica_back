@@ -4,6 +4,7 @@ import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdmin
 import br.edu.ufape.sguAuthService.models.*;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UnidadeAdministrativaService {
 
@@ -30,4 +31,7 @@ public interface UnidadeAdministrativaService {
     GestorUnidade adicionarGestor(Long unidadeId, GestorUnidade gestorUnidade);
 
 
+    Set<GestorUnidade> listarGestores(Long unidadeId);
+
+    Set<Funcionario> listarFuncionarios(Long unidadeId);
 }
