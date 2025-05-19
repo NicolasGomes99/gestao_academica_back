@@ -93,6 +93,10 @@ public class Fachada {
         return professorService.buscarProfessor(id, isAdmin, sessionId);
     }
 
+    public Usuario buscarProfessorAtual() throws UsuarioNotFoundException {
+        return professorService.buscarProfessorAtual();
+    }
+
 
     // ================== Tecnico ================== //
 
@@ -122,7 +126,6 @@ public class Fachada {
         boolean isAdmin = keycloakService.hasRoleAdmin(sessionId.toString());
         return gestorService.buscarGestor(id, isAdmin, sessionId);
     }
-
 
     // ================== Usuario ================== //
     @Transactional
@@ -343,6 +346,26 @@ public class Fachada {
 
     public Set<Funcionario> listarFuncionariosPorUnidade(Long id) {
         return unidadeAdministrativaService.listarFuncionarios(id);
+    }
+
+    public List<UnidadeAdministrativa> listarUnidadesDoGestorAtual() {
+        UUID sessionId = authenticatedUserProvider.getUserId();
+        Usuario usuario = buscarGestor(sessionId);
+        Gestor gestor = usuario.getPerfil(Gestor.class).orElseThrow();
+        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
+    }
+
+
+    public List<UnidadeAdministrativa> listarUnidadesDoTecnicoAtual() {
+        Usuario usuario = buscarTecnicoAtual();
+        Tecnico tecnico = usuario.getPerfil(Tecnico.class).orElseThrow();
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(tecnico);
+    }
+
+    public List<UnidadeAdministrativa> listarUnidadesDoProfessorAtual() {
+        Usuario usuario = buscarProfessorAtual();
+        Professor professor = usuario.getPerfil(Professor.class).orElseThrow();
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(professor);
     }
 
 

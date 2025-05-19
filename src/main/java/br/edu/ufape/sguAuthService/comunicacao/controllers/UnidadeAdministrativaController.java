@@ -131,4 +131,26 @@ public class UnidadeAdministrativaController {
         return fachada.listarFuncionariosPorUnidade(id).stream().map(funcionario -> new FuncionarioResponse(funcionario.getUsuario(), modelMapper)).collect(Collectors.toList());
     }
 
+    @GetMapping("gestor")
+    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestor() {
+        return fachada.listarUnidadesDoGestorAtual().stream()
+                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+                .toList();
+    }
+
+
+    @GetMapping("tecnico")
+    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoTecnico() {
+        return fachada.listarUnidadesDoTecnicoAtual().stream()
+                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+                .toList();
+    }
+
+
+    @GetMapping("professor")
+    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoProfessor() {
+        return fachada.listarUnidadesDoProfessorAtual().stream()
+                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+                .toList();
+    }
 }
