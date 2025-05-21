@@ -131,14 +131,15 @@ public class UnidadeAdministrativaController {
         return fachada.listarFuncionariosPorUnidade(id).stream().map(funcionario -> new FuncionarioResponse(funcionario.getUsuario(), modelMapper)).collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
     @GetMapping("gestor")
-    public List<UnidadeAdministrativaGetResponse> listarUnidadesDoGestor() {
+    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestor() {
         return fachada.listarUnidadesDoGestorAtual().stream()
-                .map(unidade -> new UnidadeAdministrativaGetResponse(unidade, modelMapper))
+                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
                 .toList();
     }
 
-
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
     @GetMapping("tecnico")
     public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoTecnico() {
         return fachada.listarUnidadesDoTecnicoAtual().stream()
@@ -146,7 +147,7 @@ public class UnidadeAdministrativaController {
                 .toList();
     }
 
-
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
     @GetMapping("professor")
     public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoProfessor() {
         return fachada.listarUnidadesDoProfessorAtual().stream()
