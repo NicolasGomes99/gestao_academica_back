@@ -147,18 +147,37 @@ public class UnidadeAdministrativaController {
                 .toList();
     }
 
+//    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
+//    @GetMapping("gestor/{usuarioId}")
+//    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorPorId(@PathVariable UUID usuarioId) {
+//        return fachada.listarUnidadesDoGestorPorId(usuarioId).stream()
+//                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+//                .toList();
+//    }
+
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
     @GetMapping("gestor/{usuarioId}")
-    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorPorId(@PathVariable UUID usuarioId) {
-        return fachada.listarUnidadesDoGestorPorId(usuarioId).stream()
+    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorPorId(@PathVariable String usuarioId) {
+        UUID id = fachada.parseUUID(usuarioId, "ID do usuário inválido.");
+        return fachada.listarUnidadesDoGestorPorId(id).stream()
                 .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
                 .toList();
     }
 
+
+//    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
+//    @GetMapping("funcionario/{usuarioId}")
+//    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioPorId(@PathVariable UUID usuarioId) {
+//        return fachada.listarUnidadesDoFuncionarioPorId(usuarioId).stream()
+//                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+//                .toList();
+//    }
+
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
     @GetMapping("funcionario/{usuarioId}")
-    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioPorId(@PathVariable UUID usuarioId) {
-        return fachada.listarUnidadesDoFuncionarioPorId(usuarioId).stream()
+    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioPorId(@PathVariable String usuarioId) {
+        UUID id = fachada.parseUUID(usuarioId, "ID do usuário inválido.");
+        return fachada.listarUnidadesDoFuncionarioPorId(id).stream()
                 .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
                 .toList();
     }

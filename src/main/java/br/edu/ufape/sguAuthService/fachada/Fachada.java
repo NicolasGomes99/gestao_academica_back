@@ -398,4 +398,14 @@ public class Fachada {
     public void deletarTipo(Long id) throws TipoUnidadeAdministrativaNotFoundException {
         tipoUnidadeAdministrativaService.deletar(id);
     }
+
+    // ================== ConvertStringToId ================== //
+
+    public UUID parseUUID(String idStr, String errorMessage) {
+        try {
+            return UUID.fromString(idStr);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(errorMessage);
+        }
+    }
 }
