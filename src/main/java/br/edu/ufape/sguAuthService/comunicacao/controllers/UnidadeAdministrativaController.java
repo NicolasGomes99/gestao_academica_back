@@ -132,9 +132,9 @@ public class UnidadeAdministrativaController {
     }
 
     @GetMapping("gestor")
-    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestor() {
+    public List<UnidadeAdministrativaGetResponse> listarUnidadesDoGestor() {
         return fachada.listarUnidadesDoGestorAtual().stream()
-                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+                .map(unidade -> new UnidadeAdministrativaGetResponse(unidade, modelMapper))
                 .toList();
     }
 

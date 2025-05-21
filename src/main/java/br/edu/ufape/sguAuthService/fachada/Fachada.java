@@ -350,10 +350,12 @@ public class Fachada {
 
     public List<UnidadeAdministrativa> listarUnidadesDoGestorAtual() {
         UUID sessionId = authenticatedUserProvider.getUserId();
-        Usuario usuario = buscarGestor(sessionId);
-        Gestor gestor = usuario.getPerfil(Gestor.class).orElseThrow();
+        Usuario usuario = buscarUsuario(sessionId);
+        Gestor gestor = usuario.getPerfil(Gestor.class)
+                .orElseThrow();
         return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
     }
+
 
 
     public List<UnidadeAdministrativa> listarUnidadesDoTecnicoAtual() {
