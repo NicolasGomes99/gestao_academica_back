@@ -362,16 +362,21 @@ public class Fachada {
     }
 
     public List<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId) {
-        Usuario usuario = buscarGestor(usuarioId);
-        Gestor gestor = usuario.getPerfil(Gestor.class).orElseThrow();
+        Usuario usuario = buscarUsuario(usuarioId);
+        Gestor gestor = usuario.getPerfil(Gestor.class)
+                .orElseThrow(GestorNotFoundException::new);
         return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
     }
 
     public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId) {
         Usuario usuario = buscarUsuario(usuarioId);
+        boolean possuiPerfilValido = usuario.getPerfis().stream()
+                .anyMatch(p -> p instanceof Tecnico || p instanceof Professor);
+        if (!possuiPerfilValido) {
+            throw new FuncionarioNotFoundException();
+        }
         return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
     }
-
 
 
     // ==================Tipo Unidade Administrativa ================== //
