@@ -199,11 +199,32 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
                 .toList();
     }
 
+    @Override
     public List<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor) {
         Long gestorId = gestor.getId();
         List<GestorUnidade> vinculacoes = gestorUnidadeRepository.findByGestorId(gestorId);
         return vinculacoes.stream()
                 .map(GestorUnidade::getUnidadeAdministrativa)
+                .distinct()
+                .toList();
+    }
+
+    @Override
+    public List<UnidadeAdministrativa> listarUnidadesPorProfessor(Usuario usuario) {
+        return usuario.getPerfis().stream()
+                .filter(p -> p instanceof Professor)
+                .map(p -> (Funcionario) p)
+                .flatMap(p -> listarUnidadesPorFuncionario(p).stream())
+                .distinct()
+                .toList();
+    }
+
+    @Override
+    public List<UnidadeAdministrativa> listarUnidadesPorTecnico(Usuario usuario) {
+        return usuario.getPerfis().stream()
+                .filter(p -> p instanceof Tecnico)
+                .map(p -> (Funcionario) p)
+                .flatMap(p -> listarUnidadesPorFuncionario(p).stream())
                 .distinct()
                 .toList();
     }

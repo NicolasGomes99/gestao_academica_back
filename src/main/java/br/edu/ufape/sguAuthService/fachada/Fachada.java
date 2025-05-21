@@ -356,18 +356,14 @@ public class Fachada {
         return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
     }
 
-
-
     public List<UnidadeAdministrativa> listarUnidadesDoTecnicoAtual() {
         Usuario usuario = buscarTecnicoAtual();
-        Tecnico tecnico = usuario.getPerfil(Tecnico.class).orElseThrow();
-        return unidadeAdministrativaService.listarUnidadesPorFuncionario(tecnico);
+        return unidadeAdministrativaService.listarUnidadesPorTecnico(usuario);
     }
 
     public List<UnidadeAdministrativa> listarUnidadesDoProfessorAtual() {
         Usuario usuario = buscarProfessorAtual();
-        Professor professor = usuario.getPerfil(Professor.class).orElseThrow();
-        return unidadeAdministrativaService.listarUnidadesPorFuncionario(professor);
+        return unidadeAdministrativaService.listarUnidadesPorProfessor(usuario);
     }
 
 
