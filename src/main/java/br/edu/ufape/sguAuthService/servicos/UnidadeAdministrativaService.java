@@ -193,13 +193,6 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public List<UnidadeAdministrativa> listarUnidadesPorFuncionario(Funcionario funcionario) {
-        return unidadeAdministrativaRepository.findAll().stream()
-                .filter(ua -> ua.getFuncionarios().contains(funcionario))
-                .toList();
-    }
-
-    @Override
     public List<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor) {
         Long gestorId = gestor.getId();
         List<GestorUnidade> vinculacoes = gestorUnidadeRepository.findByGestorId(gestorId);
@@ -210,21 +203,11 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public List<UnidadeAdministrativa> listarUnidadesPorProfessor(Usuario usuario) {
-        return usuario.getPerfis().stream()
-                .filter(p -> p instanceof Professor)
-                .map(p -> (Funcionario) p)
-                .flatMap(p -> listarUnidadesPorFuncionario(p).stream())
-                .distinct()
-                .toList();
-    }
-
-    @Override
-    public List<UnidadeAdministrativa> listarUnidadesPorTecnico(Usuario usuario) {
-        return usuario.getPerfis().stream()
-                .filter(p -> p instanceof Tecnico)
-                .map(p -> (Funcionario) p)
-                .flatMap(p -> listarUnidadesPorFuncionario(p).stream())
+    public List<UnidadeAdministrativa> listarUnidadesPorFuncionario(Usuario usuario) {
+        return unidadeAdministrativaRepository.findAll().stream()
+                .filter(ua -> ua.getFuncionarios().stream()
+                        .anyMatch(f -> usuario.getPerfis().contains(f) &&
+                                (f instanceof Tecnico || f instanceof Professor)))
                 .distinct()
                 .toList();
     }

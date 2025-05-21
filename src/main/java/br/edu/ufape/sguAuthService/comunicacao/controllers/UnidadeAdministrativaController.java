@@ -133,24 +133,32 @@ public class UnidadeAdministrativaController {
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
     @GetMapping("gestor")
-    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestor() {
+    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorAtual() {
         return fachada.listarUnidadesDoGestorAtual().stream()
                 .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
                 .toList();
     }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
-    @GetMapping("tecnico")
-    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoTecnico() {
-        return fachada.listarUnidadesDoTecnicoAtual().stream()
+    @GetMapping("funcionario")
+    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioAtual() {
+        return fachada.listarUnidadesDoFuncionarioAtual().stream()
                 .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
                 .toList();
     }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
-    @GetMapping("professor")
-    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoProfessor() {
-        return fachada.listarUnidadesDoProfessorAtual().stream()
+    @GetMapping("gestor/{usuarioId}")
+    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorPorId(@PathVariable UUID usuarioId) {
+        return fachada.listarUnidadesDoGestorPorId(usuarioId).stream()
+                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+                .toList();
+    }
+
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
+    @GetMapping("funcionario/{usuarioId}")
+    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioPorId(@PathVariable UUID usuarioId) {
+        return fachada.listarUnidadesDoFuncionarioPorId(usuarioId).stream()
                 .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
                 .toList();
     }

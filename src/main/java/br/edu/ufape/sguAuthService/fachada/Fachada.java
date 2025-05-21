@@ -356,15 +356,22 @@ public class Fachada {
         return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
     }
 
-    public List<UnidadeAdministrativa> listarUnidadesDoTecnicoAtual() {
-        Usuario usuario = buscarTecnicoAtual();
-        return unidadeAdministrativaService.listarUnidadesPorTecnico(usuario);
+    public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioAtual() {
+        Usuario usuario = buscarUsuarioAtual();
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
     }
 
-    public List<UnidadeAdministrativa> listarUnidadesDoProfessorAtual() {
-        Usuario usuario = buscarProfessorAtual();
-        return unidadeAdministrativaService.listarUnidadesPorProfessor(usuario);
+    public List<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId) {
+        Usuario usuario = buscarGestor(usuarioId);
+        Gestor gestor = usuario.getPerfil(Gestor.class).orElseThrow();
+        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
     }
+
+    public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId) {
+        Usuario usuario = buscarUsuario(usuarioId);
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
+    }
+
 
 
     // ==================Tipo Unidade Administrativa ================== //

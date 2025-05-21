@@ -37,9 +37,5 @@ public interface UnidadeAdministrativaService {
 
     List<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor);
 
-    List<UnidadeAdministrativa> listarUnidadesPorFuncionario(Funcionario funcionario);
-
-    List<UnidadeAdministrativa> listarUnidadesPorProfessor(Usuario usuario);
-
-    List<UnidadeAdministrativa> listarUnidadesPorTecnico(Usuario usuario);
+    List<UnidadeAdministrativa> listarUnidadesPorFuncionario(Usuario usuario);
 }
