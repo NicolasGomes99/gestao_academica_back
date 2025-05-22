@@ -93,6 +93,10 @@ public class Fachada {
         return professorService.buscarProfessor(id, isAdmin, sessionId);
     }
 
+    public Usuario buscarProfessorAtual() throws UsuarioNotFoundException {
+        return professorService.buscarProfessorAtual();
+    }
+
 
     // ================== Tecnico ================== //
 
@@ -122,7 +126,6 @@ public class Fachada {
         boolean isAdmin = keycloakService.hasRoleAdmin(sessionId.toString());
         return gestorService.buscarGestor(id, isAdmin, sessionId);
     }
-
 
     // ================== Usuario ================== //
     @Transactional
@@ -345,6 +348,36 @@ public class Fachada {
         return unidadeAdministrativaService.listarFuncionarios(id);
     }
 
+    public List<UnidadeAdministrativa> listarUnidadesDoGestorAtual() {
+        UUID sessionId = authenticatedUserProvider.getUserId();
+        Usuario usuario = buscarUsuario(sessionId);
+        Gestor gestor = usuario.getPerfil(Gestor.class)
+                .orElseThrow();
+        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
+    }
+
+    public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioAtual() {
+        Usuario usuario = buscarUsuarioAtual();
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
+    }
+
+    public List<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId) {
+        Usuario usuario = buscarUsuario(usuarioId);
+        Gestor gestor = usuario.getPerfil(Gestor.class)
+                .orElseThrow(GestorNotFoundException::new);
+        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
+    }
+
+    public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId) {
+        Usuario usuario = buscarUsuario(usuarioId);
+        boolean possuiPerfilValido = usuario.getPerfis().stream()
+                .anyMatch(p -> p instanceof Tecnico || p instanceof Professor);
+        if (!possuiPerfilValido) {
+            throw new FuncionarioNotFoundException();
+        }
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
+    }
+
 
     // ==================Tipo Unidade Administrativa ================== //
      public TipoUnidadeAdministrativa salvarTipo(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) {
@@ -364,5 +397,15 @@ public class Fachada {
 
     public void deletarTipo(Long id) throws TipoUnidadeAdministrativaNotFoundException {
         tipoUnidadeAdministrativaService.deletar(id);
+    }
+
+    // ================== ConvertStringToId ================== //
+
+    public UUID parseUUID(String idStr, String errorMessage) {
+        try {
+            return UUID.fromString(idStr);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(errorMessage);
+        }
     }
 }

@@ -34,4 +34,8 @@ public interface UnidadeAdministrativaService {
     Set<GestorUnidade> listarGestores(Long unidadeId);
 
     Set<Funcionario> listarFuncionarios(Long unidadeId);
+
+    List<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor);
+
+    List<UnidadeAdministrativa> listarUnidadesPorFuncionario(Usuario usuario);
 }

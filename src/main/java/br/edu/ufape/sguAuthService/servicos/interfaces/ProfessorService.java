@@ -11,4 +11,6 @@ public interface ProfessorService {
     List<Usuario> listarProfessores();
 
     Usuario buscarProfessor(UUID id, boolean isAdm, UUID sessionId) throws ProfessorNotFoundException, UsuarioNotFoundException;
+
+    Usuario buscarProfessorAtual() throws ProfessorNotFoundException, UsuarioNotFoundException;
 }
