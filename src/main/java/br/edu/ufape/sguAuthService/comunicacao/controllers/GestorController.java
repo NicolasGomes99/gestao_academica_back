@@ -3,6 +3,7 @@ package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.gestor.GestorResponse;
+import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaResponse;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
@@ -37,4 +38,5 @@ public class GestorController {
     List<GestorResponse> listarGestores() {
         return fachada.listarGestores().stream().map(usuario -> new GestorResponse(usuario, modelMapper)).toList();
     }
+
 }

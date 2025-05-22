@@ -35,4 +35,8 @@ public interface KeycloakServiceInterface {
     List<UserRepresentation> listUnverifiedUsers();
 
     void addClientRoleToUser(String userId, String clientId, String roleName);
+
+    void addUserToGroup(String userId, String groupName);
+
+    void removeUserFromGroup(String userId, String groupName);
 }

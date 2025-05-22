@@ -320,24 +320,43 @@ public class Fachada {
 
     public GestorUnidade adicionarGestor(Long unidadeId, GestorUnidade gestorUnidade, UUID gestorId) {
         Usuario gestor = gestorService.buscarGestor(gestorId, true, null);
+        UnidadeAdministrativa unidade = unidadeAdministrativaService.buscarUnidadeAdministrativa(unidadeId);
         gestorUnidade.setGestor(gestor.getPerfil(Gestor.class).orElseThrow());
-        return unidadeAdministrativaService.adicionarGestor(unidadeId, gestorUnidade);
+        GestorUnidade gestorAdicionado = unidadeAdministrativaService.adicionarGestor(unidade, gestorUnidade);
+        int index = unidade.getCodigo().indexOf(".");
+        String prefixo = (index != -1) ? unidade.getCodigo().substring(0, index) : unidade.getCodigo();
+        keycloakService.addUserToGroup(gestorId.toString(), prefixo);
+        return gestorAdicionado;
     }
 
     public void removerGestor(Long unidadeId, UUID gestorId) {
         Usuario gestor = gestorService.buscarGestor(gestorId, true, null);
-        unidadeAdministrativaService.removerGestor(unidadeId, gestor.getPerfil(Gestor.class).orElseThrow().getId());
+        UnidadeAdministrativa unidade = unidadeAdministrativaService.buscarUnidadeAdministrativa(unidadeId);
+        unidadeAdministrativaService.removerGestor(unidade, gestor.getPerfil(Gestor.class).orElseThrow().getId());
+        int index = unidade.getCodigo().indexOf(".");
+        String prefixo = (index != -1) ? unidade.getCodigo().substring(0, index) : unidade.getCodigo();
+        keycloakService.addUserToGroup(gestorId.toString(), prefixo);
     }
 
     public Usuario adicionarFuncionario(Long unidadeId, UUID usuarioId) {
         Usuario funcionario = usuarioService.buscarUsuario(usuarioId, true, null);
-        unidadeAdministrativaService.adicionarFuncionario(unidadeId, funcionario);
+        UnidadeAdministrativa unidade = unidadeAdministrativaService.buscarUnidadeAdministrativa(unidadeId);
+        unidadeAdministrativaService.adicionarFuncionario(unidade, funcionario);
+        //Pega a primeira parte do código da unidade administrativa, é o nome do grupo no keycloak
+        int index = unidade.getCodigo().indexOf(".");
+        String prefixo = (index != -1) ? unidade.getCodigo().substring(0, index) : unidade.getCodigo();
+        keycloakService.addUserToGroup(usuarioId.toString(), prefixo);
         return funcionario;
     }
 
     public void removerFuncionario(Long unidadeId, UUID usuarioId) {
         Usuario funcionario = usuarioService.buscarUsuario(usuarioId, true, null);
-        unidadeAdministrativaService.removerFuncionario(unidadeId, funcionario);
+        UnidadeAdministrativa unidade = unidadeAdministrativaService.buscarUnidadeAdministrativa(unidadeId);
+        int index = unidade.getCodigo().indexOf(".");
+        String prefixo = (index != -1) ? unidade.getCodigo().substring(0, index) : unidade.getCodigo();
+        log.debug("{}removerFuncionario {}", prefixo, unidade.getCodigo());
+        keycloakService.removeUserFromGroup(usuarioId.toString(), prefixo);
+        unidadeAdministrativaService.removerFuncionario(unidade, funcionario);
     }
 
     public Set<GestorUnidade> listarGestoresPorUnidade(Long id) {

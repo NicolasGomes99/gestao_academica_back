@@ -129,8 +129,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public GestorUnidade adicionarGestor(Long unidadeId, GestorUnidade gestorUnidade) {
-        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+    public GestorUnidade adicionarGestor(UnidadeAdministrativa unidade, GestorUnidade gestorUnidade) {
         gestorUnidade.setUnidadeAdministrativa(unidade);
         unidade.getGestores().add(gestorUnidade);
         gestorUnidadeRepository.save(gestorUnidade);
@@ -138,9 +137,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public void removerGestor(Long unidadeId, Long gestorUnidadeId) {
-        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-
+    public void removerGestor(UnidadeAdministrativa unidade, Long gestorUnidadeId) {
         GestorUnidade gestorUnidade = unidade.getGestores().stream()
                 .filter(gu -> gu.getGestor().getId().equals(gestorUnidadeId))
                 .findFirst()
@@ -154,8 +151,8 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public void adicionarFuncionario(Long unidadeId, Usuario usuario) {
-        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+    public void adicionarFuncionario(UnidadeAdministrativa unidade, Usuario usuario) {
+
         Funcionario funcionario = usuario.getPerfil(Funcionario.class)
                 .orElseThrow(() -> new RuntimeException("Usuário não é um funcionário."));
 
@@ -168,8 +165,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public void removerFuncionario(Long unidadeId, Usuario usuario) {
-        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
+    public void removerFuncionario(UnidadeAdministrativa unidade, Usuario usuario) {
         Funcionario funcionario = usuario.getPerfil(Funcionario.class)
                 .orElseThrow(() -> new RuntimeException("Usuário não é um funcionário."));
 

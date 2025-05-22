@@ -11,10 +11,7 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.representations.idm.ClientRepresentation;
-import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.RoleRepresentation;
-import org.keycloak.representations.idm.UserRepresentation;
+import org.keycloak.representations.idm.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -361,6 +359,94 @@ public class KeycloakService implements KeycloakServiceInterface {
             log.error("Erro ao adicionar role de client ao usuário", e);
             throw new KeycloakAuthenticationException("Erro ao adicionar role de client ao usuário", e);
         }
+    }
+
+    @Override
+    public void addUserToGroup(String userId, String groupName) {
+        log.info("Adicionando usuario '{}' ao grupo '{}'", userId, groupName);
+        Optional<GroupRepresentation> groupOptional = findGroupByNameRecursive(groupName);
+        if (groupOptional.isEmpty()) {
+            log.warn("Aviso: Grupo não encontrado: {}", groupName); // Alterado para warn e isEmpty
+            return;
+        }
+
+        keycloak.realm(realm)
+                .users()
+                .get(userId)
+                .joinGroup(groupOptional.get().getId());
+        log.info("Usuário '{}' adicionado ao grupo '{}' (ID: {})", userId, groupName, groupOptional.get().getId());
+    }
+
+    @Override
+    public void removeUserFromGroup(String userId, String groupName) {
+        log.info("Removendo usuario '{}' do grupo '{}'", userId, groupName);
+        Optional<GroupRepresentation> groupOptional = findGroupByNameRecursive(groupName);
+        if (groupOptional.isEmpty()) {
+            log.warn("Aviso: Grupo não encontrado: {}", groupName); // Alterado para warn e isEmpty
+            return;
+        }
+
+        keycloak.realm(realm)
+                .users()
+                .get(userId)
+                .leaveGroup(groupOptional.get().getId());
+        log.info("Usuário '{}' removido do grupo '{}' (ID: {})", userId, groupName, groupOptional.get().getId());
+    }
+
+    private Optional<GroupRepresentation> findGroupByNameRecursive(String groupName) {
+        log.debug("Procurando pelo grupo ou subgrupo: {}", groupName);
+        // Obtém todos os grupos de nível superior
+        List<GroupRepresentation> topLevelGroups = keycloak.realm(realm).groups().groups("", 0, Integer.MAX_VALUE); // Busca todos os grupos no realm
+
+        for (GroupRepresentation group : topLevelGroups) {
+            Optional<GroupRepresentation> foundGroup = findInGroupHierarchy(group, groupName);
+            if (foundGroup.isPresent()) {
+                return foundGroup;
+            }
+        }
+        log.debug("Grupo ou subgrupo '{}' não encontrado no realm.", groupName);
+        return Optional.empty();
+    }
+
+    private Optional<GroupRepresentation> findInGroupHierarchy(GroupRepresentation currentGroup, String targetGroupName) {
+        if (Objects.equals(currentGroup.getName(), targetGroupName)) {
+            log.info("Grupo '{}' (ID: {}) encontrado.", currentGroup.getName(), currentGroup.getId());
+            return Optional.of(currentGroup);
+        }
+
+        List<GroupRepresentation> subGroups = currentGroup.getSubGroups();
+        if (subGroups != null && !subGroups.isEmpty()) {
+            log.trace("Verificando subgrupos de '{}' (ID: {}), total de subgrupos: {}", currentGroup.getName(), currentGroup.getId(), subGroups.size());
+            for (GroupRepresentation subGroup : subGroups) {
+                // Chamada recursiva para cada subgrupo
+                Optional<GroupRepresentation> foundInSubGroup = findInGroupHierarchy(subGroup, targetGroupName);
+                if (foundInSubGroup.isPresent()) {
+                    return foundInSubGroup;
+                }
+            }
+        } else {
+            log.trace("Grupo '{}' (ID: {}) não possui subgrupos preenchidos ou não tem subgrupos.", currentGroup.getName(), currentGroup.getId());
+        }
+
+        return Optional.empty();
+    }
+
+
+    private GroupRepresentation findGroupByName(String groupName) {
+        List<GroupRepresentation> matches = keycloak
+                .realm(realm)
+                .groups()
+                .groups(groupName, true, 0, 1000, false);
+
+        if (!matches.isEmpty()) {
+            for (GroupRepresentation match : matches) {
+                log.info("Group '{}' encontrado", match.getName());
+            }
+        }
+        return matches.stream()
+                .filter(g -> groupName.equals(g.getName()))
+                .findFirst()
+                .orElse(null);
     }
 
 }
