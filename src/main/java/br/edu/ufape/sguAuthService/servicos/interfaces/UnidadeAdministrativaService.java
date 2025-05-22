@@ -22,14 +22,13 @@ public interface UnidadeAdministrativaService {
 
     UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa unidadeAdministrativa, Long id) throws UnidadeAdministrativaNotFoundException;
 
-    void removerGestor(Long unidadeId, Long gestorUnidadeId);
+    GestorUnidade adicionarGestor(UnidadeAdministrativa unidade, GestorUnidade gestorUnidade);
 
-    void adicionarFuncionario(Long unidadeId, Usuario funcionario) throws UnidadeAdministrativaNotFoundException;
+    void removerGestor(UnidadeAdministrativa unidade, Long gestorUnidadeId);
 
-    void removerFuncionario(Long unidadeId, Usuario funcionario) throws UnidadeAdministrativaNotFoundException;
+    void adicionarFuncionario(UnidadeAdministrativa unidade, Usuario usuario);
 
-    GestorUnidade adicionarGestor(Long unidadeId, GestorUnidade gestorUnidade);
-
+    void removerFuncionario(UnidadeAdministrativa unidade, Usuario usuario);
 
     Set<GestorUnidade> listarGestores(Long unidadeId);
 
