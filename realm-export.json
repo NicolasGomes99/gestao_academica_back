@@ -356,6 +356,46 @@
           "attributes": {}
         }
       ],
+      "prae-application": [
+        {
+          "id": "57a14c85-0ed4-4e8a-943a-eba2f1eda23b",
+          "name": "prae_access",
+          "description": "",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "51c7e64f-42d8-4486-8e7f-0483891d40f9",
+          "attributes": {}
+        },
+        {
+          "id": "440e9196-c2e5-492d-9d02-cdbe19fe231f",
+          "name": "profissional",
+          "description": "",
+          "composite": true,
+          "composites": {
+            "realm": [
+              "professor",
+              "tecnico"
+            ]
+          },
+          "clientRole": true,
+          "containerId": "51c7e64f-42d8-4486-8e7f-0483891d40f9",
+          "attributes": {}
+        },
+        {
+          "id": "575dc728-531f-43d5-96eb-cc4601dabeee",
+          "name": "estudante",
+          "description": "",
+          "composite": true,
+          "composites": {
+            "realm": [
+              "aluno"
+            ]
+          },
+          "clientRole": true,
+          "containerId": "51c7e64f-42d8-4486-8e7f-0483891d40f9",
+          "attributes": {}
+        }
+      ],
       "security-admin-console": [],
       "sgu-application": [
         {
@@ -470,7 +510,142 @@
       ]
     }
   },
-  "groups": [],
+  "groups": [
+    {
+      "id": "32f8e89a-8b48-4d63-8fce-5f8b412eb6c9",
+      "name": "PRAE",
+      "path": "/PRAE",
+      "subGroups": [
+        {
+          "id": "feecbba5-d88a-485f-bdd5-16cbc538e870",
+          "name": "DGFIR",
+          "path": "/PRAE/DGFIR",
+          "parentId": "32f8e89a-8b48-4d63-8fce-5f8b412eb6c9",
+          "subGroups": [
+            {
+              "id": "7fa1b92e-8d83-40a1-b7fd-727f8dbe03ee",
+              "name": "CAAF",
+              "path": "/PRAE/DGFIR/CAAF",
+              "parentId": "feecbba5-d88a-485f-bdd5-16cbc538e870",
+              "subGroups": [
+                {
+                  "id": "81a45e81-94fb-4f93-9ff3-1e9fa6dffd5c",
+                  "name": "SGDI",
+                  "path": "/PRAE/DGFIR/CAAF/SGDI",
+                  "parentId": "7fa1b92e-8d83-40a1-b7fd-727f8dbe03ee",
+                  "subGroups": [],
+                  "attributes": {},
+                  "realmRoles": [],
+                  "clientRoles": {}
+                },
+                {
+                  "id": "5156bb39-7543-4da7-87fb-a90eaa1fdfce",
+                  "name": "SPA",
+                  "path": "/PRAE/DGFIR/CAAF/SPA",
+                  "parentId": "7fa1b92e-8d83-40a1-b7fd-727f8dbe03ee",
+                  "subGroups": [],
+                  "attributes": {},
+                  "realmRoles": [],
+                  "clientRoles": {}
+                }
+              ],
+              "attributes": {},
+              "realmRoles": [],
+              "clientRoles": {}
+            },
+            {
+              "id": "ed14f269-35c3-4361-afaa-1bdef7e4edbc",
+              "name": "CGAR",
+              "path": "/PRAE/DGFIR/CGAR",
+              "parentId": "feecbba5-d88a-485f-bdd5-16cbc538e870",
+              "subGroups": [],
+              "attributes": {},
+              "realmRoles": [],
+              "clientRoles": {}
+            }
+          ],
+          "attributes": {},
+          "realmRoles": [],
+          "clientRoles": {}
+        },
+        {
+          "id": "ab4969c7-4510-40dd-96fa-335da0e3eff5",
+          "name": "DPEA",
+          "path": "/PRAE/DPEA",
+          "parentId": "32f8e89a-8b48-4d63-8fce-5f8b412eb6c9",
+          "subGroups": [
+            {
+              "id": "901f26f3-dd71-40f1-ac33-1dd89662e6c1",
+              "name": "CAPE",
+              "path": "/PRAE/DPEA/CAPE",
+              "parentId": "ab4969c7-4510-40dd-96fa-335da0e3eff5",
+              "subGroups": [
+                {
+                  "id": "6e25a9ad-9a88-47d3-8126-c27d05355f13",
+                  "name": "SIA",
+                  "path": "/PRAE/DPEA/CAPE/SIA",
+                  "parentId": "901f26f3-dd71-40f1-ac33-1dd89662e6c1",
+                  "subGroups": [],
+                  "attributes": {},
+                  "realmRoles": [],
+                  "clientRoles": {}
+                },
+                {
+                  "id": "b0e56d80-7d81-4087-8670-4220ab9594e1",
+                  "name": "SPAD",
+                  "path": "/PRAE/DPEA/CAPE/SPAD",
+                  "parentId": "901f26f3-dd71-40f1-ac33-1dd89662e6c1",
+                  "subGroups": [],
+                  "attributes": {},
+                  "realmRoles": [],
+                  "clientRoles": {}
+                },
+                {
+                  "id": "923ff637-795c-4279-b49b-0590c78f303b",
+                  "name": "SPEL",
+                  "path": "/PRAE/DPEA/CAPE/SPEL",
+                  "parentId": "901f26f3-dd71-40f1-ac33-1dd89662e6c1",
+                  "subGroups": [],
+                  "attributes": {},
+                  "realmRoles": [],
+                  "clientRoles": {}
+                }
+              ],
+              "attributes": {},
+              "realmRoles": [],
+              "clientRoles": {}
+            },
+            {
+              "id": "58ff868e-56f2-4980-b87e-f0e9b63a6fc9",
+              "name": "CGME",
+              "path": "/PRAE/DPEA/CGME",
+              "parentId": "ab4969c7-4510-40dd-96fa-335da0e3eff5",
+              "subGroups": [],
+              "attributes": {},
+              "realmRoles": [],
+              "clientRoles": {}
+            }
+          ],
+          "attributes": {},
+          "realmRoles": [],
+          "clientRoles": {}
+        },
+        {
+          "id": "7dd3a059-14b7-4c1c-9f33-1093d607a294",
+          "name": "SEC",
+          "path": "/PRAE/SEC",
+          "parentId": "32f8e89a-8b48-4d63-8fce-5f8b412eb6c9",
+          "subGroups": [],
+          "attributes": {},
+          "realmRoles": [],
+          "clientRoles": {}
+        }
+      ],
+      "attributes": {},
+      "realmRoles": [],
+      "clientRoles": {}
+    }
+  ],
   "defaultRole": {
     "id": "3978f952-1c1e-4c89-aae5-00bc1c9d7b6f",
     "name": "default-roles-sgu ufape",
@@ -753,6 +928,59 @@
       ]
     },
     {
+      "id": "51c7e64f-42d8-4486-8e7f-0483891d40f9",
+      "clientId": "prae-application",
+      "name": "PRAE application",
+      "description": "Serviço do Módulo da PRAE",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": true,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [
+        "/*"
+      ],
+      "webOrigins": [
+        "/*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
       "id": "63276b2c-0511-4e40-adc9-da4a4907b4b7",
       "clientId": "realm-management",
       "name": "${client_realm-management}",
@@ -874,7 +1102,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": true,
       "clientAuthenticatorType": "client-secret",
-      "secret": "iIueertdxnoPmpoA1Fsy6BfjMVbEa1d5",
+      "secret": "**********",
       "redirectUris": [
         "/*"
       ],
@@ -1645,18 +1873,18 @@
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
   "smtpServer": {
-    "password": "d546225af0d474",
+    "password": "**********",
     "replyToDisplayName": "",
     "starttls": "true",
     "auth": "true",
-    "port": "2525",
-    "host": "sandbox.smtp.mailtrap.io",
+    "port": "587",
+    "host": "smtp.gmail.com",
     "replyTo": "",
     "from": "naoresponder@ufape.edu.br",
     "fromDisplayName": "Sistema de Gestão UFAPE",
     "envelopeFrom": "",
     "ssl": "false",
-    "user": "9469f671a3d492"
+    "user": "naoresponder@ufape.edu.br"
   },
   "loginTheme": "",
   "accountTheme": "",
@@ -1728,14 +1956,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-full-name-mapper",
-            "oidc-usermodel-property-mapper",
-            "saml-role-list-mapper",
             "saml-user-attribute-mapper",
-            "saml-user-property-mapper",
             "oidc-address-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-full-name-mapper",
+            "saml-role-list-mapper",
+            "saml-user-property-mapper",
+            "oidc-usermodel-attribute-mapper"
           ]
         }
       },
@@ -1755,14 +1983,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
+            "oidc-address-mapper",
             "saml-user-attribute-mapper",
             "saml-role-list-mapper",
-            "oidc-full-name-mapper",
-            "oidc-address-mapper",
-            "saml-user-property-mapper",
-            "oidc-usermodel-property-mapper",
             "oidc-usermodel-attribute-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-usermodel-property-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-full-name-mapper",
+            "saml-user-property-mapper"
           ]
         }
       },
