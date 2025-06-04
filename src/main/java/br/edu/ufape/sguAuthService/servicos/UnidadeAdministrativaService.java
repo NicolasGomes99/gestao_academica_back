@@ -47,24 +47,6 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
 
     }
 
-//    @Override
-//    public UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa novaUnidadeAdministrativa, Long id) {
-//        try {
-//            UnidadeAdministrativa unidadeAdministrativaAtual = unidadeAdministrativaRepository.findById(id)
-//                    .orElseThrow(UnidadeAdministrativaNotFoundException::new);
-//
-//            if (novaUnidadeAdministrativa.getUnidadePai() != null
-//                    && novaUnidadeAdministrativa.getUnidadePai().getId().equals(id)) {
-//                throw new UnidadeAdministrativaCircularException();
-//            }
-//
-//            modelMapper.map(novaUnidadeAdministrativa, unidadeAdministrativaAtual);
-//            return unidadeAdministrativaRepository.save(unidadeAdministrativaAtual);
-//        } catch (DataIntegrityViolationException e) {
-//            throw ExceptionUtil.handleDataIntegrityViolationException(e);
-//        }
-//    }
-
     @Override
     public UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa novaUnidadeAdministrativa, Long id) {
         try {

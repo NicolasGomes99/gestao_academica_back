@@ -298,6 +298,7 @@ public class Fachada {
     public UnidadeAdministrativa buscarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         return unidadeAdministrativaService.buscarUnidadeAdministrativa(id);
     }
+
     public List<UnidadeAdministrativa> listarUnidadesAdministrativas() {
         return unidadeAdministrativaService.listarUnidadesAdministrativas();
     }
@@ -406,10 +407,11 @@ public class Fachada {
     public TipoUnidadeAdministrativa buscarTipo(Long id) throws TipoUnidadeAdministrativaNotFoundException {
         return tipoUnidadeAdministrativaService.buscar(id);
     }
+
     public List<TipoUnidadeAdministrativa> listarTipos() {
        return tipoUnidadeAdministrativaService.listar();
-
     }
+
     public TipoUnidadeAdministrativa editarTipo(Long id, TipoUnidadeAdministrativa novoTipo) throws TipoUnidadeAdministrativaNotFoundException {
         return tipoUnidadeAdministrativaService.editar(id, novoTipo);
     }
