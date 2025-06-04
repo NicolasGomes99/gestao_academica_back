@@ -69,8 +69,12 @@ public class Fachada {
     // ================== Aluno ================== //
 
 
-    public List<Usuario> listarAlunos() {
-        return alunoService.listarAlunos();
+//    public List<Usuario> listarAlunos() {
+//        return alunoService.listarAlunos();
+//    }
+
+    public Page<Usuario> listarAlunos(Pageable pageable) {
+        return alunoService.listarAlunos(pageable);
     }
 
     public Usuario buscarAluno(UUID id) throws AlunoNotFoundException, UsuarioNotFoundException {
@@ -123,9 +127,14 @@ public class Fachada {
 
 
     // ================== Gestor ================== //
-    public List<Usuario> listarGestores() {
-        return gestorService.listarGestores();
-    }
+//    public List<Usuario> listarGestores() {
+//        return gestorService.listarGestores();
+//    }
+
+    public Page<Usuario> listarGestores(Pageable pageable) {
+    return gestorService.listarGestores(pageable);
+}
+
 
     public Usuario buscarGestor(UUID id) throws GestorNotFoundException, UsuarioNotFoundException {
         UUID sessionId = authenticatedUserProvider.getUserId();
@@ -214,9 +223,14 @@ public class Fachada {
         return cursoService.buscar(id);
     }
 
-    public List<Curso> listarCursos() {
-        return cursoService.listar();
-    }
+//    public List<Curso> listarCursos() {
+//        return cursoService.listar();
+//    }
+
+    public Page<Curso> listarCursos(Pageable pageable) {
+    return cursoService.listar(pageable);
+}
+
 
     public List<Usuario> listarAlunosPorCurso(Long id){
         return cursoService.listarAlunosPorCurso(id);

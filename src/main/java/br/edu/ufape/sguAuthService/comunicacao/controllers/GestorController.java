@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,10 +36,18 @@ public class GestorController {
         return new ResponseEntity<>(new GestorResponse(response, modelMapper), HttpStatus.OK);
     }
 
+//    @PreAuthorize("hasRole('ADMINISTRADOR')")
+//    @GetMapping
+//    List<GestorResponse> listarGestores() {
+//        return fachada.listarGestores().stream().map(usuario -> new GestorResponse(usuario, modelMapper)).toList();
+//    }
+
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping
-    List<GestorResponse> listarGestores() {
-        return fachada.listarGestores().stream().map(usuario -> new GestorResponse(usuario, modelMapper)).toList();
+    public Page<GestorResponse> listarGestores(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarGestores(pageable)
+                .map(usuario -> new GestorResponse(usuario, modelMapper));
     }
+
 
 }

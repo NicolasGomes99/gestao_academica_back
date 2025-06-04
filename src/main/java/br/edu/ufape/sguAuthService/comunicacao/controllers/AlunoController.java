@@ -29,10 +29,18 @@ public class AlunoController {
         return new ResponseEntity<>(new AlunoResponse(response, modelMapper), HttpStatus.OK);
     }
 
+//    @PreAuthorize("hasRole('ADMINISTRADOR')")
+//    @GetMapping List<AlunoResponse> listarAlunos() {
+//        return fachada.listarAlunos().stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
+//    }
+
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    @GetMapping List<AlunoResponse> listarAlunos() {
-        return fachada.listarAlunos().stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
+    @GetMapping
+    public Page<AlunoResponse> listarAlunos(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarAlunos(pageable)
+                .map(usuario -> new AlunoResponse(usuario, modelMapper));
     }
+
 
 
     @PostMapping("/batch")

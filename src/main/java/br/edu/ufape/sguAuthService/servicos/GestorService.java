@@ -19,8 +19,13 @@ import java.util.UUID;
 public class GestorService implements br.edu.ufape.sguAuthService.servicos.interfaces.GestorService {
     private final UsuarioRepository usuarioRepository;
 
+//    @Override
+//    public List<Usuario> listarGestores() {return usuarioRepository.findUsuariosGestores();}
+
     @Override
-    public List<Usuario> listarGestores() {return usuarioRepository.findUsuariosGestores();}
+    public Page<Usuario> listarGestores(Pageable pageable) {
+        return usuarioRepository.findUsuariosGestores(pageable);
+    }
 
     @Override
     public Usuario buscarGestor(UUID id, boolean isAdm, UUID sessionId) throws GestorNotFoundException, UsuarioNotFoundException {
