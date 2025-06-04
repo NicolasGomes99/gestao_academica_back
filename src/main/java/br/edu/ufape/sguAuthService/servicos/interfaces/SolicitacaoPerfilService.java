@@ -6,6 +6,8 @@ import br.edu.ufape.sguAuthService.models.Documento;
 import br.edu.ufape.sguAuthService.models.Perfil;
 import br.edu.ufape.sguAuthService.models.SolicitacaoPerfil;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -22,9 +24,9 @@ public interface SolicitacaoPerfilService {
 
     List<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id);
 
-    List<SolicitacaoPerfil> listarSolicitacoes();
+    Page<SolicitacaoPerfil> listarSolicitacoes(Pageable pageable);
 
-    List<SolicitacaoPerfil> listarSolicitacoesPendentes();
+    Page<SolicitacaoPerfil> listarSolicitacoesPendentes(Pageable pageable);
 
     @Transactional
     SolicitacaoPerfil aceitarSolicitacao(Long id, SolicitacaoPerfil parecer) throws SolicitacaoNotFoundException;

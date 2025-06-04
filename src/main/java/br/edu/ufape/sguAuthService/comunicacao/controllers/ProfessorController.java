@@ -8,6 +8,9 @@ import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +37,7 @@ public class ProfessorController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping
-    List<ProfessorResponse> listarProfessores() {
-        return fachada.listarProfessores().stream().map(usuario -> new ProfessorResponse(usuario, modelMapper)).toList();
+    public Page<ProfessorResponse> listarProfessores(@PageableDefault(sort = "id")Pageable pageable) {
+        return fachada.listarProfessores(pageable).map(usuario -> new ProfessorResponse(usuario, modelMapper));
     }
 }

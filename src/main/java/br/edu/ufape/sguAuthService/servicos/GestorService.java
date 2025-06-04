@@ -7,6 +7,8 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFound
 import br.edu.ufape.sguAuthService.models.Gestor;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

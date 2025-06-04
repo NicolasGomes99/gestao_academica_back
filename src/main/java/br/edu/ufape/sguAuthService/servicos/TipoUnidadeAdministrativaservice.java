@@ -5,6 +5,8 @@ import java.util.List;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.edu.ufape.sguAuthService.dados.TipoUnidadeAdministrativaRepository;
@@ -33,9 +35,14 @@ public class TipoUnidadeAdministrativaservice implements br.edu.ufape.sguAuthSer
         return tipoUnidadeAdministrativaRepository.findById(id).orElseThrow(TipoUnidadeAdministrativaNotFoundException::new);
     }
 
+//    @Override
+//    public List<TipoUnidadeAdministrativa> listar() {
+//        return tipoUnidadeAdministrativaRepository.findAll();
+//    }
+
     @Override
-    public List<TipoUnidadeAdministrativa> listar() {
-        return tipoUnidadeAdministrativaRepository.findAll();
+    public Page<TipoUnidadeAdministrativa> listar(Pageable pageable) {
+        return tipoUnidadeAdministrativaRepository.findAll(pageable);
     }
 
     @Override

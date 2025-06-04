@@ -8,6 +8,8 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFound
 import br.edu.ufape.sguAuthService.models.Tecnico;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +23,14 @@ public class TecnicoService implements br.edu.ufape.sguAuthService.servicos.inte
     private final AuthenticatedUserProvider authenticatedUserProvider;
 
 
+//    @Override
+//    public List<Usuario> getTecnicos(){
+//        return usuarioRepository.findUsuariosTecnicos();
+//    }
+
     @Override
-    public List<Usuario> getTecnicos(){
-        return usuarioRepository.findUsuariosTecnicos();
+    public Page<Usuario> getTecnicos(Pageable pageable) {
+        return usuarioRepository.findUsuariosTecnicos(pageable);
     }
 
 

@@ -24,6 +24,8 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,8 +85,8 @@ public class Fachada {
 
 
     // ================== Professor ================== //
-    public List<Usuario> listarProfessores() {
-        return professorService.listarProfessores();
+    public Page<Usuario> listarProfessores(Pageable pageable) {
+        return professorService.listarProfessores(pageable);
     }
 
     public Usuario buscarProfessor(UUID id) throws UsuarioNotFoundException, ProfessorNotFoundException {
@@ -100,8 +102,12 @@ public class Fachada {
 
     // ================== Tecnico ================== //
 
-    public List<Usuario> listarTecnicos(){
-        return tecnicoService.getTecnicos();
+//    public List<Usuario> listarTecnicos(){
+//        return tecnicoService.getTecnicos();
+//    }
+
+    public Page<Usuario> listarTecnicos(Pageable pageable) {
+        return tecnicoService.getTecnicos(pageable);
     }
 
     public Usuario buscarTecnico(UUID id) throws UsuarioNotFoundException, TecnicoNotFoundException {
@@ -179,7 +185,11 @@ public class Fachada {
         return usuarioService.buscarUsuarioAtual();
     }
 
-    public List<Usuario> listarUsuarios() {return usuarioService.listarUsuarios();}
+//    public List<Usuario> listarUsuarios() {return usuarioService.listarUsuarios();}
+
+    public Page<Usuario> listarUsuarios(Pageable pageable) {
+        return usuarioService.listarUsuarios(pageable);
+    }
 
     public List<Usuario> listarUsuariosEmBatch(List<UUID> ids) {
         return usuarioService.buscarUsuariosPorIds(ids);
@@ -247,13 +257,22 @@ public class Fachada {
         return solicitacaoPerfilService.buscarSolicitacoesPorId(id);
     }
 
-    public List<SolicitacaoPerfil> listarSolicitacoes() {
-        return solicitacaoPerfilService.listarSolicitacoes();
+//    public List<SolicitacaoPerfil> listarSolicitacoes() {
+//        return solicitacaoPerfilService.listarSolicitacoes();
+//    }
+//
+//    public List<SolicitacaoPerfil> listarSolicitacoesPendentes() {
+//        return solicitacaoPerfilService.listarSolicitacoesPendentes();
+//    }
+
+    public Page<SolicitacaoPerfil> listarSolicitacoes(Pageable pageable) {
+        return solicitacaoPerfilService.listarSolicitacoes(pageable);
     }
 
-    public List<SolicitacaoPerfil> listarSolicitacoesPendentes() {
-        return solicitacaoPerfilService.listarSolicitacoesPendentes();
+    public Page<SolicitacaoPerfil> listarSolicitacoesPendentes(Pageable pageable) {
+        return solicitacaoPerfilService.listarSolicitacoesPendentes(pageable);
     }
+
 
     public List<DocumentoResponse> listarDocumentosBase64(Long id) throws SolicitacaoNotFoundException, IOException {
         UUID sessionId = authenticatedUserProvider.getUserId();
@@ -299,8 +318,12 @@ public class Fachada {
         return unidadeAdministrativaService.buscarUnidadeAdministrativa(id);
     }
 
-    public List<UnidadeAdministrativa> listarUnidadesAdministrativas() {
-        return unidadeAdministrativaService.listarUnidadesAdministrativas();
+//    public List<UnidadeAdministrativa> listarUnidadesAdministrativas() {
+//        return unidadeAdministrativaService.listarUnidadesAdministrativas();
+//    }
+
+    public Page<UnidadeAdministrativa> listarUnidadesAdministrativas(Pageable pageable) {
+        return unidadeAdministrativaService.listarUnidadesAdministrativas(pageable);
     }
 
     public List<UnidadeAdministrativa> montarArvore() {
@@ -408,8 +431,12 @@ public class Fachada {
         return tipoUnidadeAdministrativaService.buscar(id);
     }
 
-    public List<TipoUnidadeAdministrativa> listarTipos() {
-       return tipoUnidadeAdministrativaService.listar();
+//    public List<TipoUnidadeAdministrativa> listarTipos() {
+//       return tipoUnidadeAdministrativaService.listar();
+//    }
+
+    public Page<TipoUnidadeAdministrativa> listarTipos(Pageable pageable) {
+        return tipoUnidadeAdministrativaService.listar(pageable);
     }
 
     public TipoUnidadeAdministrativa editarTipo(Long id, TipoUnidadeAdministrativa novoTipo) throws TipoUnidadeAdministrativaNotFoundException {

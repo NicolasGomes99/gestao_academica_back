@@ -3,12 +3,14 @@ package br.edu.ufape.sguAuthService.servicos.interfaces;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TecnicoNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface TecnicoService {
-    List<Usuario> getTecnicos();
+    Page<Usuario> getTecnicos(Pageable pageable);
 
     Usuario buscarTecnico(UUID id, boolean isAdm, UUID sessionId) throws TecnicoNotFoundException, UsuarioNotFoundException;
 

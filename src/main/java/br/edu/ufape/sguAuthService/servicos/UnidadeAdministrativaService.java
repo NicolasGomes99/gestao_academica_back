@@ -13,6 +13,8 @@ import br.edu.ufape.sguAuthService.models.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -83,9 +85,14 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
                 .orElseThrow(UnidadeAdministrativaNotFoundException::new);
     }
 
+//    @Override
+//    public List<UnidadeAdministrativa> listarUnidadesAdministrativas() {
+//        return unidadeAdministrativaRepository.findAll();
+//    }
+
     @Override
-    public List<UnidadeAdministrativa> listarUnidadesAdministrativas() {
-        return unidadeAdministrativaRepository.findAll();
+    public Page<UnidadeAdministrativa> listarUnidadesAdministrativas(Pageable pageable) {
+        return unidadeAdministrativaRepository.findAll(pageable);
     }
 
     @Override

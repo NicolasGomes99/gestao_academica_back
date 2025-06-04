@@ -15,6 +15,9 @@ import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Aluno;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -78,17 +81,32 @@ public class SolicitacaoPerfilController {
         return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.buscarSolicitacao(id), modelMapper), HttpStatus.OK);
     }
 
+//    @PreAuthorize("hasRole('ADMINISTRADOR')")
+//    @GetMapping
+//    public List<SolicitacaoPerfilResponse> listarSolicitacoes() {
+//        return fachada.listarSolicitacoes().stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
+//    }
+//
+//    @PreAuthorize("hasRole('ADMINISTRADOR')")
+//    @GetMapping("/pendentes")
+//    public List<SolicitacaoPerfilResponse> listarSolicitacoesPendentes() {
+//        return fachada.listarSolicitacoesPendentes().stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
+//    }
+
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping
-    public List<SolicitacaoPerfilResponse> listarSolicitacoes() {
-        return fachada.listarSolicitacoes().stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
+    public Page<SolicitacaoPerfilResponse> listarSolicitacoes(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarSolicitacoes(pageable)
+                .map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper));
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping("/pendentes")
-    public List<SolicitacaoPerfilResponse> listarSolicitacoesPendentes() {
-        return fachada.listarSolicitacoesPendentes().stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
+    public Page<SolicitacaoPerfilResponse> listarSolicitacoesPendentes(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarSolicitacoesPendentes(pageable)
+                .map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper));
     }
+
 
     @GetMapping("/usuario")
     public List<SolicitacaoPerfilResponse> buscarSolicitacoesUsuario() {

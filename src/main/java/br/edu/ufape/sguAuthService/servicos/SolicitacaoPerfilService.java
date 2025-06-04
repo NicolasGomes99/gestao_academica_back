@@ -12,6 +12,8 @@ import br.edu.ufape.sguAuthService.models.SolicitacaoPerfil;
 import br.edu.ufape.sguAuthService.models.Usuario;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,15 +67,26 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
         return solicitacaoPerfilRepository.findAllBySolicitante_Id(id);
     }
 
+//    @Override
+//    public List<SolicitacaoPerfil> listarSolicitacoes() {
+//        return solicitacaoPerfilRepository.findAll();
+//    }
+//
+//    @Override
+//    public List<SolicitacaoPerfil> listarSolicitacoesPendentes() {
+//        return solicitacaoPerfilRepository.findAllByStatus(StatusSolicitacao.PENDENTE);
+//    }
+
     @Override
-    public List<SolicitacaoPerfil> listarSolicitacoes() {
-        return solicitacaoPerfilRepository.findAll();
+    public Page<SolicitacaoPerfil> listarSolicitacoes(Pageable pageable) {
+        return solicitacaoPerfilRepository.findAll(pageable);
     }
 
     @Override
-    public List<SolicitacaoPerfil> listarSolicitacoesPendentes() {
-        return solicitacaoPerfilRepository.findAllByStatus(StatusSolicitacao.PENDENTE);
+    public Page<SolicitacaoPerfil> listarSolicitacoesPendentes(Pageable pageable) {
+        return solicitacaoPerfilRepository.findAllByStatus(StatusSolicitacao.PENDENTE, pageable);
     }
+
 
     @Override
     @Transactional

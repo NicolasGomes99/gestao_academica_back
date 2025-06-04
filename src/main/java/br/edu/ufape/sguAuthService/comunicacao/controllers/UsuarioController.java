@@ -13,6 +13,9 @@ import br.edu.ufape.sguAuthService.models.Usuario;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,10 +42,17 @@ public class UsuarioController {
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.OK);
     }
 
+//    @PreAuthorize("hasRole('ADMINISTRADOR')")
+//    @GetMapping
+//    public List<UsuarioResponse> listar() {
+//        return fachada.listarUsuarios().stream().map(usuario -> new UsuarioResponse(usuario, modelMapper)).toList();
+//    }
+
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping
-    public List<UsuarioResponse> listar() {
-        return fachada.listarUsuarios().stream().map(usuario -> new UsuarioResponse(usuario, modelMapper)).toList();
+    public Page<UsuarioResponse> listar(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarUsuarios(pageable)
+                .map(usuario -> new UsuarioResponse(usuario, modelMapper));
     }
 
     @GetMapping("/current")
