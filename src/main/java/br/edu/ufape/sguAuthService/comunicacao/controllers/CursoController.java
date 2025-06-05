@@ -47,11 +47,6 @@ public class CursoController {
         return new ResponseEntity<>(new CursoResponse(response, modelMapper), HttpStatus.OK);
     }
 
-//    @GetMapping
-//    public List<CursoResponse> listar() {
-//        return fachada.listarCursos().stream().map(curso -> new CursoResponse(curso, modelMapper)).toList();
-//    }
-
     @GetMapping
     public Page<CursoResponse> listar(@PageableDefault(sort = "id") Pageable pageable) {
         return fachada.listarCursos(pageable)

@@ -35,11 +35,6 @@ public class TipoUnidadeAdministrativaservice implements br.edu.ufape.sguAuthSer
         return tipoUnidadeAdministrativaRepository.findById(id).orElseThrow(TipoUnidadeAdministrativaNotFoundException::new);
     }
 
-//    @Override
-//    public List<TipoUnidadeAdministrativa> listar() {
-//        return tipoUnidadeAdministrativaRepository.findAll();
-//    }
-
     @Override
     public Page<TipoUnidadeAdministrativa> listar(Pageable pageable) {
         return tipoUnidadeAdministrativaRepository.findAll(pageable);

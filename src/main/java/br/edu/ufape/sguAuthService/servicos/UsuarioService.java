@@ -61,11 +61,6 @@ public class UsuarioService implements br.edu.ufape.sguAuthService.servicos.inte
         return usuarioRepository.findById(idSessao).orElseThrow(UsuarioNotFoundException::new);
     }
 
-//    @Override
-//    public List<Usuario> listarUsuarios() {
-//        return usuarioRepository.findByAtivoTrue();
-//    }
-
     @Override
     public Page<Usuario> listarUsuarios(Pageable pageable) {
         return usuarioRepository.findByAtivoTrue(pageable);

@@ -11,16 +11,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 
 @Service @RequiredArgsConstructor
 public class GestorService implements br.edu.ufape.sguAuthService.servicos.interfaces.GestorService {
     private final UsuarioRepository usuarioRepository;
-
-//    @Override
-//    public List<Usuario> listarGestores() {return usuarioRepository.findUsuariosGestores();}
 
     @Override
     public Page<Usuario> listarGestores(Pageable pageable) {

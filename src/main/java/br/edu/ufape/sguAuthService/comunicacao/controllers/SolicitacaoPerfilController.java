@@ -81,18 +81,6 @@ public class SolicitacaoPerfilController {
         return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.buscarSolicitacao(id), modelMapper), HttpStatus.OK);
     }
 
-//    @PreAuthorize("hasRole('ADMINISTRADOR')")
-//    @GetMapping
-//    public List<SolicitacaoPerfilResponse> listarSolicitacoes() {
-//        return fachada.listarSolicitacoes().stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
-//    }
-//
-//    @PreAuthorize("hasRole('ADMINISTRADOR')")
-//    @GetMapping("/pendentes")
-//    public List<SolicitacaoPerfilResponse> listarSolicitacoesPendentes() {
-//        return fachada.listarSolicitacoesPendentes().stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
-//    }
-
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping
     public Page<SolicitacaoPerfilResponse> listarSolicitacoes(@PageableDefault(sort = "id") Pageable pageable) {

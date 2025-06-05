@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,12 +24,6 @@ import java.util.UUID;
 public class TecnicoController {
     private final Fachada fachada;
     private final ModelMapper modelMapper;
-
-//    @PreAuthorize("hasRole('ADMINISTRADOR')")
-//    @GetMapping
-//    List<TecnicoResponse> listarTecnicos() {
-//        return fachada.listarTecnicos().stream().map(usuario -> new TecnicoResponse(usuario, modelMapper)).toList();
-//    }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping

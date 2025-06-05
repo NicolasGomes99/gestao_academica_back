@@ -1,7 +1,5 @@
 package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
@@ -54,15 +52,6 @@ public class TipoUnidadeAdministrativaController {
         TipoUnidadeAdministrativa response = fachada.buscarTipo(id);
         return new ResponseEntity<>(new TipoUnidadeAdministrativaResponse(response, modelMapper), HttpStatus.OK);
     }
-
-//    @GetMapping
-//    public ResponseEntity<List<TipoUnidadeAdministrativaResponse>> listar() {
-//        List<TipoUnidadeAdministrativa> tipos = fachada.listarTipos();
-//        List<TipoUnidadeAdministrativaResponse> response = tipos.stream()
-//                .map(tipo -> new TipoUnidadeAdministrativaResponse(tipo, modelMapper))
-//                .collect(Collectors.toList());
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
 
     @GetMapping
     public ResponseEntity<Page<TipoUnidadeAdministrativaResponse>> listar(@PageableDefault(sort = "id") Pageable pageable) {

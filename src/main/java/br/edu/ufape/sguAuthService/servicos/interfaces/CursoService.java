@@ -14,7 +14,6 @@ public interface CursoService {
 
     Curso buscar(Long id) throws CursoNotFoundException;
 
-  //  List<Curso> listar();
     Page<Curso> listar(Pageable pageable);
 
     List<Usuario> listarAlunosPorCurso(Long id);

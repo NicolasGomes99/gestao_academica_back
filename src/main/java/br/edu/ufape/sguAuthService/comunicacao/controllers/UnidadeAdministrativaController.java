@@ -58,13 +58,6 @@ public class UnidadeAdministrativaController {
         return new ResponseEntity<>(new UnidadeAdministrativaGetResponse(response, modelMapper), HttpStatus.OK);
     }
 
-//    @GetMapping
-//    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesAdministrativas() {
-//        return fachada.listarUnidadesAdministrativas().stream()
-//                .map(unidadeAdministrativa -> new UnidadeAdministrativaGetAllResponse(unidadeAdministrativa, modelMapper))
-//                .toList();
-//    }
-
     @GetMapping
     public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesAdministrativas(@PageableDefault(sort = "id") Pageable pageable) {
         return fachada.listarUnidadesAdministrativas(pageable)

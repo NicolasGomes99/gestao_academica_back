@@ -67,16 +67,6 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
         return solicitacaoPerfilRepository.findAllBySolicitante_Id(id);
     }
 
-//    @Override
-//    public List<SolicitacaoPerfil> listarSolicitacoes() {
-//        return solicitacaoPerfilRepository.findAll();
-//    }
-//
-//    @Override
-//    public List<SolicitacaoPerfil> listarSolicitacoesPendentes() {
-//        return solicitacaoPerfilRepository.findAllByStatus(StatusSolicitacao.PENDENTE);
-//    }
-
     @Override
     public Page<SolicitacaoPerfil> listarSolicitacoes(Pageable pageable) {
         return solicitacaoPerfilRepository.findAll(pageable);

@@ -85,11 +85,6 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
                 .orElseThrow(UnidadeAdministrativaNotFoundException::new);
     }
 
-//    @Override
-//    public List<UnidadeAdministrativa> listarUnidadesAdministrativas() {
-//        return unidadeAdministrativaRepository.findAll();
-//    }
-
     @Override
     public Page<UnidadeAdministrativa> listarUnidadesAdministrativas(Pageable pageable) {
         return unidadeAdministrativaRepository.findAll(pageable);

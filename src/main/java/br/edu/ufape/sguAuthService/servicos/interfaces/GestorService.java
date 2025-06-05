@@ -6,11 +6,9 @@ import br.edu.ufape.sguAuthService.models.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface GestorService {
-    //List<Usuario> listarGestores();
 
     Page<Usuario> listarGestores(Pageable pageable);
 

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service @RequiredArgsConstructor
@@ -21,11 +20,6 @@ import java.util.UUID;
 public class AlunoService implements br.edu.ufape.sguAuthService.servicos.interfaces.AlunoService {
     private final UsuarioRepository usuarioRepository;
     private final AuthenticatedUserProvider authenticatedUserProvider;
-
-//    @Override
-//    public List<Usuario> listarAlunos() {
-//        return usuarioRepository.findUsuariosAlunos();
-//    }
 
     @Override
     public Page<Usuario> listarAlunos(Pageable pageable) {

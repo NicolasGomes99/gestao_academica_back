@@ -42,11 +42,6 @@ public class CursoService implements br.edu.ufape.sguAuthService.servicos.interf
         return cursoRepository.findById(id).orElseThrow(CursoNotFoundException::new);
     }
 
-//    @Override
-//    public List<Curso> listar() {
-//        return cursoRepository.findByAtivoTrue();
-//    }
-
     @Override
     public Page<Curso> listar(Pageable pageable) {
         return cursoRepository.findByAtivoTrue(pageable);

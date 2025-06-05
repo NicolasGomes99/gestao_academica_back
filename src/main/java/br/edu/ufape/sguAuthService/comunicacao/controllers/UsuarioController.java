@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController@RequiredArgsConstructor
@@ -41,12 +40,6 @@ public class UsuarioController {
         Usuario response = fachada.buscarUsuario(id);
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.OK);
     }
-
-//    @PreAuthorize("hasRole('ADMINISTRADOR')")
-//    @GetMapping
-//    public List<UsuarioResponse> listar() {
-//        return fachada.listarUsuarios().stream().map(usuario -> new UsuarioResponse(usuario, modelMapper)).toList();
-//    }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping

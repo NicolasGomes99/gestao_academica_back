@@ -69,10 +69,6 @@ public class Fachada {
     // ================== Aluno ================== //
 
 
-//    public List<Usuario> listarAlunos() {
-//        return alunoService.listarAlunos();
-//    }
-
     public Page<Usuario> listarAlunos(Pageable pageable) {
         return alunoService.listarAlunos(pageable);
     }
@@ -106,10 +102,6 @@ public class Fachada {
 
     // ================== Tecnico ================== //
 
-//    public List<Usuario> listarTecnicos(){
-//        return tecnicoService.getTecnicos();
-//    }
-
     public Page<Usuario> listarTecnicos(Pageable pageable) {
         return tecnicoService.getTecnicos(pageable);
     }
@@ -127,9 +119,6 @@ public class Fachada {
 
 
     // ================== Gestor ================== //
-//    public List<Usuario> listarGestores() {
-//        return gestorService.listarGestores();
-//    }
 
     public Page<Usuario> listarGestores(Pageable pageable) {
     return gestorService.listarGestores(pageable);
@@ -194,8 +183,6 @@ public class Fachada {
         return usuarioService.buscarUsuarioAtual();
     }
 
-//    public List<Usuario> listarUsuarios() {return usuarioService.listarUsuarios();}
-
     public Page<Usuario> listarUsuarios(Pageable pageable) {
         return usuarioService.listarUsuarios(pageable);
     }
@@ -222,10 +209,6 @@ public class Fachada {
     public Curso buscarCurso(Long id) throws CursoNotFoundException {
         return cursoService.buscar(id);
     }
-
-//    public List<Curso> listarCursos() {
-//        return cursoService.listar();
-//    }
 
     public Page<Curso> listarCursos(Pageable pageable) {
     return cursoService.listar(pageable);
@@ -270,14 +253,6 @@ public class Fachada {
     public List<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id) {
         return solicitacaoPerfilService.buscarSolicitacoesPorId(id);
     }
-
-//    public List<SolicitacaoPerfil> listarSolicitacoes() {
-//        return solicitacaoPerfilService.listarSolicitacoes();
-//    }
-//
-//    public List<SolicitacaoPerfil> listarSolicitacoesPendentes() {
-//        return solicitacaoPerfilService.listarSolicitacoesPendentes();
-//    }
 
     public Page<SolicitacaoPerfil> listarSolicitacoes(Pageable pageable) {
         return solicitacaoPerfilService.listarSolicitacoes(pageable);
@@ -331,10 +306,6 @@ public class Fachada {
     public UnidadeAdministrativa buscarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException{
         return unidadeAdministrativaService.buscarUnidadeAdministrativa(id);
     }
-
-//    public List<UnidadeAdministrativa> listarUnidadesAdministrativas() {
-//        return unidadeAdministrativaService.listarUnidadesAdministrativas();
-//    }
 
     public Page<UnidadeAdministrativa> listarUnidadesAdministrativas(Pageable pageable) {
         return unidadeAdministrativaService.listarUnidadesAdministrativas(pageable);
@@ -444,10 +415,6 @@ public class Fachada {
     public TipoUnidadeAdministrativa buscarTipo(Long id) throws TipoUnidadeAdministrativaNotFoundException {
         return tipoUnidadeAdministrativaService.buscar(id);
     }
-
-//    public List<TipoUnidadeAdministrativa> listarTipos() {
-//       return tipoUnidadeAdministrativaService.listar();
-//    }
 
     public Page<TipoUnidadeAdministrativa> listarTipos(Pageable pageable) {
         return tipoUnidadeAdministrativaService.listar(pageable);

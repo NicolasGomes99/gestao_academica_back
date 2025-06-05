@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 
@@ -22,11 +21,6 @@ public class TecnicoService implements br.edu.ufape.sguAuthService.servicos.inte
     private final UsuarioRepository usuarioRepository;
     private final AuthenticatedUserProvider authenticatedUserProvider;
 
-
-//    @Override
-//    public List<Usuario> getTecnicos(){
-//        return usuarioRepository.findUsuariosTecnicos();
-//    }
 
     @Override
     public Page<Usuario> getTecnicos(Pageable pageable) {
