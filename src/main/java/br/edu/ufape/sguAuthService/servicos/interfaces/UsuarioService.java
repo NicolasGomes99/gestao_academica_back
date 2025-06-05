@@ -2,6 +2,8 @@ package br.edu.ufape.sguAuthService.servicos.interfaces;
 
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +18,7 @@ public interface UsuarioService {
 
     Usuario buscarUsuarioAtual() throws UsuarioNotFoundException;
 
-    List<Usuario> listarUsuarios();
+    Page<Usuario> listarUsuarios(Pageable pageable);
 
     void deletarUsuario(UUID sessionId) throws UsuarioNotFoundException;
 

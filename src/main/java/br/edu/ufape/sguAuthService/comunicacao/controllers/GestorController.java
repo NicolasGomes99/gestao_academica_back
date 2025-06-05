@@ -3,7 +3,6 @@ package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.gestor.GestorResponse;
-import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.UnidadeAdministrativaResponse;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
@@ -17,8 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController @RequiredArgsConstructor
@@ -35,8 +36,10 @@ public class GestorController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping
-    List<GestorResponse> listarGestores() {
-        return fachada.listarGestores().stream().map(usuario -> new GestorResponse(usuario, modelMapper)).toList();
+    public Page<GestorResponse> listarGestores(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarGestores(pageable)
+                .map(usuario -> new GestorResponse(usuario, modelMapper));
     }
+
 
 }

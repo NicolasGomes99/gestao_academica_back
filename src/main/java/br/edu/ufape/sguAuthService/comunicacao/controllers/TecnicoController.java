@@ -8,12 +8,14 @@ import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,9 +27,11 @@ public class TecnicoController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping
-    List<TecnicoResponse> listarTecnicos() {
-        return fachada.listarTecnicos().stream().map(usuario -> new TecnicoResponse(usuario, modelMapper)).toList();
+    public Page<TecnicoResponse> listarTecnicos(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarTecnicos(pageable)
+                .map(usuario -> new TecnicoResponse(usuario, modelMapper));
     }
+
 
     @GetMapping("/{id}")
     TecnicoResponse buscarTecnico(@PathVariable UUID id) throws TecnicoNotFoundException, UsuarioNotFoundException {

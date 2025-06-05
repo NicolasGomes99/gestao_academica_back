@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 import java.util.List;
 
@@ -45,9 +48,11 @@ public class CursoController {
     }
 
     @GetMapping
-    public List<CursoResponse> listar() {
-        return fachada.listarCursos().stream().map(curso -> new CursoResponse(curso, modelMapper)).toList();
+    public Page<CursoResponse> listar(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarCursos(pageable)
+                .map(curso -> new CursoResponse(curso, modelMapper));
     }
+
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @DeleteMapping("/{id}")

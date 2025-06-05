@@ -2,6 +2,8 @@ package br.edu.ufape.sguAuthService.servicos.interfaces;
 
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Set;
@@ -12,7 +14,7 @@ public interface UnidadeAdministrativaService {
 
     UnidadeAdministrativa buscarUnidadeAdministrativa(Long id) throws UnidadeAdministrativaNotFoundException;
 
-    List<UnidadeAdministrativa> listarUnidadesAdministrativas();
+    Page<UnidadeAdministrativa> listarUnidadesAdministrativas(Pageable pageable);
 
     List<UnidadeAdministrativa> montarArvore();
 

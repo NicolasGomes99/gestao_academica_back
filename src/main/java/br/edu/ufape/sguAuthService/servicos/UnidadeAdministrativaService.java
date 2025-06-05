@@ -13,6 +13,8 @@ import br.edu.ufape.sguAuthService.models.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,24 +48,6 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         }
 
     }
-
-//    @Override
-//    public UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa novaUnidadeAdministrativa, Long id) {
-//        try {
-//            UnidadeAdministrativa unidadeAdministrativaAtual = unidadeAdministrativaRepository.findById(id)
-//                    .orElseThrow(UnidadeAdministrativaNotFoundException::new);
-//
-//            if (novaUnidadeAdministrativa.getUnidadePai() != null
-//                    && novaUnidadeAdministrativa.getUnidadePai().getId().equals(id)) {
-//                throw new UnidadeAdministrativaCircularException();
-//            }
-//
-//            modelMapper.map(novaUnidadeAdministrativa, unidadeAdministrativaAtual);
-//            return unidadeAdministrativaRepository.save(unidadeAdministrativaAtual);
-//        } catch (DataIntegrityViolationException e) {
-//            throw ExceptionUtil.handleDataIntegrityViolationException(e);
-//        }
-//    }
 
     @Override
     public UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa novaUnidadeAdministrativa, Long id) {
@@ -102,8 +86,8 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public List<UnidadeAdministrativa> listarUnidadesAdministrativas() {
-        return unidadeAdministrativaRepository.findAll();
+    public Page<UnidadeAdministrativa> listarUnidadesAdministrativas(Pageable pageable) {
+        return unidadeAdministrativaRepository.findAll(pageable);
     }
 
     @Override

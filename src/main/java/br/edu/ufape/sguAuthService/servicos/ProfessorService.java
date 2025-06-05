@@ -8,9 +8,10 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFound
 import br.edu.ufape.sguAuthService.models.Professor;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,10 +21,9 @@ public class ProfessorService implements br.edu.ufape.sguAuthService.servicos.in
     private final AuthenticatedUserProvider authenticatedUserProvider;
 
     @Override
-    public List<Usuario> listarProfessores() {
-        return usuarioRepository.findUsuariosProfessores();
+    public Page<Usuario> listarProfessores(Pageable pageable) {
+        return usuarioRepository.findUsuariosProfessores(pageable);
     }
-
 
     @Override
     public Usuario buscarProfessor(UUID id, boolean isAdm, UUID sessionId) throws ProfessorNotFoundException, UsuarioNotFoundException {

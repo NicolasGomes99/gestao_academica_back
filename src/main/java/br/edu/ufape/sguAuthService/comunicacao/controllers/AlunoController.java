@@ -14,6 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 @RestController @RequestMapping("/aluno")  @RequiredArgsConstructor
 
@@ -27,9 +30,12 @@ public class AlunoController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    @GetMapping List<AlunoResponse> listarAlunos() {
-        return fachada.listarAlunos().stream().map(usuario -> new AlunoResponse(usuario, modelMapper)).toList();
+    @GetMapping
+    public Page<AlunoResponse> listarAlunos(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarAlunos(pageable)
+                .map(usuario -> new AlunoResponse(usuario, modelMapper));
     }
+
 
 
     @PostMapping("/batch")

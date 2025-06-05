@@ -7,9 +7,10 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFound
 import br.edu.ufape.sguAuthService.models.Gestor;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 
@@ -18,7 +19,9 @@ public class GestorService implements br.edu.ufape.sguAuthService.servicos.inter
     private final UsuarioRepository usuarioRepository;
 
     @Override
-    public List<Usuario> listarGestores() {return usuarioRepository.findUsuariosGestores();}
+    public Page<Usuario> listarGestores(Pageable pageable) {
+        return usuarioRepository.findUsuariosGestores(pageable);
+    }
 
     @Override
     public Usuario buscarGestor(UUID id, boolean isAdm, UUID sessionId) throws GestorNotFoundException, UsuarioNotFoundException {

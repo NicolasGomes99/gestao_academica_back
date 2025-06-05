@@ -10,8 +10,9 @@ import br.edu.ufape.sguAuthService.models.Aluno;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service @RequiredArgsConstructor
@@ -21,9 +22,10 @@ public class AlunoService implements br.edu.ufape.sguAuthService.servicos.interf
     private final AuthenticatedUserProvider authenticatedUserProvider;
 
     @Override
-    public List<Usuario> listarAlunos() {
-        return usuarioRepository.findUsuariosAlunos();
+    public Page<Usuario> listarAlunos(Pageable pageable) {
+        return usuarioRepository.findUsuariosAlunos(pageable);
     }
+
 
     @Override
     public Usuario buscarAluno(UUID id, boolean isAdm, UUID sessionId) throws AlunoNotFoundException, UsuarioNotFoundException {
