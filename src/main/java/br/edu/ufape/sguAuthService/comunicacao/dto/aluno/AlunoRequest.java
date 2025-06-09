@@ -7,6 +7,8 @@ import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Aluno;
 import br.edu.ufape.sguAuthService.models.Curso;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class AlunoRequest {
 
     @NotBlank(message = "A matrícula é obrigatória")
+    @Size(min = 1, max = 100, message = "A matrícula deve ter entre 1 e 100 caracteres")
     private String matricula;
     @NotBlank(message = "O curso é obrigatório")
     private Long cursoId;
 
     @NotBlank(message = "Os documentos são obrigatórios")
+    @NotNull(message = "Os documentos não podem ser nulos")
     private MultipartFile[] documentos;
 
     public Aluno convertToEntity( ModelMapper modelMapper, Fachada fachada) throws CursoNotFoundException {
