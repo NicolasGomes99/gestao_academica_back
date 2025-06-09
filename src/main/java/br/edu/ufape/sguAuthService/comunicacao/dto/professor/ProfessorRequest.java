@@ -7,6 +7,7 @@ import br.edu.ufape.sguAuthService.models.Curso;
 import br.edu.ufape.sguAuthService.models.Professor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class ProfessorRequest {
 
     @NotBlank(message = "O SIAPE é obrigatório")
+    @Size(min = 1, max = 100, message = "O siape deve ter entre 1 e 100 caracteres")
     private String siape;
 
     @NotEmpty(message = "A lista de cursos é obrigatória")
