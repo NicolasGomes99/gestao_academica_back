@@ -307,8 +307,8 @@ public class Fachada {
         return unidadeAdministrativaService.buscarUnidadeAdministrativa(id);
     }
 
-    public Page<UnidadeAdministrativa> listarUnidadesAdministrativas(Pageable pageable) {
-        return unidadeAdministrativaService.listarUnidadesAdministrativas(pageable);
+    public List<UnidadeAdministrativa> listarUnidadesAdministrativas() {
+        return unidadeAdministrativaService.listarUnidadesAdministrativas();
     }
 
     public List<UnidadeAdministrativa> montarArvore() {
