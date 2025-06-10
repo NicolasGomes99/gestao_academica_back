@@ -20,7 +20,6 @@ public class UsuarioRequest {
     @Size(min = 1, max = 100, message = "O nome deve ter entre 1 e 100 caracteres")
     private String nome;
 
-    @Size(min = 1, max = 100, message = "O nome social deve ter entre 1 e 100 caracteres")
     private String nomeSocial;
 
     @CPF
