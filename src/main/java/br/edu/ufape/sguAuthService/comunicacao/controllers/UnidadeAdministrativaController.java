@@ -13,6 +13,9 @@ import br.edu.ufape.sguAuthService.models.Usuario;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -105,9 +108,11 @@ public class UnidadeAdministrativaController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping("/{id}/gestores")
-    public List<GestorUnidadeResponse> listarGestores(@PathVariable Long id) {
-        return fachada.listarGestoresPorUnidade(id).stream().map(gestorUnidade -> new GestorUnidadeResponse(gestorUnidade, modelMapper)).collect(Collectors.toList());
+    public Page<GestorUnidadeResponse> listarGestores(@PathVariable Long id, @PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarGestoresPorUnidade(id, pageable)
+                .map(g -> new GestorUnidadeResponse(g, modelMapper));
     }
+
 
     @PreAuthorize("hasRole('GESTOR')")
     @PostMapping("{id}/funcionarios")
@@ -125,43 +130,82 @@ public class UnidadeAdministrativaController {
         return ResponseEntity.noContent().build();
     }
 
+//    @PreAuthorize("hasRole('GESTOR')")
+//    @GetMapping("/{id}/funcionarios")
+//    public List<FuncionarioResponse> listarFuncionarios(@PathVariable Long id) {
+//        return fachada.listarFuncionariosPorUnidade(id).stream().map(funcionario -> new FuncionarioResponse(funcionario.getUsuario(), modelMapper)).collect(Collectors.toList());
+//    }
+//
+//    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
+//    @GetMapping("gestor")
+//    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorAtual() {
+//        return fachada.listarUnidadesDoGestorAtual().stream()
+//                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+//                .toList();
+//    }
+//
+//    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
+//    @GetMapping("funcionario")
+//    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioAtual() {
+//        return fachada.listarUnidadesDoFuncionarioAtual().stream()
+//                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+//                .toList();
+//    }
+//
+//    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
+//    @GetMapping("gestor/{usuarioId}")
+//    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorPorId(@PathVariable String usuarioId) {
+//        UUID id = fachada.parseUUID(usuarioId, "ID do usuário inválido.");
+//        return fachada.listarUnidadesDoGestorPorId(id).stream()
+//                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+//                .toList();
+//    }
+//
+//    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
+//    @GetMapping("funcionario/{usuarioId}")
+//    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioPorId(@PathVariable String usuarioId) {
+//        UUID id = fachada.parseUUID(usuarioId, "ID do usuário inválido.");
+//        return fachada.listarUnidadesDoFuncionarioPorId(id).stream()
+//                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
+//                .toList();
+//    }
+
     @PreAuthorize("hasRole('GESTOR')")
     @GetMapping("/{id}/funcionarios")
-    public List<FuncionarioResponse> listarFuncionarios(@PathVariable Long id) {
-        return fachada.listarFuncionariosPorUnidade(id).stream().map(funcionario -> new FuncionarioResponse(funcionario.getUsuario(), modelMapper)).collect(Collectors.toList());
+    public Page<FuncionarioResponse> listarFuncionarios(@PathVariable Long id, @PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarFuncionariosPorUnidade(id, pageable)
+                .map(funcionario -> new FuncionarioResponse(funcionario.getUsuario(), modelMapper));
     }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
     @GetMapping("gestor")
-    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorAtual() {
-        return fachada.listarUnidadesDoGestorAtual().stream()
-                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
-                .toList();
+    public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorAtual(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarUnidadesDoGestorAtual(pageable)
+                .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
     @GetMapping("funcionario")
-    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioAtual() {
-        return fachada.listarUnidadesDoFuncionarioAtual().stream()
-                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
-                .toList();
+    public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioAtual(@PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.listarUnidadesDoFuncionarioAtual(pageable)
+                .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
     @GetMapping("gestor/{usuarioId}")
-    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorPorId(@PathVariable String usuarioId) {
+    public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorPorId(@PathVariable String usuarioId,
+                                                                                 @PageableDefault(sort = "id") Pageable pageable) {
         UUID id = fachada.parseUUID(usuarioId, "ID do usuário inválido.");
-        return fachada.listarUnidadesDoGestorPorId(id).stream()
-                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
-                .toList();
+        return fachada.listarUnidadesDoGestorPorId(id, pageable)
+                .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
     @GetMapping("funcionario/{usuarioId}")
-    public List<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioPorId(@PathVariable String usuarioId) {
+    public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioPorId(@PathVariable String usuarioId,
+                                                                                      @PageableDefault(sort = "id") Pageable pageable) {
         UUID id = fachada.parseUUID(usuarioId, "ID do usuário inválido.");
-        return fachada.listarUnidadesDoFuncionarioPorId(id).stream()
-                .map(unidade -> new UnidadeAdministrativaGetAllResponse(unidade, modelMapper))
-                .toList();
+        return fachada.listarUnidadesDoFuncionarioPorId(id, pageable)
+                .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 }

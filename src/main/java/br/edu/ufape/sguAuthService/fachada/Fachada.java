@@ -368,42 +368,75 @@ public class Fachada {
         unidadeAdministrativaService.removerFuncionario(unidade, funcionario);
     }
 
-    public Set<GestorUnidade> listarGestoresPorUnidade(Long id) {
-        return unidadeAdministrativaService.listarGestores(id);
+    public Page<GestorUnidade> listarGestoresPorUnidade(Long id, Pageable pageable) {
+        return unidadeAdministrativaService.listarGestores(id, pageable);
     }
 
-    public Set<Funcionario> listarFuncionariosPorUnidade(Long id) {
-        return unidadeAdministrativaService.listarFuncionarios(id);
+//    public Set<Funcionario> listarFuncionariosPorUnidade(Long id) {
+//        return unidadeAdministrativaService.listarFuncionarios(id);
+//    }
+//
+//    public List<UnidadeAdministrativa> listarUnidadesDoGestorAtual() {
+//        UUID sessionId = authenticatedUserProvider.getUserId();
+//        Usuario usuario = buscarUsuario(sessionId);
+//        Gestor gestor = usuario.getPerfil(Gestor.class)
+//                .orElseThrow();
+//        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
+//    }
+//
+//    public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioAtual() {
+//        Usuario usuario = buscarUsuarioAtual();
+//        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
+//    }
+//
+//    public List<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId) {
+//        Usuario usuario = buscarUsuario(usuarioId);
+//        Gestor gestor = usuario.getPerfil(Gestor.class)
+//                .orElseThrow(GestorNotFoundException::new);
+//        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
+//    }
+//
+//    public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId) {
+//        Usuario usuario = buscarUsuario(usuarioId);
+//        boolean possuiPerfilValido = usuario.getPerfis().stream()
+//                .anyMatch(p -> p instanceof Tecnico || p instanceof Professor);
+//        if (!possuiPerfilValido) {
+//            throw new FuncionarioNotFoundException();
+//        }
+//        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
+//    }
+
+    public Page<Funcionario> listarFuncionariosPorUnidade(Long id, Pageable pageable) {
+        return unidadeAdministrativaService.listarFuncionarios(id, pageable);
     }
 
-    public List<UnidadeAdministrativa> listarUnidadesDoGestorAtual() {
+    public Page<UnidadeAdministrativa> listarUnidadesDoGestorAtual(Pageable pageable) {
         UUID sessionId = authenticatedUserProvider.getUserId();
-        Usuario usuario = buscarUsuario(sessionId);
-        Gestor gestor = usuario.getPerfil(Gestor.class)
-                .orElseThrow();
-        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
+        Usuario usuario = usuarioService.buscarUsuario(null, true, sessionId);
+        Gestor gestor = usuario.getPerfil(Gestor.class).orElseThrow();
+        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, pageable);
     }
 
-    public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioAtual() {
-        Usuario usuario = buscarUsuarioAtual();
-        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
+    public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioAtual(Pageable pageable) {
+        Usuario usuario = usuarioService.buscarUsuarioAtual();
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, pageable);
     }
 
-    public List<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId) {
-        Usuario usuario = buscarUsuario(usuarioId);
+    public Page<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId, Pageable pageable) {
+        Usuario usuario = usuarioService.buscarUsuario(null, true, usuarioId);
         Gestor gestor = usuario.getPerfil(Gestor.class)
                 .orElseThrow(GestorNotFoundException::new);
-        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
+        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, pageable);
     }
 
-    public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId) {
-        Usuario usuario = buscarUsuario(usuarioId);
+    public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId, Pageable pageable) {
+        Usuario usuario = usuarioService.buscarUsuario(null, true, usuarioId);
         boolean possuiPerfilValido = usuario.getPerfis().stream()
                 .anyMatch(p -> p instanceof Tecnico || p instanceof Professor);
         if (!possuiPerfilValido) {
             throw new FuncionarioNotFoundException();
         }
-        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, pageable);
     }
 
 
