@@ -246,12 +246,12 @@ public class Fachada {
         return solicitacaoPerfilService.buscarSolicitacao(id);
     }
 
-    public List<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual() {
-        return solicitacaoPerfilService.buscarSolicitacoesUsuarioAtual();
+    public Page<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual(Pageable pageable) {
+        return solicitacaoPerfilService.buscarSolicitacoesUsuarioAtual(pageable);
     }
 
-    public List<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id) {
-        return solicitacaoPerfilService.buscarSolicitacoesPorId(id);
+    public Page<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id, Pageable pageable) {
+        return solicitacaoPerfilService.buscarSolicitacoesPorId(id, pageable);
     }
 
     public Page<SolicitacaoPerfil> listarSolicitacoes(Pageable pageable) {

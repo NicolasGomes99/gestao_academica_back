@@ -14,7 +14,7 @@ import java.util.UUID;
 public interface SolicitacaoPerfilRepository extends JpaRepository<SolicitacaoPerfil, Long> {
     List<SolicitacaoPerfil> findBySolicitanteAndStatusIn(Usuario solicitante, Collection<StatusSolicitacao> status);
 
-    List<SolicitacaoPerfil> findAllBySolicitante_Id(UUID id);
+    Page<SolicitacaoPerfil> findAllBySolicitante_Id(UUID id, Pageable pageable);
 
     Page<SolicitacaoPerfil> findAllByStatus(StatusSolicitacao status, Pageable pageable);
 
