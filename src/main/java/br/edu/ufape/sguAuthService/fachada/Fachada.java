@@ -15,7 +15,6 @@ import br.edu.ufape.sguAuthService.models.*;
 import br.edu.ufape.sguAuthService.servicos.interfaces.*;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -371,40 +370,6 @@ public class Fachada {
     public Page<GestorUnidade> listarGestoresPorUnidade(Long id, Pageable pageable) {
         return unidadeAdministrativaService.listarGestores(id, pageable);
     }
-
-//    public Set<Funcionario> listarFuncionariosPorUnidade(Long id) {
-//        return unidadeAdministrativaService.listarFuncionarios(id);
-//    }
-//
-//    public List<UnidadeAdministrativa> listarUnidadesDoGestorAtual() {
-//        UUID sessionId = authenticatedUserProvider.getUserId();
-//        Usuario usuario = buscarUsuario(sessionId);
-//        Gestor gestor = usuario.getPerfil(Gestor.class)
-//                .orElseThrow();
-//        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
-//    }
-//
-//    public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioAtual() {
-//        Usuario usuario = buscarUsuarioAtual();
-//        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
-//    }
-//
-//    public List<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId) {
-//        Usuario usuario = buscarUsuario(usuarioId);
-//        Gestor gestor = usuario.getPerfil(Gestor.class)
-//                .orElseThrow(GestorNotFoundException::new);
-//        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor);
-//    }
-//
-//    public List<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId) {
-//        Usuario usuario = buscarUsuario(usuarioId);
-//        boolean possuiPerfilValido = usuario.getPerfis().stream()
-//                .anyMatch(p -> p instanceof Tecnico || p instanceof Professor);
-//        if (!possuiPerfilValido) {
-//            throw new FuncionarioNotFoundException();
-//        }
-//        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario);
-//    }
 
     public Page<Funcionario> listarFuncionariosPorUnidade(Long id, Pageable pageable) {
         return unidadeAdministrativaService.listarFuncionarios(id, pageable);
