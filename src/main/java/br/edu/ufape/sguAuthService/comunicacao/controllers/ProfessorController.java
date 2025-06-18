@@ -34,7 +34,7 @@ public class ProfessorController {
         return new ResponseEntity<>(new ProfessorResponse(response, modelMapper), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR')")
     @GetMapping
     public Page<ProfessorResponse> listarProfessores(@PageableDefault(sort = "id")Pageable pageable) {
         return fachada.listarProfessores(pageable).map(usuario -> new ProfessorResponse(usuario, modelMapper));
