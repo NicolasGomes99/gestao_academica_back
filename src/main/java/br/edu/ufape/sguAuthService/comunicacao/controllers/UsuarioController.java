@@ -65,4 +65,11 @@ public class UsuarioController {
         fachada.deletarUsuario();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarUsuario(@PathVariable UUID id) throws UsuarioNotFoundException {
+        fachada.deletarUsuario(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
