@@ -200,6 +200,15 @@ public class Fachada {
         }
         usuarioService.deletarUsuario(idSessao);}
 
+    public void deletarUsuario(UUID id) throws UsuarioNotFoundException {
+        try {
+            keycloakService.deleteUser(id.toString());
+        } catch (KeycloakAuthenticationException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+        usuarioService.deletarUsuario(id);
+    }
+
     // ================== Curso ================== //
     public Curso salvarCurso(Curso curso){
         return cursoService.salvar(curso);
