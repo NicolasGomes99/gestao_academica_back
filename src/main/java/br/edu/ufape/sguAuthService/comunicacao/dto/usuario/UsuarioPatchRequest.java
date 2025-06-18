@@ -15,10 +15,10 @@ import org.modelmapper.ModelMapper;
 @NoArgsConstructor
 public class UsuarioPatchRequest {
 
-    @Size(min = 1, max = 100, message = "O curso deve ter entre 1 e 100 caracteres")
+    @Size(min = 1, max = 100, message = "O nome deve ter entre 1 e 100 caracteres")
     private String nome;
 
-    @Size(min = 1, max = 100, message = "O curso deve ter entre 1 e 100 caracteres")
+    @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres")
     private String nomeSocial;
 
     @NumeroValido
