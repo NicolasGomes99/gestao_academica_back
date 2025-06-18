@@ -2,6 +2,8 @@ package br.edu.ufape.sguAuthService.servicos.interfaces;
 
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 import java.util.List;
@@ -31,11 +33,11 @@ public interface UnidadeAdministrativaService {
 
     void removerFuncionario(UnidadeAdministrativa unidade, Usuario usuario);
 
-    Set<GestorUnidade> listarGestores(Long unidadeId);
+    Page<GestorUnidade> listarGestores(Long unidadeId, Pageable pageable);
 
-    Set<Funcionario> listarFuncionarios(Long unidadeId);
+    Page<Funcionario> listarFuncionarios(Long unidadeId, Pageable pageable);
 
-    List<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor);
+    Page<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor, Pageable pageable);
 
-    List<UnidadeAdministrativa> listarUnidadesPorFuncionario(Usuario usuario);
+    Page<UnidadeAdministrativa> listarUnidadesPorFuncionario(Usuario usuario, Pageable pageable);
 }

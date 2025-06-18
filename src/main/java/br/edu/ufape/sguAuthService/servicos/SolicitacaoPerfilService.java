@@ -57,14 +57,14 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
     }
 
     @Override
-    public List<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual() {
+    public Page<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual(Pageable pageable) {
         UUID sessionId = authenticatedUserProvider.getUserId();
-        return solicitacaoPerfilRepository.findAllBySolicitante_Id(sessionId);
+        return solicitacaoPerfilRepository.findAllBySolicitante_Id(sessionId, pageable);
     }
 
     @Override
-    public List<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id) {
-        return solicitacaoPerfilRepository.findAllBySolicitante_Id(id);
+    public Page<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id, Pageable pageable) {
+        return solicitacaoPerfilRepository.findAllBySolicitante_Id(id, pageable);
     }
 
     @Override

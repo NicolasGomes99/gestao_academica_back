@@ -97,13 +97,18 @@ public class SolicitacaoPerfilController {
 
 
     @GetMapping("/usuario")
-    public List<SolicitacaoPerfilResponse> buscarSolicitacoesUsuario() {
-        return fachada.buscarSolicitacoesUsuarioAtual().stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
+    public Page<SolicitacaoPerfilResponse> buscarSolicitacoesUsuario(
+            @PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.buscarSolicitacoesUsuarioAtual(pageable)
+                .map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper));
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping("/{id}/usuario")
-    public List<SolicitacaoPerfilResponse> buscarSolicitacoesPorId(@PathVariable UUID id) {
-        return fachada.buscarSolicitacoesPorId(id).stream().map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper)).toList();
+    public Page<SolicitacaoPerfilResponse> buscarSolicitacoesPorId(
+            @PathVariable UUID id,
+            @PageableDefault(sort = "id") Pageable pageable) {
+        return fachada.buscarSolicitacoesPorId(id, pageable)
+                .map(solicitacao -> new SolicitacaoPerfilResponse(solicitacao, modelMapper));
     }
 }

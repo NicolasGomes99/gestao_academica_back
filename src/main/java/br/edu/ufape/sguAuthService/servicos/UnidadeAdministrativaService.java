@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.servicos;
 
 
+import br.edu.ufape.sguAuthService.comunicacao.paginacao.PaginadorUtils;
 import br.edu.ufape.sguAuthService.dados.GestorUnidadeRepository;
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
@@ -13,10 +14,15 @@ import br.edu.ufape.sguAuthService.models.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static br.edu.ufape.sguAuthService.comunicacao.paginacao.PaginadorUtils.paginarLista;
 
 @Service
 @RequiredArgsConstructor
@@ -159,35 +165,39 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public Set<GestorUnidade> listarGestores(Long unidadeId) {
+    public Page<GestorUnidade> listarGestores(Long unidadeId, Pageable pageable) {
         UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-        return unidade.getGestores();
+        List<GestorUnidade> gestores = new ArrayList<>(unidade.getGestores());
+        return paginarLista(gestores, pageable);
     }
 
     @Override
-    public Set<Funcionario> listarFuncionarios(Long unidadeId) {
+    public Page<Funcionario> listarFuncionarios(Long unidadeId, Pageable pageable) {
         UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-        return unidade.getFuncionarios();
+        List<Funcionario> funcionarios = new ArrayList<>(unidade.getFuncionarios());
+        return paginarLista(funcionarios, pageable);
     }
 
     @Override
-    public List<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor) {
-        Long gestorId = gestor.getId();
-        List<GestorUnidade> vinculacoes = gestorUnidadeRepository.findByGestorId(gestorId);
-        return vinculacoes.stream()
+    public Page<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor, Pageable pageable) {
+        List<GestorUnidade> vinculacoes = gestorUnidadeRepository.findByGestorId(gestor.getId());
+        List<UnidadeAdministrativa> unidades = vinculacoes.stream()
                 .map(GestorUnidade::getUnidadeAdministrativa)
                 .distinct()
                 .toList();
+        return paginarLista(unidades, pageable);
     }
 
     @Override
-    public List<UnidadeAdministrativa> listarUnidadesPorFuncionario(Usuario usuario) {
-        return unidadeAdministrativaRepository.findAll().stream()
+    public Page<UnidadeAdministrativa> listarUnidadesPorFuncionario(Usuario usuario, Pageable pageable) {
+        List<UnidadeAdministrativa> todas = unidadeAdministrativaRepository.findAll();
+        List<UnidadeAdministrativa> unidades = todas.stream()
                 .filter(ua -> ua.getFuncionarios().stream()
                         .anyMatch(f -> usuario.getPerfis().contains(f) &&
                                 (f instanceof Tecnico || f instanceof Professor)))
                 .distinct()
                 .toList();
+        return paginarLista(unidades, pageable);
     }
 
 }

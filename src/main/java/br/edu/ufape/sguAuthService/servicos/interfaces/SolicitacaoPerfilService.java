@@ -20,9 +20,9 @@ public interface SolicitacaoPerfilService {
 
     SolicitacaoPerfil buscarSolicitacao(Long id) throws SolicitacaoNotFoundException;
 
-    List<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual();
+    Page<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual(Pageable pageable);
 
-    List<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id);
+    Page<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id, Pageable pageable);
 
     Page<SolicitacaoPerfil> listarSolicitacoes(Pageable pageable);
 
