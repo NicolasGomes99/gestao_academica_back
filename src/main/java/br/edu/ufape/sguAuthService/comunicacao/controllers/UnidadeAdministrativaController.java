@@ -91,7 +91,7 @@ public class UnidadeAdministrativaController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    @PostMapping("{id}/gestores")
+    @PostMapping("/{id}/gestores")
     public ResponseEntity<GestorUnidadeResponse> alocarGestor(@PathVariable Long id, @RequestBody @Valid GestorUnidadeRequest request) {
         GestorUnidade gestor = request.convertToEntity(request, modelMapper);
         GestorUnidadeResponse gestorUnidade = new GestorUnidadeResponse(fachada.adicionarGestor(id, gestor, request.getUsuarioId()), modelMapper);
@@ -115,7 +115,7 @@ public class UnidadeAdministrativaController {
 
 
     @PreAuthorize("hasRole('GESTOR')")
-    @PostMapping("{id}/funcionarios")
+    @PostMapping("/{id}/funcionarios")
     public ResponseEntity<UsuarioResponse> alocarFuncionarios( @PathVariable Long id, @RequestBody Map<String, String> body) {
         UUID usuarioId = UUID.fromString(body.get("usuarioId"));
         Usuario funcionario = fachada.adicionarFuncionario(id, usuarioId);
@@ -123,7 +123,7 @@ public class UnidadeAdministrativaController {
     }
 
     @PreAuthorize("hasRole('GESTOR')")
-    @DeleteMapping("{id}/funcionarios")
+    @DeleteMapping("/{id}/funcionarios")
     public ResponseEntity<UsuarioResponse> removerTecnico( @PathVariable Long id, @RequestBody  Map<String, String> body) {
         UUID usuarioId = UUID.fromString(body.get("usuarioId"));
         fachada.removerFuncionario(id, usuarioId);
@@ -138,22 +138,22 @@ public class UnidadeAdministrativaController {
                 .map(funcionario -> new FuncionarioResponse(funcionario.getUsuario(), modelMapper));
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
-    @GetMapping("gestor")
+    @PreAuthorize("hasAnyRole('GESTOR')")
+    @GetMapping("/gestor")
     public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorAtual(@PageableDefault(sort = "id") Pageable pageable) {
         return fachada.listarUnidadesDoGestorAtual(pageable)
                 .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
-    @GetMapping("funcionario")
+    @PreAuthorize("hasAnyRole('TECNICO', 'PROFESSOR')")
+    @GetMapping("/funcionario")
     public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioAtual(@PageableDefault(sort = "id") Pageable pageable) {
         return fachada.listarUnidadesDoFuncionarioAtual(pageable)
                 .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
-    @GetMapping("gestor/{usuarioId}")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR')")
+    @GetMapping("/gestor/{usuarioId}")
     public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorPorId(@PathVariable String usuarioId,
                                                                                  @PageableDefault(sort = "id") Pageable pageable) {
         UUID id = fachada.parseUUID(usuarioId, "ID do usuário inválido.");
@@ -161,8 +161,8 @@ public class UnidadeAdministrativaController {
                 .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO')")
-    @GetMapping("funcionario/{usuarioId}")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO', 'PROFESSOR')")
+    @GetMapping("/funcionario/{usuarioId}")
     public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioPorId(@PathVariable String usuarioId,
                                                                                       @PageableDefault(sort = "id") Pageable pageable) {
         UUID id = fachada.parseUUID(usuarioId, "ID do usuário inválido.");

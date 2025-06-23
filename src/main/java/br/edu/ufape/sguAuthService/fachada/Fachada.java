@@ -385,8 +385,7 @@ public class Fachada {
     }
 
     public Page<UnidadeAdministrativa> listarUnidadesDoGestorAtual(Pageable pageable) {
-        UUID sessionId = authenticatedUserProvider.getUserId();
-        Usuario usuario = usuarioService.buscarUsuario(null, true, sessionId);
+        Usuario usuario = usuarioService.buscarUsuarioAtual();
         Gestor gestor = usuario.getPerfil(Gestor.class).orElseThrow();
         return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, pageable);
     }
@@ -397,14 +396,14 @@ public class Fachada {
     }
 
     public Page<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId, Pageable pageable) {
-        Usuario usuario = usuarioService.buscarUsuario(null, true, usuarioId);
+        Usuario usuario = gestorService.buscarGestor(usuarioId, true, usuarioId);
         Gestor gestor = usuario.getPerfil(Gestor.class)
                 .orElseThrow(GestorNotFoundException::new);
         return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, pageable);
     }
 
     public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId, Pageable pageable) {
-        Usuario usuario = usuarioService.buscarUsuario(null, true, usuarioId);
+        Usuario usuario = usuarioService.buscarUsuario(usuarioId, true, usuarioId);
         boolean possuiPerfilValido = usuario.getPerfis().stream()
                 .anyMatch(p -> p instanceof Tecnico || p instanceof Professor);
         if (!possuiPerfilValido) {
