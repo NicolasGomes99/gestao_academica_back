@@ -1,10 +1,11 @@
 package br.edu.ufape.sguAuthService.servicos;
 
 
-import br.edu.ufape.sguAuthService.comunicacao.paginacao.PaginadorUtils;
+
 import br.edu.ufape.sguAuthService.dados.GestorUnidadeRepository;
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
+import br.edu.ufape.sguAuthService.exceptions.SolicitacaoDuplicadaException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TecnicoNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaCircularException;
@@ -16,11 +17,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
 
 import static br.edu.ufape.sguAuthService.comunicacao.paginacao.PaginadorUtils.paginarLista;
 
@@ -142,10 +145,16 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     public void adicionarFuncionario(UnidadeAdministrativa unidade, Usuario usuario) {
 
         Funcionario funcionario = usuario.getPerfil(Funcionario.class)
-                .orElseThrow(() -> new RuntimeException("Usuário não é um funcionário."));
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.BAD_REQUEST,
+                                "Usuário não é um funcionário."
+                        )
+                );
 
         if (unidade.getFuncionarios().contains(funcionario)) {
-            throw new DataIntegrityViolationException("O Funcionário já está vinculado a esta unidade.");
+            throw new SolicitacaoDuplicadaException(
+                    "O funcionário já está vinculado a esta unidade administrativa.");
         }
 
         unidade.getFuncionarios().add(funcionario);
@@ -155,7 +164,12 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     @Override
     public void removerFuncionario(UnidadeAdministrativa unidade, Usuario usuario) {
         Funcionario funcionario = usuario.getPerfil(Funcionario.class)
-                .orElseThrow(() -> new RuntimeException("Usuário não é um funcionário."));
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.BAD_REQUEST,
+                                "Usuário não é um funcionário."
+                        )
+                );
 
         if (!unidade.getFuncionarios().contains(funcionario)) {
             throw new TecnicoNotFoundException();
