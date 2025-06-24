@@ -43,7 +43,8 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
                 List.of(StatusSolicitacao.PENDENTE, StatusSolicitacao.APROVADA));
         for (SolicitacaoPerfil solicitacao : solicitacoes) {
             if (solicitacao.getPerfil().getClass().equals(perfil.getClass())) {
-                throw new SolicitacaoDuplicadaException();
+                throw new SolicitacaoDuplicadaException(
+                        "Já existe uma solicitação pendente ou aprovada para o perfil: " + perfil.getClass().getSimpleName());
             }
         }
         return solicitacaoPerfilRepository.save(solicitacaoPerfil);
