@@ -24,7 +24,7 @@ public class UsuarioPatchRequest {
     @NumeroValido
     private String telefone;
 
-    public Usuario convertToEntity(UsuarioPatchRequest usuarioRequest, ModelMapper modelMapper) {
-        return modelMapper.map(usuarioRequest, Usuario.class);
-    }
+//    public Usuario convertToEntity(UsuarioPatchRequest usuarioRequest, ModelMapper modelMapper) {
+//        return modelMapper.map(usuarioRequest, Usuario.class);
+//    }
 }

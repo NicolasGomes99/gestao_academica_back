@@ -3,6 +3,7 @@ package br.edu.ufape.sguAuthService.fachada;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoPatchRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.documento.DocumentoResponse;
+import br.edu.ufape.sguAuthService.comunicacao.dto.usuario.UsuarioPatchRequest;
 import br.edu.ufape.sguAuthService.config.AuthenticatedUserProvider;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
@@ -169,8 +170,18 @@ public class Fachada {
             }
     }
 
-    public Usuario editarUsuario(Usuario novoUsuario) throws UsuarioNotFoundException {
-        return usuarioService.editarUsuario(novoUsuario);
+//    public Usuario editarUsuario(Usuario novoUsuario) throws UsuarioNotFoundException {
+//        return usuarioService.editarUsuario(novoUsuario);
+//    }
+
+    public Usuario editarUsuario(UsuarioPatchRequest dto) throws UsuarioNotFoundException {
+        Usuario usuario = usuarioService.buscarUsuarioAtual();
+
+        if (dto.getNome() != null) usuario.setNome(dto.getNome());
+        if (dto.getNomeSocial() != null) usuario.setNomeSocial(dto.getNomeSocial());
+        if (dto.getTelefone() != null) usuario.setTelefone(dto.getTelefone());
+
+        return usuarioService.salvar(usuario);
     }
 
     public Usuario buscarUsuario(UUID id) throws UsuarioNotFoundException {

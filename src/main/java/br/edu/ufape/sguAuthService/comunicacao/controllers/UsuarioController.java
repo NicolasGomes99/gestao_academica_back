@@ -54,10 +54,17 @@ public class UsuarioController {
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.OK);
     }
 
+//    @PatchMapping
+//    public ResponseEntity<UsuarioResponse> atualizar(@Valid @RequestBody UsuarioPatchRequest usuario) throws UsuarioNotFoundException{
+//        Usuario novoUsuario = usuario.convertToEntity(usuario, modelMapper);
+//        return new ResponseEntity<>(new UsuarioResponse(fachada.editarUsuario(novoUsuario), modelMapper), HttpStatus.OK);
+//    }
+
     @PatchMapping
-    public ResponseEntity<UsuarioResponse> atualizar(@Valid @RequestBody UsuarioPatchRequest usuario) throws UsuarioNotFoundException{
-        Usuario novoUsuario = usuario.convertToEntity(usuario, modelMapper);
-        return new ResponseEntity<>(new UsuarioResponse(fachada.editarUsuario(novoUsuario), modelMapper), HttpStatus.OK);
+    public ResponseEntity<UsuarioResponse> atualizar(@RequestBody UsuarioPatchRequest usuario)
+            throws UsuarioNotFoundException {
+        Usuario atualizado = fachada.editarUsuario(usuario);
+        return ResponseEntity.ok(new UsuarioResponse(atualizado, modelMapper));
     }
 
     @DeleteMapping
