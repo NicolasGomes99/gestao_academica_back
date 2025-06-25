@@ -170,10 +170,6 @@ public class Fachada {
             }
     }
 
-//    public Usuario editarUsuario(Usuario novoUsuario) throws UsuarioNotFoundException {
-//        return usuarioService.editarUsuario(novoUsuario);
-//    }
-
     public Usuario editarUsuario(UsuarioPatchRequest dto) throws UsuarioNotFoundException {
         Usuario usuario = usuarioService.buscarUsuarioAtual();
 
