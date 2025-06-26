@@ -4,6 +4,7 @@ package br.edu.ufape.sguAuthService.servicos;
 import br.edu.ufape.sguAuthService.config.AuthenticatedUserProvider;
 import br.edu.ufape.sguAuthService.dados.SolicitacaoPerfilRepository;
 import br.edu.ufape.sguAuthService.exceptions.SolicitacaoDuplicadaException;
+import br.edu.ufape.sguAuthService.exceptions.SolicitacaoNaoPendenteException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.SolicitacaoNotFoundException;
 import br.edu.ufape.sguAuthService.models.Documento;
 import br.edu.ufape.sguAuthService.models.Enums.StatusSolicitacao;
@@ -81,10 +82,10 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
 
     @Override
     @Transactional
-    public SolicitacaoPerfil aceitarSolicitacao(Long id, SolicitacaoPerfil parecer) throws SolicitacaoNotFoundException {
+    public SolicitacaoPerfil aceitarSolicitacao(Long id, SolicitacaoPerfil parecer) throws SolicitacaoNotFoundException, SolicitacaoNaoPendenteException {
         SolicitacaoPerfil solicitacaoPerfil = buscarSolicitacao(id);
         if (solicitacaoPerfil.getStatus() != StatusSolicitacao.PENDENTE) {
-            throw new IllegalStateException("Solicitação não está pendente!");
+            throw new SolicitacaoNaoPendenteException();
         }
         solicitacaoPerfil.setParecer(parecer.getParecer());
         solicitacaoPerfil.setResponsavel(parecer.getResponsavel());
@@ -99,7 +100,7 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
     public SolicitacaoPerfil rejeitarSolicitacao(Long id, SolicitacaoPerfil parecer) throws SolicitacaoNotFoundException {
         SolicitacaoPerfil solicitacaoPerfil = buscarSolicitacao(id);
         if (solicitacaoPerfil.getStatus() != StatusSolicitacao.PENDENTE) {
-            throw new IllegalStateException("Solicitação não está pendente!");
+            throw new SolicitacaoNaoPendenteException();
         }
         solicitacaoPerfil.setParecer(parecer.getParecer());
         solicitacaoPerfil.setResponsavel(parecer.getResponsavel());
