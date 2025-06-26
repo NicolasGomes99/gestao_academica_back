@@ -25,7 +25,7 @@ public class TecnicoController {
     private final Fachada fachada;
     private final ModelMapper modelMapper;
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'Gestor')")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR')")
     @GetMapping
     public Page<TecnicoResponse> listarTecnicos(@PageableDefault(sort = "id") Pageable pageable) {
         return fachada.listarTecnicos(pageable)
