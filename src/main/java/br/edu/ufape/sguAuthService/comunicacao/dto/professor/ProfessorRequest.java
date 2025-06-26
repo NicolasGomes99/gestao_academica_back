@@ -7,6 +7,7 @@ import br.edu.ufape.sguAuthService.models.Curso;
 import br.edu.ufape.sguAuthService.models.Professor;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.modelmapper.ModelMapper;
@@ -27,9 +28,10 @@ public class ProfessorRequest {
     private String siape;
 
     @NotEmpty(message = "A lista de cursos é obrigatória")
+    @NotNull(message = "A lista de cursos não pode ser nula")
     private List<Long> cursoIds; // Lista de IDs dos cursos
 
-    @NotBlank(message = "Os documentos são obrigatórios")
+    @NotNull(message = "Os documentos são obrigatórios")
     private MultipartFile[] documentos;
 
     @SneakyThrows

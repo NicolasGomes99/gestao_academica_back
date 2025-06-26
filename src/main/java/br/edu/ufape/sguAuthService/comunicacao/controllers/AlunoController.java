@@ -24,12 +24,13 @@ public class AlunoController {
     private final Fachada fachada;
     private final ModelMapper modelMapper;
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR')")
     @GetMapping("/{id}") ResponseEntity<AlunoResponse> buscarAluno(@PathVariable UUID id) throws AlunoNotFoundException, UsuarioNotFoundException {
         Usuario response = fachada.buscarAluno(id);
         return new ResponseEntity<>(new AlunoResponse(response, modelMapper), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR')")
     @GetMapping
     public Page<AlunoResponse> listarAlunos(@PageableDefault(sort = "id") Pageable pageable) {
         return fachada.listarAlunos(pageable)

@@ -75,9 +75,7 @@ public class Fachada {
     }
 
     public Usuario buscarAluno(UUID id) throws AlunoNotFoundException, UsuarioNotFoundException {
-        UUID sessionId = authenticatedUserProvider.getUserId();
-        boolean isAdmin = keycloakService.hasRoleAdmin(sessionId.toString());
-        return alunoService.buscarAluno(id, isAdmin, sessionId);
+        return alunoService.buscarAluno(id);
     }
 
     public Usuario buscarAlunoAtual() throws UsuarioNotFoundException {

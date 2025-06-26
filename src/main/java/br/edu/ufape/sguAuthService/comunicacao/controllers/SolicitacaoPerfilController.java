@@ -13,6 +13,7 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.SolicitacaoNotF
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Aluno;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -36,25 +37,25 @@ public class SolicitacaoPerfilController {
     private final ModelMapper modelMapper;
 
     @PostMapping(value = "/aluno", consumes = "multipart/form-data")
-    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilAluno(@ModelAttribute AlunoRequest alunoRequest) throws CursoNotFoundException, UsuarioNotFoundException {
+    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilAluno(@Valid @ModelAttribute AlunoRequest alunoRequest) throws CursoNotFoundException, UsuarioNotFoundException {
         Aluno aluno = alunoRequest.convertToEntity(modelMapper, fachada);
         return new ResponseEntity<>( new SolicitacaoPerfilResponse(fachada.solicitarPerfil(aluno,alunoRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
     }
 
 
     @PostMapping(value = "/professor", consumes = "multipart/form-data")
-    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilProfessor(@ModelAttribute ProfessorRequest professorRequest) throws  UsuarioNotFoundException {
+    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilProfessor(@Valid @ModelAttribute ProfessorRequest professorRequest) throws  UsuarioNotFoundException {
         return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(professorRequest.convertToEntity(modelMapper, fachada), professorRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
     }
 
 
     @PostMapping(value = "/tecnico", consumes = "multipart/form-data")
-    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilTecnico(@ModelAttribute TecnicoRequest tecnicoRequest) throws  UsuarioNotFoundException {
+    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilTecnico(@Valid @ModelAttribute TecnicoRequest tecnicoRequest) throws  UsuarioNotFoundException {
         return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(tecnicoRequest.convertToEntity(modelMapper),tecnicoRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/gestor", consumes = "multipart/form-data")
-    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilGestor(@ModelAttribute GestorRequest gestorRequest) throws  UsuarioNotFoundException {
+    public ResponseEntity<SolicitacaoPerfilResponse> solicitarPerfilGestor(@Valid @ModelAttribute GestorRequest gestorRequest) throws  UsuarioNotFoundException {
         return new ResponseEntity<>(new SolicitacaoPerfilResponse(fachada.solicitarPerfil(gestorRequest.convertToEntity(modelMapper),gestorRequest.getDocumentos()), modelMapper), HttpStatus.CREATED);
     }
 

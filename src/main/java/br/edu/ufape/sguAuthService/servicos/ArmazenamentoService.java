@@ -4,6 +4,7 @@ import br.edu.ufape.sguAuthService.comunicacao.dto.documento.DocumentoResponse;
 import br.edu.ufape.sguAuthService.models.Documento;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArmazenamentoService implements br.edu.ufape.sguAuthService.servicos.interfaces.ArmazenamentoService {
@@ -31,6 +33,13 @@ public class ArmazenamentoService implements br.edu.ufape.sguAuthService.servico
     public List<Documento> salvarArquivo(MultipartFile[] arquivos) {
         List<Documento> documentosSalvos = new ArrayList<>();
         for (MultipartFile arquivo : arquivos) {
+            if (arquivo == null || arquivo.isEmpty()
+                    || arquivo.getOriginalFilename() == null
+                    || arquivo.getOriginalFilename().isBlank()
+                    || arquivo.getContentType() == null
+            ) {
+                throw new IllegalArgumentException("Um dos arquivos está vazio ou não foi selecionado corretamente");
+            }
             if (!tiposPermitidos.contains(arquivo.getContentType())) {
                 throw new IllegalArgumentException("Tipo de arquivo não permitido!");
             }

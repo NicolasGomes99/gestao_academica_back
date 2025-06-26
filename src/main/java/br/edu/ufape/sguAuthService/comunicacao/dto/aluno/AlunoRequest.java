@@ -6,9 +6,7 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.CursoNotFoundEx
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Aluno;
 import br.edu.ufape.sguAuthService.models.Curso;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,11 +21,12 @@ public class AlunoRequest {
     @NotBlank(message = "A matrícula é obrigatória")
     @Size(min = 1, max = 100, message = "A matrícula deve ter entre 1 e 100 caracteres")
     private String matricula;
-    @NotBlank(message = "O curso é obrigatório")
+    @NotNull(message = "O curso é obrigatório")
+    @Positive(message = "O ID do curso deve ser um número positivo")
     private Long cursoId;
 
-    @NotBlank(message = "Os documentos são obrigatórios")
-    @NotNull(message = "Os documentos não podem ser nulos")
+    @NotNull(message = "Os documentos são obrigatórios")
+    @Size(min = 1, message = "Pelo menos um documento deve ser fornecido")
     private MultipartFile[] documentos;
 
     public Aluno convertToEntity( ModelMapper modelMapper, Fachada fachada) throws CursoNotFoundException {

@@ -2,6 +2,7 @@ package br.edu.ufape.sguAuthService.comunicacao.dto.gestor;
 
 import br.edu.ufape.sguAuthService.models.Gestor;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class GestorRequest {
     @Size(min = 1, max = 100, message = "O siape deve ter entre 1 e 100 caracteres")
     private String siape;
 
-    @NotBlank(message = "Os documentos são obrigatórios")
+    @NotNull(message = "Os documentos são obrigatórios")
     private MultipartFile[] documentos;
 
     public Gestor convertToEntity(ModelMapper modelMapper)  {

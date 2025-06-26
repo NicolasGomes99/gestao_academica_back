@@ -36,6 +36,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return response;
     }
 
+    @ExceptionHandler(SolicitacaoNaoPendenteException.class)
+    public ResponseEntity<ErrorResponse> handleNaoPendente(SolicitacaoNaoPendenteException ex) {
+        ErrorResponse body = new ErrorResponse(
+                ex.getMessage(),
+                HttpStatus.CONFLICT.value()
+                );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             @NonNull MethodArgumentNotValidException ex,
