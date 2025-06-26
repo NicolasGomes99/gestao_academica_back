@@ -42,11 +42,11 @@ public class UnidadeAdministrativaController {
         return new ResponseEntity<>(new UnidadeAdministrativaResponse(response, modelMapper), HttpStatus.CREATED);
     }
      @PatchMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UnidadeAdministrativaResponse> editar(@PathVariable Long id, @Valid @RequestBody UnidadeAdministrativaPatchRequest unidadeAdministrativaPatchRequest) {
+    public ResponseEntity<UnidadeAdministrativaGetResponse> editar(@PathVariable Long id, @Valid @RequestBody UnidadeAdministrativaPatchRequest unidadeAdministrativaPatchRequest) {
         try {
             UnidadeAdministrativa unidade = modelMapper.map(unidadeAdministrativaPatchRequest, UnidadeAdministrativa.class);
             UnidadeAdministrativa response = fachada.editarUnidadeAdministrativa(id, unidade);
-            return new ResponseEntity<>(new UnidadeAdministrativaResponse(response, modelMapper), HttpStatus.OK);
+            return new ResponseEntity<>(new UnidadeAdministrativaGetResponse(response, modelMapper), HttpStatus.OK);
         } catch (UnidadeAdministrativaNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

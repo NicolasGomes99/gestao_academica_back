@@ -2,6 +2,7 @@ package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.aluno.AlunoResponse;
+import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoPatchRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoResponse;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.CursoNotFoundException;
@@ -36,9 +37,9 @@ public class CursoController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PatchMapping("/{id}")
-    public ResponseEntity<CursoResponse> editar(@PathVariable Long id, @Valid @RequestBody CursoRequest curso) throws CursoNotFoundException{
-        Curso response = fachada.editarCurso(id, curso.convertToEntity(curso, modelMapper));
-        return new ResponseEntity<>(new CursoResponse(response, modelMapper), HttpStatus.OK);
+    public ResponseEntity<CursoResponse> editar(@PathVariable Long id, @RequestBody CursoPatchRequest patch) throws CursoNotFoundException {
+        Curso atualizado = fachada.editarCurso(id, patch);
+        return new ResponseEntity<>(new CursoResponse(atualizado, modelMapper), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
