@@ -12,7 +12,7 @@ public interface AlunoService {
 
     Page<Usuario> listarAlunos(Pageable pageable);
 
-    Usuario buscarAluno(UUID id, boolean isAdm, UUID sessionId) throws AlunoNotFoundException, UsuarioNotFoundException;
+    Usuario buscarAluno(UUID id) throws AlunoNotFoundException, UsuarioNotFoundException;
 
     Usuario buscarAlunoAtual();
 
