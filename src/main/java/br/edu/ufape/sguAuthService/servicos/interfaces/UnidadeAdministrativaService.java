@@ -2,12 +2,12 @@ package br.edu.ufape.sguAuthService.servicos.interfaces;
 
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.*;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
 import java.util.List;
-import java.util.Set;
 
 public interface UnidadeAdministrativaService {
 
@@ -25,6 +25,7 @@ public interface UnidadeAdministrativaService {
 
     UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa unidadeAdministrativa, Long id) throws UnidadeAdministrativaNotFoundException;
 
+    @Transactional
     GestorUnidade adicionarGestor(UnidadeAdministrativa unidade, GestorUnidade gestorUnidade);
 
     void removerGestor(UnidadeAdministrativa unidade, Long gestorUnidadeId);

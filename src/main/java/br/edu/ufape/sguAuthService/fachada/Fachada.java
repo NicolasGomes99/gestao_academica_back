@@ -358,6 +358,7 @@ public class Fachada {
         return unidadeAdministrativaService.editarUnidadeAdministrativa(novaUnidadeAdministrativa, id);
     }
 
+    @Transactional
     public GestorUnidade adicionarGestor(Long unidadeId, GestorUnidade gestorUnidade, UUID gestorId) {
         Usuario gestor = gestorService.buscarGestor(gestorId, true, null);
         UnidadeAdministrativa unidade = unidadeAdministrativaService.buscarUnidadeAdministrativa(unidadeId);
@@ -375,7 +376,7 @@ public class Fachada {
         unidadeAdministrativaService.removerGestor(unidade, gestor.getPerfil(Gestor.class).orElseThrow().getId());
         int index = unidade.getCodigo().indexOf(".");
         String prefixo = (index != -1) ? unidade.getCodigo().substring(0, index) : unidade.getCodigo();
-        keycloakService.addUserToGroup(gestorId.toString(), prefixo);
+        keycloakService.removeUserFromGroup(gestorId.toString(), prefixo);
     }
 
     public Usuario adicionarFuncionario(Long unidadeId, UUID usuarioId) {
