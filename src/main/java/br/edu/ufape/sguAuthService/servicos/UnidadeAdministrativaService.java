@@ -12,6 +12,7 @@ import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdmin
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaComDependenciasException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -119,8 +120,12 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         unidadeAdministrativaRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public GestorUnidade adicionarGestor(UnidadeAdministrativa unidade, GestorUnidade gestorUnidade) {
+        if(unidade.getGestores().stream().anyMatch(g -> g.getGestor().getUsuario().getId().equals(gestorUnidade.getGestor().getUsuario().getId()))) {
+            throw new SolicitacaoDuplicadaException("O gestor já está vinculado a esta unidade administrativa.");
+        }
         gestorUnidade.setUnidadeAdministrativa(unidade);
         unidade.getGestores().add(gestorUnidade);
         gestorUnidadeRepository.save(gestorUnidade);
