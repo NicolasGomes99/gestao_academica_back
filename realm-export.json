@@ -1763,7 +1763,7 @@
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
   "smtpServer": {
-    "password": "cscjhfjobyvnrxai",
+    "password": "ubouscbvsrgkxxpj",
     "replyToDisplayName": "",
     "starttls": "true",
     "auth": "true",
