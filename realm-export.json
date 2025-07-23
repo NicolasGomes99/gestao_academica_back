@@ -1763,18 +1763,18 @@
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
   "smtpServer": {
-    "password": "ubouscbvsrgkxxpj",
+    "password": "",
     "replyToDisplayName": "",
-    "starttls": "true",
-    "auth": "true",
-    "port": "587",
-    "host": "smtp.gmail.com",
+    "starttls": "false",
+    "auth": "false",
+    "port": "",
+    "host": "",
     "replyTo": "",
-    "from": "naoresponder@ufape.edu.br",
-    "fromDisplayName": "Sistema de Gestão UFAPE",
+    "from": "",
+    "fromDisplayName": "",
     "envelopeFrom": "",
     "ssl": "false",
-    "user": "naoresponder@ufape.edu.br"
+    "user": ""
   },
   "loginTheme": "",
   "accountTheme": "",
