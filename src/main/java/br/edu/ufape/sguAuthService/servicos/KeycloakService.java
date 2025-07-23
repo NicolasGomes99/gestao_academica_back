@@ -47,6 +47,9 @@ public class KeycloakService implements KeycloakServiceInterface {
     @Value("${keycloak.client-id}")
     private String clientId;
 
+    @Value("${common.emailEnabled}")
+    private boolean emailEnabled;
+
 
 
     @Override
@@ -191,8 +194,17 @@ public class KeycloakService implements KeycloakServiceInterface {
             keycloak.realm(realm).users().get(userId).roles().realmLevel().add(Collections.singletonList(userRole));
 
             // Enviar e-mail de confirmação
-            List<String> actions = Collections.singletonList("VERIFY_EMAIL");
-            keycloak.realm(realm).users().get(userId).executeActionsEmail(actions);
+            if (emailEnabled){
+                try {
+                    List<String> actions = Collections.singletonList("VERIFY_EMAIL");
+                    keycloak.realm(realm).users().get(userId).executeActionsEmail(actions);
+                } catch (Exception e){
+                    log.error("Erro ao enviar e-mail de confirmação para o usuário {}: {}", email, e.getMessage());
+                    throw new KeycloakAuthenticationException(e.getMessage());
+                }
+
+            }
+
 
         } catch (NotFoundException e) {
             log.error("Erro: {} ",e, e);
@@ -304,7 +316,7 @@ public class KeycloakService implements KeycloakServiceInterface {
         return true;
     }
 
-    static UserRepresentation getUserRepresentation(String email, String password) {
+    private UserRepresentation getUserRepresentation(String email, String password) {
         CredentialRepresentation credential = new CredentialRepresentation();
         credential.setTemporary(false);
         credential.setType(CredentialRepresentation.PASSWORD);
@@ -317,7 +329,7 @@ public class KeycloakService implements KeycloakServiceInterface {
         user.setLastName(email);
         user.setEmail(email);
         user.setEnabled(true);
-        user.setEmailVerified(false);
+        user.setEmailVerified(!emailEnabled);
         user.setCredentials(Collections.singletonList(credential));
 
 
