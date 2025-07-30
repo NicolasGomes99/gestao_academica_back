@@ -124,7 +124,7 @@ public class UnidadeAdministrativaController {
 
     @PreAuthorize("hasRole('GESTOR')")
     @DeleteMapping("/{id}/funcionarios")
-    public ResponseEntity<UsuarioResponse> removerTecnico( @PathVariable Long id, @RequestBody  Map<String, String> body) {
+    public ResponseEntity<UsuarioResponse> removerFuncionario(@PathVariable Long id, @RequestBody  Map<String, String> body) {
         UUID usuarioId = UUID.fromString(body.get("usuarioId"));
         fachada.removerFuncionario(id, usuarioId);
         return ResponseEntity.noContent().build();
