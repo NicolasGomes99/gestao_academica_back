@@ -30,8 +30,9 @@ public class UsuarioController {
     private final ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<UsuarioResponse> salvar(@Valid @RequestBody UsuarioRequest usuario) {
-        Usuario response = fachada.salvarUsuario(usuario.convertToEntity(usuario, modelMapper), usuario.getSenha());
+    public ResponseEntity<UsuarioResponse> salvar(@Valid @RequestBody UsuarioRequest usuarioRequest) {
+        Usuario usuario = usuarioRequest.convertToEntity(usuarioRequest, modelMapper);
+        Usuario response = fachada.salvarUsuario(usuario, usuarioRequest.getTipoEtniaId(), usuarioRequest.getSenha());
         return new ResponseEntity<>(new UsuarioResponse(response, modelMapper), HttpStatus.CREATED);
     }
 

@@ -1,6 +1,7 @@
 package br.edu.ufape.sguAuthService.comunicacao.dto.usuario;
 
 
+import br.edu.ufape.sguAuthService.comunicacao.dto.tipoEtnia.TipoEtniaResponse;
 import br.edu.ufape.sguAuthService.models.Usuario;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class UsuarioResponse {
     String cpf;
     String email;
     String telefone;
+    TipoEtniaResponse tipoEtnia;
 
     public UsuarioResponse(Usuario aluno, ModelMapper modelMapper){
         if (aluno == null) throw new IllegalArgumentException("Usuario não pode ser nulo");

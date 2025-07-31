@@ -49,6 +49,7 @@ public class Fachada {
     private final GestorService gestorService;
     private final TipoUnidadeAdministrativaService tipoUnidadeAdministrativaService;
     private final AuthenticatedUserProvider authenticatedUserProvider;
+    private final TipoEtniaService tipoEtniaService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -150,8 +151,9 @@ public class Fachada {
         }
     }
     @Transactional
-    public Usuario salvarUsuario(Usuario usuario, String senha) {
+    public Usuario salvarUsuario(Usuario usuario, Long tipoEtniaId, String senha) throws TipoEtniaNotFoundException {
         UUID userId = null;
+            usuario.setTipoEtnia(tipoEtniaService.buscarTipoEtnia(tipoEtniaId));
             keycloakService.createUser(usuario.getEmail(), senha, "visitante");
             try {
                 userId = UUID.fromString(keycloakService.getUserId(usuario.getEmail()));
@@ -168,12 +170,15 @@ public class Fachada {
             }
     }
 
-    public Usuario editarUsuario(UsuarioPatchRequest dto) throws UsuarioNotFoundException {
+    public Usuario editarUsuario(UsuarioPatchRequest dto) throws UsuarioNotFoundException,TipoEtniaNotFoundException {
         Usuario usuario = usuarioService.buscarUsuarioAtual();
 
         if (dto.getNome() != null) usuario.setNome(dto.getNome());
         if (dto.getNomeSocial() != null) usuario.setNomeSocial(dto.getNomeSocial());
         if (dto.getTelefone() != null) usuario.setTelefone(dto.getTelefone());
+        if (dto.getTipoEtniaId() != null){
+            usuario.setTipoEtnia(tipoEtniaService.buscarTipoEtnia(dto.getTipoEtniaId()));
+        }
 
         return usuarioService.salvar(usuario);
     }
@@ -467,4 +472,27 @@ public class Fachada {
             throw new IllegalArgumentException(errorMessage);
         }
     }
+
+        // ================== TipoEtnia ================== //
+
+    public TipoEtnia salvarTipoEtnia(TipoEtnia tipoEtnia) {
+        return tipoEtniaService.salvarTipoEtnia(tipoEtnia);
+    }
+
+    public TipoEtnia buscarTipoEtnia(Long id) throws TipoEtniaNotFoundException {
+        return tipoEtniaService.buscarTipoEtnia(id);
+    }
+
+    public Page<TipoEtnia> listarTiposEtnia(Pageable pageable) {
+        return tipoEtniaService.listarTiposEtnia(pageable);
+    }
+
+    public TipoEtnia atualizarTipoEtnia(Long id, TipoEtnia tipoEtnia) throws TipoEtniaNotFoundException {
+        return tipoEtniaService.atualizarTipoEtnia(id, tipoEtnia);
+    }
+
+    public void deletarTipoEtnia(Long id) throws TipoEtniaNotFoundException {
+        tipoEtniaService.deletarTipoEtnia(id);
+    }
+
 }
