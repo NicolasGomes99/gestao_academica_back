@@ -25,6 +25,9 @@ public class Usuario {
     private String telefone;
     private Boolean ativo = true;
 
+    @ManyToOne
+    private TipoEtnia tipoEtnia;
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<Perfil> perfis = new HashSet<>();

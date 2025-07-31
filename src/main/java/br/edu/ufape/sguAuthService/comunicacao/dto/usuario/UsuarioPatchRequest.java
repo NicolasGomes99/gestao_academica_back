@@ -21,4 +21,6 @@ public class UsuarioPatchRequest {
 
     @NumeroValido
     private String telefone;
+
+    private Long tipoEtniaId;
 }

@@ -3,9 +3,13 @@ package br.edu.ufape.sguAuthService.comunicacao.dto.usuario;
 
 
 import br.edu.ufape.sguAuthService.comunicacao.annotations.NumeroValido;
+import br.edu.ufape.sguAuthService.fachada.Fachada;
+import br.edu.ufape.sguAuthService.models.TipoEtnia;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import br.edu.ufape.sguAuthService.servicos.TipoEtniaService;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +39,9 @@ public class UsuarioRequest {
 
     @NumeroValido
     private String telefone;
+
+    @NotNull(message = "Defina o tipo de Etnia.")
+    private Long tipoEtniaId;
 
 
     public Usuario convertToEntity(UsuarioRequest usuarioRequest, ModelMapper modelMapper) {
