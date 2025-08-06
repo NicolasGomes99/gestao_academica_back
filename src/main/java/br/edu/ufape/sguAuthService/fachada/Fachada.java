@@ -85,8 +85,8 @@ public class Fachada {
 
 
     // ================== Professor ================== //
-    public Page<Usuario> listarProfessores(Pageable pageable) {
-        return professorService.listarProfessores(pageable);
+    public Page<Usuario> listarProfessores(Predicate predicate, Pageable pageable) {
+        return professorService.listarProfessores(predicate, pageable);
     }
 
     public Usuario buscarProfessor(UUID id) throws UsuarioNotFoundException, ProfessorNotFoundException {
