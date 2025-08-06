@@ -1,24 +1,23 @@
 package br.edu.ufape.sguAuthService.dados;
 
+import br.edu.ufape.sguAuthService.models.QUsuario;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import com.querydsl.core.types.dsl.StringPath;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+import org.springframework.data.querydsl.binding.QuerydslBindings;
+import org.springframework.lang.NonNull;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
-    Page<Usuario> findByAtivoTrue(Pageable pageable);
+public interface UsuarioRepository extends JpaRepository<Usuario, UUID>, QuerydslPredicateExecutor<Usuario>, QuerydslBinderCustomizer<QUsuario> {
     List<Usuario> findByIdIn(List<UUID> kcIds);
 
-    @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Aluno AND u.ativo = true")
-    Page<Usuario> findUsuariosAlunos(Pageable pageable);
-    @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Professor AND u.ativo = true")
-    Page<Usuario> findUsuariosProfessores(Pageable pageable);
-    @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Tecnico AND u.ativo = true")
-    Page<Usuario> findUsuariosTecnicos(Pageable pageable);
-    @Query("SELECT u FROM Usuario u JOIN u.perfis p WHERE TYPE(p) = Gestor AND u.ativo = true")
-    Page<Usuario> findUsuariosGestores(Pageable pageable);
+    @Override
+    default void customize(QuerydslBindings bindings, @NonNull QUsuario root) {
+        bindings.bind(String.class).first((StringPath path, String value) -> path.containsIgnoreCase(value));
+    }
+
 }
