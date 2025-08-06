@@ -7,8 +7,12 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundE
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,8 +40,11 @@ public class GestorController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping
-    public Page<GestorResponse> listarGestores(@PageableDefault(sort = "id") Pageable pageable) {
-        return fachada.listarGestores(pageable)
+    public Page<GestorResponse> listarGestores(@QuerydslPredicate(root = Usuario.class) Predicate predicate,
+                                               @PageableDefault(value = 2)
+                                               @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                               Pageable pageable) {
+        return fachada.listarGestores(predicate, pageable)
                 .map(usuario -> new GestorResponse(usuario, modelMapper));
     }
 

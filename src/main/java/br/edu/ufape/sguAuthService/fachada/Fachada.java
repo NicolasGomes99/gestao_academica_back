@@ -120,8 +120,8 @@ public class Fachada {
 
     // ================== Gestor ================== //
 
-    public Page<Usuario> listarGestores(Pageable pageable) {
-    return gestorService.listarGestores(pageable);
+    public Page<Usuario> listarGestores(Predicate predicate, Pageable pageable) {
+    return gestorService.listarGestores(predicate, pageable);
 }
 
 
