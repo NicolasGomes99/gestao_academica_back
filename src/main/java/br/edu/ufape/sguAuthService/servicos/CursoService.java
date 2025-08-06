@@ -4,8 +4,9 @@ package br.edu.ufape.sguAuthService.servicos;
 import br.edu.ufape.sguAuthService.dados.CursoRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.CursoNotFoundException;
-import br.edu.ufape.sguAuthService.models.Curso;
-import br.edu.ufape.sguAuthService.models.Usuario;
+import br.edu.ufape.sguAuthService.models.*;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -43,8 +44,14 @@ public class CursoService implements br.edu.ufape.sguAuthService.servicos.interf
     }
 
     @Override
-    public Page<Curso> listar(Pageable pageable) {
-        return cursoRepository.findByAtivoTrue(pageable);
+    public Page<Curso> listar(Predicate predicate, Pageable pageable) {
+        QCurso curso = QCurso.curso;
+        BooleanBuilder filtroFixo = new BooleanBuilder();
+        filtroFixo.and(curso.ativo.isTrue());
+
+        Predicate predicadoFinal = filtroFixo.and(predicate);
+
+        return cursoRepository.findAll(predicadoFinal, pageable);
     }
 
 

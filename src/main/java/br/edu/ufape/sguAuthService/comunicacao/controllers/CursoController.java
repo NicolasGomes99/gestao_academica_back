@@ -8,9 +8,13 @@ import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoResponse;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.CursoNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Curso;
+import com.querydsl.core.types.Predicate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,8 +53,12 @@ public class CursoController {
     }
 
     @GetMapping
-    public Page<CursoResponse> listar(@PageableDefault(sort = "id") Pageable pageable) {
-        return fachada.listarCursos(pageable)
+    public Page<CursoResponse> listar(@QuerydslPredicate(root = Curso.class) Predicate predicate,
+                                      @PageableDefault(value = 2)
+                                      @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                      Pageable pageable) {
+
+        return fachada.listarCursos(predicate, pageable)
                 .map(curso -> new CursoResponse(curso, modelMapper));
     }
 

@@ -71,8 +71,8 @@ public class Fachada {
     // ================== Aluno ================== //
 
 
-    public Page<Usuario> listarAlunos(Pageable pageable) {
-        return alunoService.listarAlunos(pageable);
+    public Page<Usuario> listarAlunos(Predicate predicate, Pageable pageable) {
+        return alunoService.listarAlunos(predicate, pageable);
     }
 
     public Usuario buscarAluno(UUID id) throws AlunoNotFoundException, UsuarioNotFoundException {
@@ -229,9 +229,9 @@ public class Fachada {
         return cursoService.buscar(id);
     }
 
-    public Page<Curso> listarCursos(Pageable pageable) {
-    return cursoService.listar(pageable);
-}
+    public Page<Curso> listarCursos(Predicate predicate, Pageable pageable) {
+        return cursoService.listar(predicate, pageable);
+    }
 
 
     public List<Usuario> listarAlunosPorCurso(Long id){
