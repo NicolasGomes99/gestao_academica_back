@@ -102,8 +102,8 @@ public class Fachada {
 
     // ================== Tecnico ================== //
 
-    public Page<Usuario> listarTecnicos(Pageable pageable) {
-        return tecnicoService.getTecnicos(pageable);
+    public Page<Usuario> listarTecnicos(Predicate predicate, Pageable pageable) {
+        return tecnicoService.getTecnicos(predicate, pageable);
     }
 
     public Usuario buscarTecnico(UUID id) throws UsuarioNotFoundException, TecnicoNotFoundException {

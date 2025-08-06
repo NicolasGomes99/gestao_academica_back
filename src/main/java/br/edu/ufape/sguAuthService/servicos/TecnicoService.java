@@ -5,8 +5,11 @@ import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 import br.edu.ufape.sguAuthService.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TecnicoNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
+import br.edu.ufape.sguAuthService.models.QUsuario;
 import br.edu.ufape.sguAuthService.models.Tecnico;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +26,15 @@ public class TecnicoService implements br.edu.ufape.sguAuthService.servicos.inte
 
 
     @Override
-    public Page<Usuario> getTecnicos(Pageable pageable) {
-        return usuarioRepository.findUsuariosTecnicos(pageable);
+    public Page<Usuario> getTecnicos(Predicate predicate, Pageable pageable) {
+        QUsuario qUsuario = QUsuario.usuario;
+        BooleanBuilder filtroFixo = new BooleanBuilder();
+        filtroFixo.and(qUsuario.ativo.isTrue());
+        filtroFixo.and(qUsuario.perfis.any().instanceOf(Tecnico.class));
+
+        Predicate predicadoFinal = filtroFixo.and(predicate);
+
+        return usuarioRepository.findAll(predicadoFinal, pageable);
     }
 
 
