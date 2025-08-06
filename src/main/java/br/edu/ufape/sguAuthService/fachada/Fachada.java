@@ -451,8 +451,8 @@ public class Fachada {
         return tipoUnidadeAdministrativaService.buscar(id);
     }
 
-    public Page<TipoUnidadeAdministrativa> listarTipos(Pageable pageable) {
-        return tipoUnidadeAdministrativaService.listar(pageable);
+    public Page<TipoUnidadeAdministrativa> listarTipos(Predicate predicate, Pageable pageable) {
+        return tipoUnidadeAdministrativaService.listar(predicate, pageable);
     }
 
     public TipoUnidadeAdministrativa editarTipo(Long id, TipoUnidadeAdministrativa novoTipo) throws TipoUnidadeAdministrativaNotFoundException {
