@@ -6,12 +6,11 @@ import br.edu.ufape.sguAuthService.dados.SolicitacaoPerfilRepository;
 import br.edu.ufape.sguAuthService.exceptions.SolicitacaoDuplicadaException;
 import br.edu.ufape.sguAuthService.exceptions.SolicitacaoNaoPendenteException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.SolicitacaoNotFoundException;
-import br.edu.ufape.sguAuthService.models.Documento;
+import br.edu.ufape.sguAuthService.models.*;
 import br.edu.ufape.sguAuthService.models.Enums.StatusSolicitacao;
-import br.edu.ufape.sguAuthService.models.Perfil;
-import br.edu.ufape.sguAuthService.models.SolicitacaoPerfil;
-import br.edu.ufape.sguAuthService.models.Usuario;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,24 +58,36 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
     }
 
     @Override
-    public Page<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual(Pageable pageable) {
+    public Page<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual(Predicate predicate, Pageable pageable) {
         UUID sessionId = authenticatedUserProvider.getUserId();
-        return solicitacaoPerfilRepository.findAllBySolicitante_Id(sessionId, pageable);
+        QSolicitacaoPerfil qSolicitacaoPerfil = QSolicitacaoPerfil.solicitacaoPerfil;
+        BooleanBuilder filtroFixo = new BooleanBuilder();
+        filtroFixo.and(qSolicitacaoPerfil.solicitante.id.eq(sessionId));
+        Predicate predicadoFinal = filtroFixo.and(predicate);
+        return solicitacaoPerfilRepository.findAll(predicadoFinal,  pageable);
     }
 
     @Override
-    public Page<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id, Pageable pageable) {
-        return solicitacaoPerfilRepository.findAllBySolicitante_Id(id, pageable);
+    public Page<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id, Predicate predicate, Pageable pageable) {
+        QSolicitacaoPerfil qSolicitacaoPerfil = QSolicitacaoPerfil.solicitacaoPerfil;
+        BooleanBuilder filtroFixo = new BooleanBuilder();
+        filtroFixo.and(qSolicitacaoPerfil.solicitante.id.eq(id));
+        Predicate predicadoFinal = filtroFixo.and(predicate);
+        return solicitacaoPerfilRepository.findAll(predicadoFinal, pageable);
     }
 
     @Override
-    public Page<SolicitacaoPerfil> listarSolicitacoes(Pageable pageable) {
-        return solicitacaoPerfilRepository.findAll(pageable);
+    public Page<SolicitacaoPerfil> listarSolicitacoes(Predicate predicate, Pageable pageable) {
+        return solicitacaoPerfilRepository.findAll(predicate, pageable);
     }
 
     @Override
-    public Page<SolicitacaoPerfil> listarSolicitacoesPendentes(Pageable pageable) {
-        return solicitacaoPerfilRepository.findAllByStatus(StatusSolicitacao.PENDENTE, pageable);
+    public Page<SolicitacaoPerfil> listarSolicitacoesPendentes(Predicate predicate, Pageable pageable) {
+        QSolicitacaoPerfil qSolicitacaoPerfil = QSolicitacaoPerfil.solicitacaoPerfil;
+        BooleanBuilder filtroFixo = new BooleanBuilder();
+        filtroFixo.and(qSolicitacaoPerfil.status.eq(StatusSolicitacao.PENDENTE));
+        Predicate predicadoFinal = filtroFixo.and(predicate);
+        return solicitacaoPerfilRepository.findAll(predicadoFinal, pageable);
     }
 
 

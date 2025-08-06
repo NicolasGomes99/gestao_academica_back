@@ -282,20 +282,20 @@ public class Fachada {
         return solicitacaoPerfilService.buscarSolicitacao(id);
     }
 
-    public Page<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual(Pageable pageable) {
-        return solicitacaoPerfilService.buscarSolicitacoesUsuarioAtual(pageable);
+    public Page<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual(Predicate predicate, Pageable pageable) {
+        return solicitacaoPerfilService.buscarSolicitacoesUsuarioAtual(predicate, pageable);
     }
 
-    public Page<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id, Pageable pageable) {
-        return solicitacaoPerfilService.buscarSolicitacoesPorId(id, pageable);
+    public Page<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id, Predicate predicate, Pageable pageable) {
+        return solicitacaoPerfilService.buscarSolicitacoesPorId(id, predicate, pageable);
     }
 
-    public Page<SolicitacaoPerfil> listarSolicitacoes(Pageable pageable) {
-        return solicitacaoPerfilService.listarSolicitacoes(pageable);
+    public Page<SolicitacaoPerfil> listarSolicitacoes(Predicate predicate, Pageable pageable) {
+        return solicitacaoPerfilService.listarSolicitacoes(predicate, pageable);
     }
 
-    public Page<SolicitacaoPerfil> listarSolicitacoesPendentes(Pageable pageable) {
-        return solicitacaoPerfilService.listarSolicitacoesPendentes(pageable);
+    public Page<SolicitacaoPerfil> listarSolicitacoesPendentes(Predicate predicate, Pageable pageable) {
+        return solicitacaoPerfilService.listarSolicitacoesPendentes(predicate, pageable);
     }
 
 
