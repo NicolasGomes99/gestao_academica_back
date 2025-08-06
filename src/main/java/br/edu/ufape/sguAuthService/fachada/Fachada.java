@@ -483,8 +483,8 @@ public class Fachada {
         return tipoEtniaService.buscarTipoEtnia(id);
     }
 
-    public Page<TipoEtnia> listarTiposEtnia(Pageable pageable) {
-        return tipoEtniaService.listarTiposEtnia(pageable);
+    public Page<TipoEtnia> listarTiposEtnia(Predicate predicate, Pageable pageable) {
+        return tipoEtniaService.listarTiposEtnia(predicate, pageable);
     }
 
     public TipoEtnia atualizarTipoEtnia(Long id, TipoEtnia tipoEtnia) throws TipoEtniaNotFoundException {
