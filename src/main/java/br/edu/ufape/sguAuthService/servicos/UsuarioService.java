@@ -7,9 +7,12 @@ import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 import br.edu.ufape.sguAuthService.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.models.Aluno;
+import br.edu.ufape.sguAuthService.models.QUsuario;
 import br.edu.ufape.sguAuthService.models.Usuario;
 
 import br.edu.ufape.sguAuthService.models.Visitante;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -62,8 +65,14 @@ public class UsuarioService implements br.edu.ufape.sguAuthService.servicos.inte
     }
 
     @Override
-    public Page<Usuario> listarUsuarios(Pageable pageable) {
-        return usuarioRepository.findByAtivoTrue(pageable);
+    public Page<Usuario> listarUsuarios(Predicate predicate, Pageable pageable) {
+        QUsuario qUsuario = QUsuario.usuario;
+        BooleanBuilder filtroFixo = new BooleanBuilder();
+        filtroFixo.and(qUsuario.ativo.isTrue());
+
+        Predicate predicadoFinal = filtroFixo.and(predicate);
+
+        return usuarioRepository.findAll(predicadoFinal, pageable);
     }
 
 

@@ -193,8 +193,8 @@ public class Fachada {
         return usuarioService.buscarUsuarioAtual();
     }
 
-    public Page<Usuario> listarUsuarios(Pageable pageable) {
-        return usuarioService.listarUsuarios(pageable);
+    public Page<Usuario> listarUsuarios(Predicate predicate, Pageable pageable) {
+        return usuarioService.listarUsuarios(predicate, pageable);
     }
 
     public List<Usuario> listarUsuariosEmBatch(List<UUID> ids) {
