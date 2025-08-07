@@ -12,6 +12,8 @@ import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdmin
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaComDependenciasException;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.*;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -22,11 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
-
-import static br.edu.ufape.sguAuthService.comunicacao.paginacao.PaginadorUtils.paginarLista;
 
 @Service
 @RequiredArgsConstructor
@@ -184,39 +183,46 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
     }
 
     @Override
-    public Page<GestorUnidade> listarGestores(Long unidadeId, Pageable pageable) {
-        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-        List<GestorUnidade> gestores = new ArrayList<>(unidade.getGestores());
-        return paginarLista(gestores, pageable);
+    public Page<GestorUnidade> listarGestores(Long unidadeId, Predicate predicate, Pageable pageable) {
+        QGestorUnidade qGestorUnidade = QGestorUnidade.gestorUnidade;
+        BooleanBuilder filtroFixo = new BooleanBuilder(qGestorUnidade.unidadeAdministrativa.id.eq(unidadeId));
+        Predicate filtro = filtroFixo.and(predicate);
+        return gestorUnidadeRepository.findAll(filtro, pageable);
     }
 
     @Override
-    public Page<Funcionario> listarFuncionarios(Long unidadeId, Pageable pageable) {
-        UnidadeAdministrativa unidade = buscarUnidadeAdministrativa(unidadeId);
-        List<Funcionario> funcionarios = new ArrayList<>(unidade.getFuncionarios());
-        return paginarLista(funcionarios, pageable);
+    public Page<Funcionario> listarFuncionarios(Long unidadeId, Predicate predicate, Pageable pageable) {
+        return unidadeAdministrativaRepository
+                .findFuncionariosByUnidadeId(unidadeId, predicate, pageable);
     }
 
     @Override
-    public Page<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor, Pageable pageable) {
-        List<GestorUnidade> vinculacoes = gestorUnidadeRepository.findByGestorId(gestor.getId());
-        List<UnidadeAdministrativa> unidades = vinculacoes.stream()
-                .map(GestorUnidade::getUnidadeAdministrativa)
-                .distinct()
+    public Page<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor, Predicate predicate, Pageable pageable) {
+        QUnidadeAdministrativa qUnidade = QUnidadeAdministrativa.unidadeAdministrativa;
+        BooleanBuilder filtro = new BooleanBuilder(
+                qUnidade.gestores
+                        .any()
+                        .gestor.id.eq(gestor.getId())
+        );
+
+        Predicate filtroFixo = filtro.and(predicate);
+        return unidadeAdministrativaRepository.findAll(filtroFixo, pageable);
+    }
+
+    @Override
+    public Page<UnidadeAdministrativa> listarUnidadesPorFuncionario(Usuario usuario, Predicate predicate, Pageable pageable) {
+        QUnidadeAdministrativa qUnidade = QUnidadeAdministrativa.unidadeAdministrativa;
+        List<Long> perfilIds = usuario.getPerfis()
+                .stream()
+                .map(Perfil::getId)
                 .toList();
-        return paginarLista(unidades, pageable);
-    }
-
-    @Override
-    public Page<UnidadeAdministrativa> listarUnidadesPorFuncionario(Usuario usuario, Pageable pageable) {
-        List<UnidadeAdministrativa> todas = unidadeAdministrativaRepository.findAll();
-        List<UnidadeAdministrativa> unidades = todas.stream()
-                .filter(ua -> ua.getFuncionarios().stream()
-                        .anyMatch(f -> usuario.getPerfis().contains(f) &&
-                                (f instanceof Tecnico || f instanceof Professor)))
-                .distinct()
-                .toList();
-        return paginarLista(unidades, pageable);
+        BooleanBuilder filtro = new BooleanBuilder()
+                .and(qUnidade.funcionarios.any().id.in(perfilIds))
+                .and(qUnidade.funcionarios.any().instanceOf(Tecnico.class)
+                                .or(qUnidade.funcionarios.any().instanceOf(Professor.class))
+                );
+        Predicate filtroFixo = filtro.and(predicate);
+        return unidadeAdministrativaRepository.findAll(filtroFixo, pageable);
     }
 
 }

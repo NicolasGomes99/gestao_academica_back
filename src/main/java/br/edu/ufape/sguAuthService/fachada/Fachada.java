@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
@@ -405,40 +406,40 @@ public class Fachada {
         unidadeAdministrativaService.removerFuncionario(unidade, funcionario);
     }
 
-    public Page<GestorUnidade> listarGestoresPorUnidade(Long id, Pageable pageable) {
-        return unidadeAdministrativaService.listarGestores(id, pageable);
+    public Page<GestorUnidade> listarGestoresPorUnidade(Long id, Predicate predicate, Pageable pageable) {
+        return unidadeAdministrativaService.listarGestores(id, predicate, pageable);
     }
 
-    public Page<Funcionario> listarFuncionariosPorUnidade(Long id, Pageable pageable) {
-        return unidadeAdministrativaService.listarFuncionarios(id, pageable);
+    public Page<Funcionario> listarFuncionariosPorUnidade(Long id, Predicate predicate, Pageable pageable) {
+        return unidadeAdministrativaService.listarFuncionarios(id, predicate, pageable);
     }
 
-    public Page<UnidadeAdministrativa> listarUnidadesDoGestorAtual(Pageable pageable) {
+    public Page<UnidadeAdministrativa> listarUnidadesDoGestorAtual(Predicate predicate, Pageable pageable) {
         Usuario usuario = usuarioService.buscarUsuarioAtual();
         Gestor gestor = usuario.getPerfil(Gestor.class).orElseThrow();
-        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, pageable);
+        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, predicate, pageable);
     }
 
-    public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioAtual(Pageable pageable) {
+    public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioAtual(Predicate predicate, Pageable pageable) {
         Usuario usuario = usuarioService.buscarUsuarioAtual();
-        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, pageable);
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, predicate, pageable);
     }
 
-    public Page<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId, Pageable pageable) {
+    public Page<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId, Predicate predicate,  Pageable pageable) {
         Usuario usuario = gestorService.buscarGestor(usuarioId, true, usuarioId);
         Gestor gestor = usuario.getPerfil(Gestor.class)
                 .orElseThrow(GestorNotFoundException::new);
-        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, pageable);
+        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, predicate, pageable);
     }
 
-    public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId, Pageable pageable) {
+    public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId, Predicate predicate, Pageable pageable) {
         Usuario usuario = usuarioService.buscarUsuario(usuarioId, true, usuarioId);
         boolean possuiPerfilValido = usuario.getPerfis().stream()
                 .anyMatch(p -> p instanceof Tecnico || p instanceof Professor);
         if (!possuiPerfilValido) {
             throw new FuncionarioNotFoundException();
         }
-        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, pageable);
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, predicate, pageable);
     }
 
 
