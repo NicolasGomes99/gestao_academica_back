@@ -39,4 +39,6 @@ public interface KeycloakServiceInterface {
     void addUserToGroup(String userId, String groupName);
 
     void removeUserFromGroup(String userId, String groupName);
+
+    List<String> getUserRoles(String userId);
 }

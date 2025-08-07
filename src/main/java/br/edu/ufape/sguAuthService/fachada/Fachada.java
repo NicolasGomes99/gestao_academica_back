@@ -69,6 +69,11 @@ public class Fachada {
         keycloakService.resetPassword(email);
     }
 
+    public List<String> getUserRoles() {
+        UUID sessionId = authenticatedUserProvider.getUserId();
+        return keycloakService.getUserRoles(sessionId.toString());
+    }
+
     // ================== Aluno ================== //
 
 

@@ -23,10 +23,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -459,6 +456,48 @@ public class KeycloakService implements KeycloakServiceInterface {
                 .filter(g -> groupName.equals(g.getName()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public List<String> getUserRoles(String userId) {
+        try {
+            List<String> realmRoles = keycloak.realm(realm)
+                    .users()
+                    .get(userId)
+                    .roles()
+                    .realmLevel()
+                    .listEffective()
+                    .stream()
+                    .map(RoleRepresentation::getName)
+                    .toList();
+
+            List<ClientRepresentation> clients = keycloak.realm(realm).clients().findAll();
+
+            List<String> clientRoles = new ArrayList<>();
+            for (ClientRepresentation client : clients) {
+                List<RoleRepresentation> roles = keycloak.realm(realm)
+                        .users()
+                        .get(userId)
+                        .roles()
+                        .clientLevel(client.getId())
+                        .listEffective();
+
+                clientRoles.addAll(
+                        roles.stream()
+                                .map(RoleRepresentation::getName)
+                                .toList()
+                );
+            }
+
+            List<String> allRoles = new ArrayList<>();
+            allRoles.addAll(realmRoles);
+            allRoles.addAll(clientRoles);
+
+            return allRoles;
+        } catch (Exception e) {
+            log.error("Erro ao obter as roles do usuário: {}", e.getMessage(), e);
+            throw new KeycloakAuthenticationException("Erro ao obter as roles do usuário.", e);
+        }
     }
 
 }
