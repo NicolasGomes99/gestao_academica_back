@@ -16,6 +16,17 @@ public interface GestorUnidadeRepository extends JpaRepository<GestorUnidade, Lo
 
     @Override
     default void customize(QuerydslBindings bindings, @NonNull QGestorUnidade root) {
-        bindings.bind(String.class).first((StringPath path, String value) -> path.containsIgnoreCase(value));
+        bindings.including(
+                root.papel,
+                root.gestor.usuario.nome,
+                root.gestor.usuario.email,
+                root.gestor.usuario.telefone,
+                root.gestor.usuario.email,
+                root.gestor.usuario.cpf,
+                root.gestor.siape
+        );
+
+        bindings.bind(String.class)
+                .first((StringPath path, String value) -> path.containsIgnoreCase(value));
     }
 }
