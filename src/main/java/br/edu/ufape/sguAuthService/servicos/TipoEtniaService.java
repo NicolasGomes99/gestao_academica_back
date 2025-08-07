@@ -4,6 +4,7 @@ import br.edu.ufape.sguAuthService.dados.TipoEtniaRepository;
 import br.edu.ufape.sguAuthService.exceptions.TipoEtniaDuplicadoException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TipoEtniaNotFoundException;
 import br.edu.ufape.sguAuthService.models.TipoEtnia;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,8 +31,8 @@ public class TipoEtniaService implements br.edu.ufape.sguAuthService.servicos.in
     }
 
     @Override
-    public Page<TipoEtnia> listarTiposEtnia(Pageable pageable) {
-        return tipoEtniaRepository.findAll(pageable);
+    public Page<TipoEtnia> listarTiposEtnia(Predicate predicate, Pageable pageable) {
+        return tipoEtniaRepository.findAll(predicate, pageable);
     }
 
     @Override

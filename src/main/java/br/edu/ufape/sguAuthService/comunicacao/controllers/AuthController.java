@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -36,5 +38,12 @@ public class AuthController {
         fachada.resetPassword(email);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/roles")
+    public ResponseEntity<List<String>> getUserRoles(){
+        List<String> roles = fachada.getUserRoles();
+        return ResponseEntity.ok(roles);
+    }
+
 }
 

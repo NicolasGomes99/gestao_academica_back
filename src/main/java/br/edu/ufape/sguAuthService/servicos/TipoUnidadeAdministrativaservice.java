@@ -3,6 +3,7 @@ package br.edu.ufape.sguAuthService.servicos;
 import java.util.List;
 
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
+import com.querydsl.core.types.Predicate;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -36,8 +37,8 @@ public class TipoUnidadeAdministrativaservice implements br.edu.ufape.sguAuthSer
     }
 
     @Override
-    public Page<TipoUnidadeAdministrativa> listar(Pageable pageable) {
-        return tipoUnidadeAdministrativaRepository.findAll(pageable);
+    public Page<TipoUnidadeAdministrativa> listar(Predicate predicate, Pageable pageable) {
+        return tipoUnidadeAdministrativaRepository.findAll(predicate, pageable);
     }
 
     @Override

@@ -6,11 +6,15 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TecnicoNotFound
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,8 +31,11 @@ public class TecnicoController {
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR')")
     @GetMapping
-    public Page<TecnicoResponse> listarTecnicos(@PageableDefault(sort = "id") Pageable pageable) {
-        return fachada.listarTecnicos(pageable)
+    public Page<TecnicoResponse> listarTecnicos(@QuerydslPredicate(root = Usuario.class) Predicate predicate,
+                                                @PageableDefault(value = 2)
+                                                @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                                Pageable pageable) {
+        return fachada.listarTecnicos(predicate, pageable)
                 .map(usuario -> new TecnicoResponse(usuario, modelMapper));
     }
 

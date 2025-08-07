@@ -4,6 +4,7 @@ import java.util.List;
 
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.TipoUnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.TipoUnidadeAdministrativa;
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,7 +14,7 @@ public interface TipoUnidadeAdministrativaService {
 
     TipoUnidadeAdministrativa buscar(Long id) throws TipoUnidadeAdministrativaNotFoundException;
 
-    Page<TipoUnidadeAdministrativa> listar(Pageable pageable);
+    Page<TipoUnidadeAdministrativa> listar(Predicate predicate, Pageable pageable);
 
     TipoUnidadeAdministrativa editar(Long id, TipoUnidadeAdministrativa novoTipoUnidadeAdministrativa) throws TipoUnidadeAdministrativaNotFoundException;
 

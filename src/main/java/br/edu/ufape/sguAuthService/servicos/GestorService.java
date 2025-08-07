@@ -4,8 +4,12 @@ import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 import br.edu.ufape.sguAuthService.exceptions.accessDeniedException.GlobalAccessDeniedException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.GestorNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
+import br.edu.ufape.sguAuthService.models.Aluno;
 import br.edu.ufape.sguAuthService.models.Gestor;
+import br.edu.ufape.sguAuthService.models.QUsuario;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +23,15 @@ public class GestorService implements br.edu.ufape.sguAuthService.servicos.inter
     private final UsuarioRepository usuarioRepository;
 
     @Override
-    public Page<Usuario> listarGestores(Pageable pageable) {
-        return usuarioRepository.findUsuariosGestores(pageable);
+    public Page<Usuario> listarGestores(Predicate predicate, Pageable pageable) {
+        QUsuario qUsuario = QUsuario.usuario;
+        BooleanBuilder filtroFixo = new BooleanBuilder();
+        filtroFixo.and(qUsuario.ativo.isTrue());
+        filtroFixo.and(qUsuario.perfis.any().instanceOf(Gestor.class));
+
+        Predicate predicadoFinal = filtroFixo.and(predicate);
+
+        return usuarioRepository.findAll(predicadoFinal, pageable);
     }
 
     @Override

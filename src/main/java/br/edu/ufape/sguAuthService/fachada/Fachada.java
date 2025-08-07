@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
@@ -68,11 +69,16 @@ public class Fachada {
         keycloakService.resetPassword(email);
     }
 
+    public List<String> getUserRoles() {
+        UUID sessionId = authenticatedUserProvider.getUserId();
+        return keycloakService.getUserRoles(sessionId.toString());
+    }
+
     // ================== Aluno ================== //
 
 
-    public Page<Usuario> listarAlunos(Pageable pageable) {
-        return alunoService.listarAlunos(pageable);
+    public Page<Usuario> listarAlunos(Predicate predicate, Pageable pageable) {
+        return alunoService.listarAlunos(predicate, pageable);
     }
 
     public Usuario buscarAluno(UUID id) throws AlunoNotFoundException, UsuarioNotFoundException {
@@ -85,8 +91,8 @@ public class Fachada {
 
 
     // ================== Professor ================== //
-    public Page<Usuario> listarProfessores(Pageable pageable) {
-        return professorService.listarProfessores(pageable);
+    public Page<Usuario> listarProfessores(Predicate predicate, Pageable pageable) {
+        return professorService.listarProfessores(predicate, pageable);
     }
 
     public Usuario buscarProfessor(UUID id) throws UsuarioNotFoundException, ProfessorNotFoundException {
@@ -102,8 +108,8 @@ public class Fachada {
 
     // ================== Tecnico ================== //
 
-    public Page<Usuario> listarTecnicos(Pageable pageable) {
-        return tecnicoService.getTecnicos(pageable);
+    public Page<Usuario> listarTecnicos(Predicate predicate, Pageable pageable) {
+        return tecnicoService.getTecnicos(predicate, pageable);
     }
 
     public Usuario buscarTecnico(UUID id) throws UsuarioNotFoundException, TecnicoNotFoundException {
@@ -120,8 +126,8 @@ public class Fachada {
 
     // ================== Gestor ================== //
 
-    public Page<Usuario> listarGestores(Pageable pageable) {
-    return gestorService.listarGestores(pageable);
+    public Page<Usuario> listarGestores(Predicate predicate, Pageable pageable) {
+    return gestorService.listarGestores(predicate, pageable);
 }
 
 
@@ -193,8 +199,8 @@ public class Fachada {
         return usuarioService.buscarUsuarioAtual();
     }
 
-    public Page<Usuario> listarUsuarios(Pageable pageable) {
-        return usuarioService.listarUsuarios(pageable);
+    public Page<Usuario> listarUsuarios(Predicate predicate, Pageable pageable) {
+        return usuarioService.listarUsuarios(predicate, pageable);
     }
 
     public List<Usuario> listarUsuariosEmBatch(List<UUID> ids) {
@@ -229,9 +235,9 @@ public class Fachada {
         return cursoService.buscar(id);
     }
 
-    public Page<Curso> listarCursos(Pageable pageable) {
-    return cursoService.listar(pageable);
-}
+    public Page<Curso> listarCursos(Predicate predicate, Pageable pageable) {
+        return cursoService.listar(predicate, pageable);
+    }
 
 
     public List<Usuario> listarAlunosPorCurso(Long id){
@@ -282,20 +288,20 @@ public class Fachada {
         return solicitacaoPerfilService.buscarSolicitacao(id);
     }
 
-    public Page<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual(Pageable pageable) {
-        return solicitacaoPerfilService.buscarSolicitacoesUsuarioAtual(pageable);
+    public Page<SolicitacaoPerfil> buscarSolicitacoesUsuarioAtual(Predicate predicate, Pageable pageable) {
+        return solicitacaoPerfilService.buscarSolicitacoesUsuarioAtual(predicate, pageable);
     }
 
-    public Page<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id, Pageable pageable) {
-        return solicitacaoPerfilService.buscarSolicitacoesPorId(id, pageable);
+    public Page<SolicitacaoPerfil> buscarSolicitacoesPorId(UUID id, Predicate predicate, Pageable pageable) {
+        return solicitacaoPerfilService.buscarSolicitacoesPorId(id, predicate, pageable);
     }
 
-    public Page<SolicitacaoPerfil> listarSolicitacoes(Pageable pageable) {
-        return solicitacaoPerfilService.listarSolicitacoes(pageable);
+    public Page<SolicitacaoPerfil> listarSolicitacoes(Predicate predicate, Pageable pageable) {
+        return solicitacaoPerfilService.listarSolicitacoes(predicate, pageable);
     }
 
-    public Page<SolicitacaoPerfil> listarSolicitacoesPendentes(Pageable pageable) {
-        return solicitacaoPerfilService.listarSolicitacoesPendentes(pageable);
+    public Page<SolicitacaoPerfil> listarSolicitacoesPendentes(Predicate predicate, Pageable pageable) {
+        return solicitacaoPerfilService.listarSolicitacoesPendentes(predicate, pageable);
     }
 
 
@@ -405,40 +411,40 @@ public class Fachada {
         unidadeAdministrativaService.removerFuncionario(unidade, funcionario);
     }
 
-    public Page<GestorUnidade> listarGestoresPorUnidade(Long id, Pageable pageable) {
-        return unidadeAdministrativaService.listarGestores(id, pageable);
+    public Page<GestorUnidade> listarGestoresPorUnidade(Long id, Predicate predicate, Pageable pageable) {
+        return unidadeAdministrativaService.listarGestores(id, predicate, pageable);
     }
 
-    public Page<Funcionario> listarFuncionariosPorUnidade(Long id, Pageable pageable) {
-        return unidadeAdministrativaService.listarFuncionarios(id, pageable);
+    public Page<Funcionario> listarFuncionariosPorUnidade(Long id, Predicate predicate, Pageable pageable) {
+        return unidadeAdministrativaService.listarFuncionarios(id, predicate, pageable);
     }
 
-    public Page<UnidadeAdministrativa> listarUnidadesDoGestorAtual(Pageable pageable) {
+    public Page<UnidadeAdministrativa> listarUnidadesDoGestorAtual(Predicate predicate, Pageable pageable) {
         Usuario usuario = usuarioService.buscarUsuarioAtual();
         Gestor gestor = usuario.getPerfil(Gestor.class).orElseThrow();
-        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, pageable);
+        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, predicate, pageable);
     }
 
-    public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioAtual(Pageable pageable) {
+    public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioAtual(Predicate predicate, Pageable pageable) {
         Usuario usuario = usuarioService.buscarUsuarioAtual();
-        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, pageable);
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, predicate, pageable);
     }
 
-    public Page<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId, Pageable pageable) {
+    public Page<UnidadeAdministrativa> listarUnidadesDoGestorPorId(UUID usuarioId, Predicate predicate,  Pageable pageable) {
         Usuario usuario = gestorService.buscarGestor(usuarioId, true, usuarioId);
         Gestor gestor = usuario.getPerfil(Gestor.class)
                 .orElseThrow(GestorNotFoundException::new);
-        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, pageable);
+        return unidadeAdministrativaService.listarUnidadesPorGestor(gestor, predicate, pageable);
     }
 
-    public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId, Pageable pageable) {
+    public Page<UnidadeAdministrativa> listarUnidadesDoFuncionarioPorId(UUID usuarioId, Predicate predicate, Pageable pageable) {
         Usuario usuario = usuarioService.buscarUsuario(usuarioId, true, usuarioId);
         boolean possuiPerfilValido = usuario.getPerfis().stream()
                 .anyMatch(p -> p instanceof Tecnico || p instanceof Professor);
         if (!possuiPerfilValido) {
             throw new FuncionarioNotFoundException();
         }
-        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, pageable);
+        return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, predicate, pageable);
     }
 
 
@@ -451,8 +457,8 @@ public class Fachada {
         return tipoUnidadeAdministrativaService.buscar(id);
     }
 
-    public Page<TipoUnidadeAdministrativa> listarTipos(Pageable pageable) {
-        return tipoUnidadeAdministrativaService.listar(pageable);
+    public Page<TipoUnidadeAdministrativa> listarTipos(Predicate predicate, Pageable pageable) {
+        return tipoUnidadeAdministrativaService.listar(predicate, pageable);
     }
 
     public TipoUnidadeAdministrativa editarTipo(Long id, TipoUnidadeAdministrativa novoTipo) throws TipoUnidadeAdministrativaNotFoundException {
@@ -483,8 +489,8 @@ public class Fachada {
         return tipoEtniaService.buscarTipoEtnia(id);
     }
 
-    public Page<TipoEtnia> listarTiposEtnia(Pageable pageable) {
-        return tipoEtniaService.listarTiposEtnia(pageable);
+    public Page<TipoEtnia> listarTiposEtnia(Predicate predicate, Pageable pageable) {
+        return tipoEtniaService.listarTiposEtnia(predicate, pageable);
     }
 
     public TipoEtnia atualizarTipoEtnia(Long id, TipoEtnia tipoEtnia) throws TipoEtniaNotFoundException {

@@ -2,6 +2,7 @@ package br.edu.ufape.sguAuthService.servicos.interfaces;
 
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,7 +19,7 @@ public interface UsuarioService {
 
     Usuario buscarUsuarioAtual() throws UsuarioNotFoundException;
 
-    Page<Usuario> listarUsuarios(Pageable pageable);
+    Page<Usuario> listarUsuarios(Predicate predicate, Pageable pageable);
 
     void deletarUsuario(UUID sessionId) throws UsuarioNotFoundException;
 

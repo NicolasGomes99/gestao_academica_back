@@ -6,8 +6,12 @@ import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.AlunoNotFoundEx
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,9 +36,14 @@ public class AlunoController {
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR')")
     @GetMapping
-    public Page<AlunoResponse> listarAlunos(@PageableDefault(sort = "id") Pageable pageable) {
-        return fachada.listarAlunos(pageable)
-                .map(usuario -> new AlunoResponse(usuario, modelMapper));
+    public Page<AlunoResponse> listarAlunos(
+            @QuerydslPredicate(root = Usuario.class) Predicate predicate,
+            @PageableDefault(value = 2)
+            @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+            Pageable pageable) {
+
+        return fachada.listarAlunos(predicate, pageable).map(usuario -> new AlunoResponse(usuario, modelMapper));
+
     }
 
 

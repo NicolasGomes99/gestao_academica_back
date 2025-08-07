@@ -7,15 +7,17 @@ import br.edu.ufape.sguAuthService.comunicacao.dto.unidadeAdministrativa.*;
 import br.edu.ufape.sguAuthService.comunicacao.dto.usuario.UsuarioResponse;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
-import br.edu.ufape.sguAuthService.models.GestorUnidade;
-import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
-import br.edu.ufape.sguAuthService.models.Usuario;
+import br.edu.ufape.sguAuthService.models.*;
+import com.querydsl.core.types.Predicate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -108,8 +110,11 @@ public class UnidadeAdministrativaController {
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @GetMapping("/{id}/gestores")
-    public Page<GestorUnidadeResponse> listarGestores(@PathVariable Long id, @PageableDefault(sort = "id") Pageable pageable) {
-        return fachada.listarGestoresPorUnidade(id, pageable)
+    public Page<GestorUnidadeResponse> listarGestores(@PathVariable Long id, @QuerydslPredicate(root = GestorUnidade.class) Predicate predicate,
+                                                      @PageableDefault(value = 2)
+                                                      @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                                      Pageable pageable)  {
+        return fachada.listarGestoresPorUnidade(id, predicate, pageable)
                 .map(g -> new GestorUnidadeResponse(g, modelMapper));
     }
 
@@ -133,40 +138,55 @@ public class UnidadeAdministrativaController {
 
     @PreAuthorize("hasRole('GESTOR')")
     @GetMapping("/{id}/funcionarios")
-    public Page<FuncionarioResponse> listarFuncionarios(@PathVariable Long id, @PageableDefault(sort = "id") Pageable pageable) {
-        return fachada.listarFuncionariosPorUnidade(id, pageable)
+    public Page<FuncionarioResponse> listarFuncionarios(@PathVariable Long id, @QuerydslPredicate(root = Funcionario.class) Predicate predicate,
+                                                        @PageableDefault(value = 2)
+                                                        @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                                        Pageable pageable) {
+        return fachada.listarFuncionariosPorUnidade(id, predicate, pageable)
                 .map(funcionario -> new FuncionarioResponse(funcionario.getUsuario(), modelMapper));
     }
 
     @PreAuthorize("hasAnyRole('GESTOR')")
     @GetMapping("/gestor")
-    public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorAtual(@PageableDefault(sort = "id") Pageable pageable) {
-        return fachada.listarUnidadesDoGestorAtual(pageable)
+    public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorAtual(@QuerydslPredicate(root = UnidadeAdministrativa.class) Predicate predicate,
+                                                                                 @PageableDefault(value = 2)
+                                                                                 @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                                                                 Pageable pageable) {
+        return fachada.listarUnidadesDoGestorAtual(predicate, pageable)
                 .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 
     @PreAuthorize("hasAnyRole('TECNICO', 'PROFESSOR')")
     @GetMapping("/funcionario")
-    public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioAtual(@PageableDefault(sort = "id") Pageable pageable) {
-        return fachada.listarUnidadesDoFuncionarioAtual(pageable)
+    public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioAtual(@QuerydslPredicate(root = UnidadeAdministrativa.class) Predicate predicate,
+                                                                                      @PageableDefault(value = 2)
+                                                                                      @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                                                                      Pageable pageable) {
+        return fachada.listarUnidadesDoFuncionarioAtual(predicate, pageable)
                 .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR')")
     @GetMapping("/gestor/{usuarioId}")
     public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoGestorPorId(@PathVariable String usuarioId,
-                                                                                 @PageableDefault(sort = "id") Pageable pageable) {
+                                                                                 @QuerydslPredicate(root = UnidadeAdministrativa.class) Predicate predicate,
+                                                                                 @PageableDefault(value = 2)
+                                                                                     @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                                                                     Pageable pageable) {
         UUID id = fachada.parseUUID(usuarioId, "ID do usuário inválido.");
-        return fachada.listarUnidadesDoGestorPorId(id, pageable)
+        return fachada.listarUnidadesDoGestorPorId(id, predicate, pageable)
                 .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'TECNICO', 'PROFESSOR')")
     @GetMapping("/funcionario/{usuarioId}")
     public Page<UnidadeAdministrativaGetAllResponse> listarUnidadesDoFuncionarioPorId(@PathVariable String usuarioId,
-                                                                                      @PageableDefault(sort = "id") Pageable pageable) {
+                                                                                      @QuerydslPredicate(root = UnidadeAdministrativa.class) Predicate predicate,
+                                                                                      @PageableDefault(value = 2)
+                                                                                          @SortDefault(sort = "id", direction = Sort.Direction.ASC)
+                                                                                          Pageable pageable) {
         UUID id = fachada.parseUUID(usuarioId, "ID do usuário inválido.");
-        return fachada.listarUnidadesDoFuncionarioPorId(id, pageable)
+        return fachada.listarUnidadesDoFuncionarioPorId(id, predicate, pageable)
                 .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
 }

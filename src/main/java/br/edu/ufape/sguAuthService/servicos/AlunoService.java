@@ -6,7 +6,10 @@ import br.edu.ufape.sguAuthService.dados.UsuarioRepository;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.AlunoNotFoundException;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.UsuarioNotFoundException;
 import br.edu.ufape.sguAuthService.models.Aluno;
+import br.edu.ufape.sguAuthService.models.QUsuario;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -21,8 +24,15 @@ public class AlunoService implements br.edu.ufape.sguAuthService.servicos.interf
     private final AuthenticatedUserProvider authenticatedUserProvider;
 
     @Override
-    public Page<Usuario> listarAlunos(Pageable pageable) {
-        return usuarioRepository.findUsuariosAlunos(pageable);
+    public Page<Usuario> listarAlunos(Predicate predicate, Pageable pageable) {
+        QUsuario qUsuario = QUsuario.usuario;
+        BooleanBuilder filtroFixo = new BooleanBuilder();
+        filtroFixo.and(qUsuario.ativo.isTrue());
+        filtroFixo.and(qUsuario.perfis.any().instanceOf(Aluno.class));
+
+        Predicate predicadoFinal = filtroFixo.and(predicate);
+
+        return usuarioRepository.findAll(predicadoFinal, pageable);
     }
 
 

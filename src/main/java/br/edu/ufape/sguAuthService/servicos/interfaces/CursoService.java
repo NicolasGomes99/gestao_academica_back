@@ -4,6 +4,7 @@ package br.edu.ufape.sguAuthService.servicos.interfaces;
 import br.edu.ufape.sguAuthService.exceptions.notFoundExceptions.CursoNotFoundException;
 import br.edu.ufape.sguAuthService.models.Curso;
 import br.edu.ufape.sguAuthService.models.Usuario;
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,7 +15,7 @@ public interface CursoService {
 
     Curso buscar(Long id) throws CursoNotFoundException;
 
-    Page<Curso> listar(Pageable pageable);
+    Page<Curso> listar(Predicate predicate, Pageable pageable);
 
     List<Usuario> listarAlunosPorCurso(Long id);
 
