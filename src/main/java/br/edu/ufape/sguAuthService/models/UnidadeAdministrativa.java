@@ -55,4 +55,14 @@ public class UnidadeAdministrativa {
     )
     private Set<Funcionario> funcionarios = new HashSet<>();
 
+    public void adicionarFuncionario(Funcionario f) {
+        this.funcionarios.add(f);
+        f.getUnidades().add(this);
+    }
+
+    public void removerFuncionario(Funcionario f) {
+        this.funcionarios.remove(f);
+        f.getUnidades().remove(this);
+    }
+
 }

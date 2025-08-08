@@ -2,6 +2,7 @@ package br.edu.ufape.sguAuthService.servicos;
 
 
 
+import br.edu.ufape.sguAuthService.dados.FuncionarioRepository;
 import br.edu.ufape.sguAuthService.dados.GestorUnidadeRepository;
 import br.edu.ufape.sguAuthService.dados.UnidadeAdministrativaRepository;
 import br.edu.ufape.sguAuthService.exceptions.ExceptionUtil;
@@ -14,7 +15,6 @@ import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdmin
 import br.edu.ufape.sguAuthService.models.*;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -35,8 +36,9 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
 
     private final ModelMapper modelMapper;
     private final GestorUnidadeRepository gestorUnidadeRepository;
+    private final FuncionarioRepository funcionarioRepository;
 
-    @Override
+    @Override @Transactional
     public UnidadeAdministrativa salvar(UnidadeAdministrativa unidadeAdministrativa, TipoUnidadeAdministrativa tipoUnidadeAdministrativa, Long paiId) {
         try {
             if (unidadeAdministrativa.getId() != null && unidadeAdministrativa.getId().equals(paiId)) {
@@ -56,7 +58,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
 
     }
 
-    @Override
+    @Override @Transactional
     public UnidadeAdministrativa editarUnidadeAdministrativa(UnidadeAdministrativa novaUnidadeAdministrativa, Long id) {
         try {
             UnidadeAdministrativa unidadeAtual = unidadeAdministrativaRepository.findById(id)
@@ -107,7 +109,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         return unidadeAdministrativaRepository.findByUnidadePaiId(id);
     }
 
-    @Override
+    @Override @Transactional
     public void deletarUnidadeAdministrativa(Long id) {
         UnidadeAdministrativa unidade = unidadeAdministrativaRepository.findById(id)
                 .orElseThrow(UnidadeAdministrativaNotFoundException::new);
@@ -131,7 +133,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         return gestorUnidade;
     }
 
-    @Override
+    @Override @Transactional
     public void removerGestor(UnidadeAdministrativa unidade, Long gestorUnidadeId) {
         GestorUnidade gestorUnidade = unidade.getGestores().stream()
                 .filter(gu -> gu.getGestor().getId().equals(gestorUnidadeId))
@@ -145,7 +147,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         unidadeAdministrativaRepository.save(unidade);
     }
 
-    @Override
+    @Override @Transactional
     public void adicionarFuncionario(UnidadeAdministrativa unidade, Usuario usuario) {
 
         Funcionario funcionario = usuario.getPerfil(Funcionario.class)
@@ -161,11 +163,11 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
                     "O funcionário já está vinculado a esta unidade administrativa.");
         }
 
-        unidade.getFuncionarios().add(funcionario);
+        unidade.adicionarFuncionario(funcionario);
         unidadeAdministrativaRepository.save(unidade);
     }
 
-    @Override
+    @Override @Transactional
     public void removerFuncionario(UnidadeAdministrativa unidade, Usuario usuario) {
         Funcionario funcionario = usuario.getPerfil(Funcionario.class)
                 .orElseThrow(() ->
@@ -178,7 +180,7 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
         if (!unidade.getFuncionarios().contains(funcionario)) {
             throw new TecnicoNotFoundException();
         }
-        unidade.getFuncionarios().remove(funcionario);
+        unidade.removerFuncionario(funcionario);
         unidadeAdministrativaRepository.save(unidade);
     }
 
@@ -192,8 +194,12 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
 
     @Override
     public Page<Funcionario> listarFuncionarios(Long unidadeId, Predicate predicate, Pageable pageable) {
-        return unidadeAdministrativaRepository
-                .findFuncionariosByUnidadeId(unidadeId, predicate, pageable);
+        QFuncionario qFuncionario = QFuncionario.funcionario;
+        BooleanBuilder filtroFixo = new BooleanBuilder(
+                qFuncionario.unidades.any().id.eq(unidadeId)
+        );
+        Predicate filtro = filtroFixo.and(predicate);
+        return funcionarioRepository.findAll(filtro, pageable);
     }
 
     @Override
