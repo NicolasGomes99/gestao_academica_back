@@ -94,14 +94,16 @@ public class KeycloakService implements KeycloakServiceInterface {
                 return tokenResponse;
             }
             // Retorno de status diferente de OK
-            throw new KeycloakAuthenticationException("Erro ao autenticar no Keycloak: " + response.getStatusCode());
+
 
         } catch (HttpStatusCodeException e) {
             // Captura qualquer erro HTTP e retorna uma mensagem apropriada com base no status
-            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                if(!verifyEmailValid(email)){
+            if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {
+                if (!verifyEmailValid(email)){
                     throw new KeycloakAuthenticationException("E-mail não verificado. Verifique sua caixa de entrada e clique no link de verificação.");
                 }
+            }
+            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
                 log.warn("Credenciais inválidas. Verifique o email e a senha. Erro: {}", e, e);
                 throw new KeycloakAuthenticationException("Credenciais inválidas. Verifique o email e a senha.");
             }
@@ -115,6 +117,7 @@ public class KeycloakService implements KeycloakServiceInterface {
             // Captura qualquer outro erro inesperado
             throw new KeycloakAuthenticationException("Erro inesperado durante o login.", e);
         }
+        throw new KeycloakAuthenticationException("Erro ao autenticar: resposta inesperada do servidor.");
     }
 
     @Override
