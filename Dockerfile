@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.3
 # Não funcionar basta rodar o comando : mvn -N io.takari:maven:wrapper
-ARG BASE_IMAGE=openjdk:24-jdk-slim
+ARG BASE_IMAGE=eclipse-temurin:24-jdk
 
 FROM ${BASE_IMAGE} AS build
 WORKDIR /app
