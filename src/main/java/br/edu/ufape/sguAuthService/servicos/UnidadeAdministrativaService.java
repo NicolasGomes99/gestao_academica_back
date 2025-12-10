@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -229,6 +230,15 @@ public class UnidadeAdministrativaService implements br.edu.ufape.sguAuthService
                 );
         Predicate filtroFixo = filtro.and(predicate);
         return unidadeAdministrativaRepository.findAll(filtroFixo, pageable);
+    }
+
+    @Override
+    public boolean verificarVinculo(Long unidadeId, UUID usuarioId) {
+        boolean isGestor = gestorUnidadeRepository.existsByUnidadeAdministrativaIdAndGestorUsuarioId(unidadeId, usuarioId);
+        if (isGestor) return true;
+
+        // Se não for gestor, verifica se é funcionário lotado na unidade
+        return unidadeAdministrativaRepository.existsByIdAndFuncionarios_Usuario_Id(unidadeId, usuarioId);
     }
 
 }

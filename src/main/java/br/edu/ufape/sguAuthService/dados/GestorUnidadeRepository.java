@@ -9,9 +9,13 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.lang.NonNull;
 
+import java.util.UUID;
+
 
 public interface GestorUnidadeRepository extends JpaRepository<GestorUnidade, Long>,
         QuerydslPredicateExecutor<GestorUnidade>, QuerydslBinderCustomizer<QGestorUnidade> {
+
+    boolean existsByUnidadeAdministrativaIdAndGestorUsuarioId(Long unidadeId, UUID usuarioId);
 
 
     @Override

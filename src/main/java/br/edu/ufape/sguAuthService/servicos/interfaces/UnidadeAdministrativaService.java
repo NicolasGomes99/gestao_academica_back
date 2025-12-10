@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UnidadeAdministrativaService {
 
@@ -42,4 +43,6 @@ public interface UnidadeAdministrativaService {
     Page<UnidadeAdministrativa> listarUnidadesPorGestor(Gestor gestor, Predicate predicate, Pageable pageable);
 
     Page<UnidadeAdministrativa> listarUnidadesPorFuncionario(Usuario usuario, Predicate predicate, Pageable pageable);
+
+    boolean verificarVinculo(Long unidadeId, UUID usuarioId);
 }

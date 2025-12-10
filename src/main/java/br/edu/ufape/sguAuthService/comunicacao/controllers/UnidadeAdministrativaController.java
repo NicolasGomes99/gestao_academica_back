@@ -189,4 +189,12 @@ public class UnidadeAdministrativaController {
         return fachada.listarUnidadesDoFuncionarioPorId(id, predicate, pageable)
                 .map(u -> new UnidadeAdministrativaGetAllResponse(u, modelMapper));
     }
+
+    @GetMapping("/{id}/vinculo")
+    public ResponseEntity<Boolean> verificarVinculo(
+            @PathVariable Long id,
+            @RequestParam(required = false) UUID userId) {
+        boolean possuiVinculo = fachada.verificarVinculoUnidade(id, userId);
+        return ResponseEntity.ok(possuiVinculo);
+    }
 }
