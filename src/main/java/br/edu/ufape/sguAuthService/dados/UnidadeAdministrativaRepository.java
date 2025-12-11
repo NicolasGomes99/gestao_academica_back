@@ -10,11 +10,13 @@ import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface  UnidadeAdministrativaRepository extends JpaRepository<UnidadeAdministrativa, Long>,
         QuerydslPredicateExecutor<UnidadeAdministrativa>, QuerydslBinderCustomizer<QUnidadeAdministrativa> {
     List<UnidadeAdministrativa> findByUnidadePaiId(Long id);
     List<UnidadeAdministrativa> findByUnidadePaiIsNull();
+    boolean existsByIdAndFuncionarios_Usuario_Id(Long id, UUID usuarioId);
 
     @Override
     default void customize(QuerydslBindings bindings, @NonNull QUnidadeAdministrativa root) {

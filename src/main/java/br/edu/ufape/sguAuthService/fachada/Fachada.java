@@ -447,6 +447,12 @@ public class Fachada {
         return unidadeAdministrativaService.listarUnidadesPorFuncionario(usuario, predicate, pageable);
     }
 
+    public boolean verificarVinculoUnidade(Long unidadeId, UUID usuarioId) {
+        // Se nenhum usuário for informado, verifica o usuário logado
+        UUID idUsuarioRecebido = (usuarioId != null) ? usuarioId : authenticatedUserProvider.getUserId();
+        return unidadeAdministrativaService.verificarVinculo(unidadeId, idUsuarioRecebido);
+    }
+
 
     // ==================Tipo Unidade Administrativa ================== //
      public TipoUnidadeAdministrativa salvarTipo(TipoUnidadeAdministrativa tipoUnidadeAdministrativa) {
