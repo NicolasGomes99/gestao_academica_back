@@ -22,6 +22,8 @@ public interface SolicitacaoPerfilRepository extends JpaRepository<SolicitacaoPe
 
     Page<SolicitacaoPerfil> findAllBySolicitante_Id(UUID id, Pageable pageable);
 
+    long countByStatus(StatusSolicitacao status);
+
     @Override
     default void customize(QuerydslBindings bindings, @NonNull QSolicitacaoPerfil root) {
         bindings.bind(String.class).first((StringPath path, String value) -> path.containsIgnoreCase(value));
