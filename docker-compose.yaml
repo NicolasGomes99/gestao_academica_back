@@ -18,9 +18,12 @@ services:
       SPRING_RABBITMQ_PORT: 5672
       SPRING_RABBITMQ_USERNAME: guest
       SPRING_RABBITMQ_PASSWORD: guest
+      SPRING_DATA_REDIS_HOST: redis-auth
+      SPRING_DATA_REDIS_PORT: 6380
     depends_on:
       - backend-db
       - keycloak
+      - redis-auth
     volumes:
       - ./storage:/app/storage
 
@@ -78,7 +81,6 @@ services:
     volumes:
       - keycloak-pg-data:/var/lib/postgresql/data
 
-
   rabbitmq:
     image: rabbitmq:3.12-management
     container_name: rabbitmq
@@ -96,6 +98,16 @@ services:
     networks:
       - sgu-networks
 
+
+  redis-auth:
+    image: redis:7-alpine
+    container_name: redis-auth
+    command: redis-server --port 6380
+    ports:
+      - "6380:6380"
+    networks:
+      - sgu-networks
+
 volumes:
   pg-data:
     driver: local
@@ -103,5 +115,5 @@ volumes:
     driver: local
 
 networks:
-    sgu-networks:
-        external: true
+  sgu-networks:
+    external: true

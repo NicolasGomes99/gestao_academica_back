@@ -4,6 +4,7 @@ package br.edu.ufape.sguAuthService.fachada;
 import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoPatchRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.documento.DocumentoResponse;
 import br.edu.ufape.sguAuthService.comunicacao.dto.usuario.UsuarioPatchRequest;
+import br.edu.ufape.sguAuthService.comunicacao.mensageria.NotificacaoEvent;
 import br.edu.ufape.sguAuthService.config.AuthenticatedUserProvider;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
@@ -31,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 
 @Component @RequiredArgsConstructor
@@ -51,6 +53,8 @@ public class Fachada {
     private final TipoUnidadeAdministrativaService tipoUnidadeAdministrativaService;
     private final AuthenticatedUserProvider authenticatedUserProvider;
     private final TipoEtniaService tipoEtniaService;
+    private final NotificacaoRedisServiceInterface notificacaoRedisService;
+    private final NotificacaoSseServiceInterface notificacaoSseService;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -507,4 +511,25 @@ public class Fachada {
         tipoEtniaService.deletarTipoEtnia(id);
     }
 
+    // ================== Notificações ================== //
+
+    public List<NotificacaoEvent> buscarNotificacoesNaoLidas(UUID userId) {
+        return notificacaoRedisService.buscarNotificacoesNaoLidas(userId);
+    }
+
+    public void marcarNotificacaoComoLida(UUID userId, UUID notificacaoId) {
+        notificacaoRedisService.marcarUnicaComoLida(userId, notificacaoId);
+    }
+
+    public void limparTodasNotificacoes(UUID userId) {
+        notificacaoRedisService.marcarTodasComoLidas(userId);
+    }
+
+    public SseEmitter subscreverNotificacoes(UUID userId) {
+        return notificacaoSseService.subscrever(userId);
+    }
+
+    public void limparConexoesSse(UUID userId) {
+        notificacaoSseService.removerTodosEmittersDoUsuario(userId);
+    }
 }
