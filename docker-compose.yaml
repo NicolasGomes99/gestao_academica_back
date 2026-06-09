@@ -10,6 +10,7 @@ services:
     networks:
       - sgu-networks
     environment:
+      TZ: America/Sao_Paulo
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://backend-db:5432/sgu
       SPRING_DATASOURCE_USERNAME: postgres
@@ -102,16 +103,20 @@ services:
   redis-auth:
     image: redis:7-alpine
     container_name: redis-auth
-    command: redis-server --port 6380
+    command: redis-server --port 6380 --appendonly yes
     ports:
       - "6380:6380"
     networks:
       - sgu-networks
+    volumes:
+      - redis-auth-data:/data
 
 volumes:
   pg-data:
     driver: local
   keycloak-pg-data:
+    driver: local
+  redis-auth-data:
     driver: local
 
 networks:
