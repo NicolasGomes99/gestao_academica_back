@@ -1,6 +1,6 @@
 package br.edu.ufape.sguAuthService.config;
 
-import br.edu.ufape.sguAuthService.fachada.Fachada; // 🚀 Importe sua Fachada
+import br.edu.ufape.sguAuthService.fachada.Fachada;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.jwt.Jwt; // 🚀 Importante para pegar o ID do token
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import java.util.UUID;
@@ -18,7 +18,6 @@ import java.util.UUID;
 @Configuration
 public class WebConfig {
 
-    // 🚀 Injeção da Fachada
     private final Fachada fachada;
 
     public WebConfig(Fachada fachada) {
@@ -38,9 +37,7 @@ public class WebConfig {
                             if (authentication != null && authentication.getPrincipal() instanceof Jwt jwt) {
                                 String subject = jwt.getSubject();
                                 if (subject != null) {
-                                    UUID userId = UUID.fromString(subject);
-                                    // Chama a Fachada para limpar o SSE e evitar estouro de memória
-                                    fachada.limparConexoesSse(userId);
+                                    fachada.limparConexoesSse(UUID.fromString(subject));
                                 }
                             }
                         })
@@ -53,7 +50,7 @@ public class WebConfig {
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/refresh").permitAll()
-                        .requestMatchers("/logout").permitAll() // Deve ser permitido
+                        .requestMatchers("/logout").permitAll()
                         .requestMatchers("/reset-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/tipoEtnia").permitAll()
                         .requestMatchers(HttpMethod.POST, "/aluno/public/batch").permitAll()

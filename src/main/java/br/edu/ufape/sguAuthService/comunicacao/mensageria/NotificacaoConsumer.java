@@ -39,21 +39,12 @@ public class NotificacaoConsumer {
     }
 
     private void processarNotificacao(UUID usuarioId, NotificacaoEvent evento) {
-        log.info("DEBUG: Iniciando processamento de notificação para o usuário: {} | Título: {}", usuarioId, evento.titulo());
-
-        // 1. Persiste no Redis
         redisService.guardarNotificacaoOffline(usuarioId, evento);
-        log.info("DEBUG: Notificação salva no Redis para o usuário: {}", usuarioId);
-
-        // 2. Envia sinal SSE
         sseService.emitirSinalDeNovaNotificacao(usuarioId);
-        log.info("DEBUG: Sinal SSE enviado para o usuário: {}", usuarioId);
     }
 
     private void distribuirParaRoleKeycloak(String roleName, NotificacaoEvent evento) {
-        log.info("Buscando usuários com a role {}...", roleName);
         List<UUID> admins = keycloakService.obterUsuariosPorRole(roleName);
-
         for (UUID adminId : admins) {
             processarNotificacao(adminId, evento);
         }
@@ -66,26 +57,11 @@ public class NotificacaoConsumer {
             for (Usuario usuario : destinatarios) {
                 processarNotificacao(usuario.getId(), evento);
             }
+        } else {
+            log.warn("Classe de entidade de perfil não encontrada para a string: {}", nomePerfil);
         }
     }
 
-//    /**
-//     * O Coração do Fallback: Tenta enviar via SSE (Tela). Se falhar, salva no Redis.
-//     */
-//    private void entregarOuGuardar(UUID usuarioId, NotificacaoEvent evento) {
-//        boolean entregue = sseService.emitirParaUsuario(usuarioId, evento);
-//
-//        if (!entregue) {
-//            log.debug("Usuário {} está offline. Guardando notificação no cache do Redis.", usuarioId);
-//            redisService.guardarNotificacaoOffline(usuarioId, evento);
-//        } else {
-//            log.info("Notificação entregue via SSE para o usuário {}.", usuarioId);
-//        }
-//    }
-
-    /**
-     * Conversor de Strings para Classes do BD
-     */
     @SuppressWarnings("unchecked")
     private Class<? extends Perfil> mapearNomeParaClasse(String nomePerfil) {
         try {
@@ -97,7 +73,7 @@ public class NotificacaoConsumer {
                 return (Class<? extends Perfil>) clazz;
             }
         } catch (ClassNotFoundException | StringIndexOutOfBoundsException e) {
-            log.warn("Classe de entidade de perfil não encontrada para a string: {}", nomePerfil);
+            log.warn("Falha ao mapear perfil destino '{}'.", nomePerfil);
         }
         return null;
     }

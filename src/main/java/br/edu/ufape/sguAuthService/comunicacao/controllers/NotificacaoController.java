@@ -4,6 +4,7 @@ import br.edu.ufape.sguAuthService.comunicacao.mensageria.NotificacaoEvent;
 import br.edu.ufape.sguAuthService.config.AuthenticatedUserProvider;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,12 @@ public class NotificacaoController {
     }
 
     @GetMapping("/historico")
-    public ResponseEntity<List<NotificacaoEvent>> getHistorico() {
+    public ResponseEntity<Page<NotificacaoEvent>> getHistorico(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
         UUID userId = authenticatedUserProvider.getUserId();
-        return ResponseEntity.ok(fachada.buscarNotificacoesNaoLidas(userId));
+        return ResponseEntity.ok(fachada.buscarNotificacoesNaoLidas(userId, page, size));
     }
 
     @DeleteMapping("/{notificacaoId}/lida")

@@ -513,8 +513,8 @@ public class Fachada {
 
     // ================== Notificações ================== //
 
-    public List<NotificacaoEvent> buscarNotificacoesNaoLidas(UUID userId) {
-        return notificacaoRedisService.buscarNotificacoesNaoLidas(userId);
+    public Page<NotificacaoEvent> buscarNotificacoesNaoLidas(UUID userId, int page, int size) {
+        return notificacaoRedisService.buscarNotificacoesNaoLidas(userId, page, size);
     }
 
     public void marcarNotificacaoComoLida(UUID userId, UUID notificacaoId) {
