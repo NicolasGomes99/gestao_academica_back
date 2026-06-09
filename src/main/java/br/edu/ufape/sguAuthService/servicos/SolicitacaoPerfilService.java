@@ -1,6 +1,8 @@
 package br.edu.ufape.sguAuthService.servicos;
 
 
+import br.edu.ufape.sguAuthService.comunicacao.mensageria.NotificacaoEvent;
+import br.edu.ufape.sguAuthService.comunicacao.mensageria.NotificacaoPublisher;
 import br.edu.ufape.sguAuthService.config.AuthenticatedUserProvider;
 import br.edu.ufape.sguAuthService.dados.SolicitacaoPerfilRepository;
 import br.edu.ufape.sguAuthService.exceptions.SolicitacaoDuplicadaException;
@@ -25,6 +27,7 @@ import java.util.UUID;
 public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.servicos.interfaces.SolicitacaoPerfilService {
     private final SolicitacaoPerfilRepository solicitacaoPerfilRepository;
     private final AuthenticatedUserProvider authenticatedUserProvider;
+    private final NotificacaoPublisher notificacaoPublisher;
 
 
 
@@ -103,12 +106,22 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
         solicitacaoPerfil.setDataAvaliacao(LocalDateTime.now());
         solicitacaoPerfil.setStatus(StatusSolicitacao.APROVADA);
         solicitacaoPerfil.getSolicitante().adicionarPerfil(solicitacaoPerfil.getPerfil());
-        return solicitacaoPerfilRepository.save(solicitacaoPerfil);
+
+        SolicitacaoPerfil salva = solicitacaoPerfilRepository.save(solicitacaoPerfil);
+
+        // GATILHO DE APROVAÇÃO
+        String nomePerfil = solicitacaoPerfil.getPerfil().getClass().getSimpleName();
+        String msg = String.format("A sua solicitação para o perfil '%s' foi APROVADA.", nomePerfil);
+        notificacaoPublisher.publicar(NotificacaoEvent.paraUsuario(
+                solicitacaoPerfil.getSolicitante().getId(), "Perfil Aprovado", msg, "SISTEMA"
+        ));
+
+        return salva;
     }
 
     @Override
     @Transactional
-    public SolicitacaoPerfil rejeitarSolicitacao(Long id, SolicitacaoPerfil parecer) throws SolicitacaoNotFoundException {
+    public SolicitacaoPerfil rejeitarSolicitacao(Long id, SolicitacaoPerfil parecer) throws SolicitacaoNotFoundException, SolicitacaoNaoPendenteException {
         SolicitacaoPerfil solicitacaoPerfil = buscarSolicitacao(id);
         if (solicitacaoPerfil.getStatus() != StatusSolicitacao.PENDENTE) {
             throw new SolicitacaoNaoPendenteException();
@@ -116,7 +129,18 @@ public class SolicitacaoPerfilService implements br.edu.ufape.sguAuthService.ser
         solicitacaoPerfil.setParecer(parecer.getParecer());
         solicitacaoPerfil.setResponsavel(parecer.getResponsavel());
         solicitacaoPerfil.setStatus(StatusSolicitacao.REJEITADA);
-        return solicitacaoPerfilRepository.save(solicitacaoPerfil);
+
+        SolicitacaoPerfil salva = solicitacaoPerfilRepository.save(solicitacaoPerfil);
+
+        // GATILHO DE REJEIÇÃO
+        String nomePerfil = solicitacaoPerfil.getPerfil().getClass().getSimpleName();
+        String msg = String.format("A sua solicitação para o perfil '%s' foi REJEITADA. Parecer do avaliador: %s",
+                nomePerfil, parecer.getParecer());
+        notificacaoPublisher.publicar(NotificacaoEvent.paraUsuario(
+                solicitacaoPerfil.getSolicitante().getId(), "Perfil Rejeitado", msg, "SISTEMA"
+        ));
+
+        return salva;
     }
 
 }

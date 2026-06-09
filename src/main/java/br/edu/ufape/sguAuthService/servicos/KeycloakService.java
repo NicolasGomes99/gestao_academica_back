@@ -503,4 +503,11 @@ public class KeycloakService implements KeycloakServiceInterface {
         }
     }
 
+    public List<UUID> obterUsuariosPorRole(String roleName) {
+        // Busca todos os membros que possuem a role especificada no Realm
+        return keycloak.realm(realm).roles().get(roleName).getUserMembers()
+                .stream()
+                .map(userRepresentation -> UUID.fromString(userRepresentation.getId()))
+                .collect(Collectors.toList());
+    }
 }
