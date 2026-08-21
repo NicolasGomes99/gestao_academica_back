@@ -80,9 +80,8 @@ public class Fachada {
 
     // ================== Aluno ================== //
 
-
-    public Page<Usuario> listarAlunos(Predicate predicate, Pageable pageable) {
-        return alunoService.listarAlunos(predicate, pageable);
+    public Page<Usuario> listarAlunos(Predicate predicate, Long cursoId, Pageable pageable) {
+        return alunoService.listarAlunos(predicate, cursoId, pageable);
     }
 
     public Usuario buscarAluno(UUID id) throws AlunoNotFoundException, UsuarioNotFoundException {

@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface AlunoService {
 
-    Page<Usuario> listarAlunos(Predicate predicate, Pageable pageable);
+    Page<Usuario> listarAlunos(Predicate predicate, Long cursoId, Pageable pageable);
 
     Usuario buscarAluno(UUID id) throws AlunoNotFoundException, UsuarioNotFoundException;
 
