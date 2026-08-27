@@ -27,10 +27,16 @@ public class NotificacaoConsumer {
     @RabbitListener(queues = "sgu.notificacoes.auth.sse.queue")
     public void receberNotificacao(NotificacaoEvent evento) {
         if (evento.destinatarioId() != null) {
-            processarNotificacao(evento.destinatarioId(), evento);
+            Usuario usuario = usuarioRepository.findById(evento.destinatarioId()).orElse(null);
+            if (usuario != null && Boolean.TRUE.equals(usuario.getAtivo())) {
+                processarNotificacao(usuario.getId(), evento);
+            }
         } else if (evento.perfilDestino() != null) {
             String destino = evento.perfilDestino().toUpperCase();
-            if (destino.equals("ADMINISTRADOR")) {
+
+            if (destino.equals("TODOS")) {
+                distribuirParaTodos(evento);
+            } else if (destino.equals("ADMINISTRADOR")) {
                 distribuirParaRoleKeycloak(destino, evento);
             } else {
                 distribuirParaPerfilBanco(destino, evento);
@@ -38,15 +44,22 @@ public class NotificacaoConsumer {
         }
     }
 
-    private void processarNotificacao(UUID usuarioId, NotificacaoEvent evento) {
-        redisService.guardarNotificacaoOffline(usuarioId, evento);
-        sseService.emitirSinalDeNovaNotificacao(usuarioId);
+    private void distribuirParaTodos(NotificacaoEvent evento) {
+        List<Usuario> todosUsuarios = usuarioRepository.findAll();
+        for (Usuario usuario : todosUsuarios) {
+            if (Boolean.TRUE.equals(usuario.getAtivo())) {
+                processarNotificacao(usuario.getId(), evento);
+            }
+        }
     }
 
     private void distribuirParaRoleKeycloak(String roleName, NotificacaoEvent evento) {
-        List<UUID> admins = keycloakService.obterUsuariosPorRole(roleName);
-        for (UUID adminId : admins) {
-            processarNotificacao(adminId, evento);
+        List<UUID> adminsIds = keycloakService.obterUsuariosPorRole(roleName);
+        List<Usuario> admins = usuarioRepository.findAllById(adminsIds);
+        for (Usuario admin : admins) {
+            if (Boolean.TRUE.equals(admin.getAtivo())) {
+                processarNotificacao(admin.getId(), evento);
+            }
         }
     }
 
@@ -55,11 +68,18 @@ public class NotificacaoConsumer {
         if (classePerfil != null) {
             List<Usuario> destinatarios = usuarioRepository.findByPerfilType(classePerfil);
             for (Usuario usuario : destinatarios) {
-                processarNotificacao(usuario.getId(), evento);
+                if (Boolean.TRUE.equals(usuario.getAtivo())) {
+                    processarNotificacao(usuario.getId(), evento);
+                }
             }
         } else {
             log.warn("Classe de entidade de perfil não encontrada para a string: {}", nomePerfil);
         }
+    }
+
+    private void processarNotificacao(UUID usuarioId, NotificacaoEvent evento) {
+        redisService.guardarNotificacaoOffline(usuarioId, evento);
+        sseService.emitirSinalDeNovaNotificacao(usuarioId);
     }
 
     @SuppressWarnings("unchecked")
