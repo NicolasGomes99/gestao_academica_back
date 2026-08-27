@@ -1,12 +1,16 @@
 package br.edu.ufape.sguAuthService.comunicacao.controllers;
 
+import br.edu.ufape.sguAuthService.comunicacao.dto.notificacao.NotificacaoBroadcastRequest;
 import br.edu.ufape.sguAuthService.comunicacao.mensageria.NotificacaoEvent;
 import br.edu.ufape.sguAuthService.config.AuthenticatedUserProvider;
 import br.edu.ufape.sguAuthService.fachada.Fachada;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -48,5 +52,13 @@ public class NotificacaoController {
         UUID userId = authenticatedUserProvider.getUserId();
         fachada.limparTodasNotificacoes(userId);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GESTOR')")
+    @PostMapping("/broadcast")
+    public ResponseEntity<Void> enviarBroadcast(@Valid @RequestBody NotificacaoBroadcastRequest request) {
+        fachada.enviarNotificacaoBroadcast(request);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }

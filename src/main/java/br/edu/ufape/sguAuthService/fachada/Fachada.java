@@ -3,8 +3,10 @@ package br.edu.ufape.sguAuthService.fachada;
 
 import br.edu.ufape.sguAuthService.comunicacao.dto.curso.CursoPatchRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.documento.DocumentoResponse;
+import br.edu.ufape.sguAuthService.comunicacao.dto.notificacao.NotificacaoBroadcastRequest;
 import br.edu.ufape.sguAuthService.comunicacao.dto.usuario.UsuarioPatchRequest;
 import br.edu.ufape.sguAuthService.comunicacao.mensageria.NotificacaoEvent;
+import br.edu.ufape.sguAuthService.comunicacao.mensageria.NotificacaoPublisher;
 import br.edu.ufape.sguAuthService.config.AuthenticatedUserProvider;
 import br.edu.ufape.sguAuthService.exceptions.unidadeAdministrativa.UnidadeAdministrativaNotFoundException;
 import br.edu.ufape.sguAuthService.models.UnidadeAdministrativa;
@@ -55,6 +57,7 @@ public class Fachada {
     private final TipoEtniaService tipoEtniaService;
     private final NotificacaoRedisServiceInterface notificacaoRedisService;
     private final NotificacaoSseServiceInterface notificacaoSseService;
+    private final NotificacaoPublisher notificacaoPublisher;
 
     // ================== Auth ================== //
     public TokenResponse login(String username, String password) {
@@ -80,9 +83,8 @@ public class Fachada {
 
     // ================== Aluno ================== //
 
-
-    public Page<Usuario> listarAlunos(Predicate predicate, Pageable pageable) {
-        return alunoService.listarAlunos(predicate, pageable);
+    public Page<Usuario> listarAlunos(Predicate predicate, Long cursoId, Pageable pageable) {
+        return alunoService.listarAlunos(predicate, cursoId, pageable);
     }
 
     public Usuario buscarAluno(UUID id) throws AlunoNotFoundException, UsuarioNotFoundException {
@@ -531,5 +533,15 @@ public class Fachada {
 
     public void limparConexoesSse(UUID userId) {
         notificacaoSseService.removerTodosEmittersDoUsuario(userId);
+    }
+
+    public void enviarNotificacaoBroadcast(NotificacaoBroadcastRequest request) {
+        NotificacaoEvent evento = NotificacaoEvent.paraPerfil(
+                request.getPerfilDestino().toUpperCase(),
+                request.getTitulo(),
+                request.getMensagem(),
+                request.getTipo()
+        );
+        notificacaoPublisher.publicar(evento);
     }
 }

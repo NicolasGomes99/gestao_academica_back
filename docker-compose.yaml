@@ -21,6 +21,10 @@ services:
       SPRING_RABBITMQ_PASSWORD: guest
       SPRING_DATA_REDIS_HOST: redis-auth
       SPRING_DATA_REDIS_PORT: 6380
+      SPRING_MAIL_HOST: mailpit
+      SPRING_MAIL_PORT: 1025
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: false
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: false
     depends_on:
       - backend-db
       - keycloak
@@ -110,6 +114,16 @@ services:
       - sgu-networks
     volumes:
       - redis-auth-data:/data
+
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    ports:
+      - "8025:8025" # Interface Web do Mailpit
+      - "1025:1025" # Porta SMTP
+    networks:
+      - sgu-networks
 
 volumes:
   pg-data:

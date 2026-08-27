@@ -39,12 +39,12 @@ public class AlunoController {
     @GetMapping
     public Page<AlunoResponse> listarAlunos(
             @QuerydslPredicate(root = Usuario.class) Predicate predicate,
+            @RequestParam(required = false, name = "curso.id") Long cursoId,
             @PageableDefault(value = 2)
             @SortDefault(sort = "id", direction = Sort.Direction.ASC)
             Pageable pageable) {
 
-        return fachada.listarAlunos(predicate, pageable).map(usuario -> new AlunoResponse(usuario, modelMapper));
-
+        return fachada.listarAlunos(predicate, cursoId, pageable).map(usuario -> new AlunoResponse(usuario, modelMapper));
     }
 
 
